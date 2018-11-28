@@ -1,7 +1,7 @@
 
 {
-  "name": "react-native-uxcam",
-  "version": "1.0.0",
+  "name": "react-native-ux-cam",
+  "version": "3.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
