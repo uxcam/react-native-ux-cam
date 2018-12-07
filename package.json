@@ -1,19 +1,29 @@
 
 {
   "name": "react-native-ux-cam",
-  "version": "3.0.0",
-  "description": "",
+  "version": "5.0.0",
+  "description": "React Native wrapper for uxcam.com.",
+  "license": "MIT",
+  "author": "UXCam Inc. after Mark Miyashita <negativetwelve@gmail.com>",
+  "homepage": "https://github.com/negativetwelve/react-native-ux-cam",
+  "repository": "negativetwelve/react-native-ux-cam",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "react-native"
+    "react-native",
+    "android",
+    "ios",
+    "react-native",
+    "user-sessions",
+    "ux",
+    "uxcam",
+    "ux-cam"
   ],
   "author": "",
   "license": "",
   "peerDependencies": {
     "react-native": "^0.57.4"
-
   }
 }
