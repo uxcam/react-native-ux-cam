@@ -47,9 +47,15 @@ class UXCam {
         Once turned on with a TRUE parameter it will continue to hide the screen until called with FALSE
      
         @parameter hideScreen Set TRUE to hide the screen from the recording, FALSE to start recording the screen contents again
+        @parameter hideGesture Set TRUE to hide the gestures in the screen from the recording, FALSE to start recording the gestures in the screen again
     */
-    static occludeSensitiveScreen(occlude) {
-        UXCamBridge.occludeSensitiveScreen(occlude);
+    static occludeSensitiveScreen(hideScreen,hideGesture) {
+        if(typeof hideGesture !== "undefined"){
+            UXCamBridge.occludeSensitiveScreen(hideScreen,hideGesture);
+        }else{
+            UXCamBridge.occludeSensitiveScreen(hideScreen,true);
+        }
+        
     }
 
     /**
@@ -127,9 +133,9 @@ class UXCam {
     
         @parameter eventName Name of the event to attach to the session recording at the current time
     */
-    static logEvent(event) {
-        UXCamBridge.logEvent(event);
-    }
+    // static logEvent(eventName) {
+    //     UXCamBridge.logEvent(eventName);
+    // }
 
     /**
         Insert a general event, with associated properties, into the timeline - stores the event with the timestamp when it was added.
@@ -140,7 +146,13 @@ class UXCam {
         @note Only NSNumber and NSString property types are supported to a maximum count of 100 and maximum size per entry of 1KiB
      */
     static logEvent(eventName, properties) {
-        UXCamBridge.logEvent(eventName, properties);
+        
+        if(typeof properties !== "undefined"){
+            UXCamBridge.logEvent(eventName, properties);
+        }else{
+            UXCamBridge.logEvent(eventName,undefined);
+        }
+        
     }
 
 
@@ -211,8 +223,8 @@ class UXCam {
      *	@brief Prevent a short trip to another app causing a break in a session
      *	@param continueSession Set to TRUE to continue the current session after a short trip out to another app. Default is FALSE - stop the session as soon as the app enters the background.
      */
-    static allowShortBreakForAnotherApp(millis) {
-        UXCamBridge.allowShortBreakForAnotherApp(millis);
+    static allowShortBreakForAnotherApp(continueSession) {
+        UXCamBridge.allowShortBreakForAnotherApp(continueSession);
     }
 
     /**
@@ -268,6 +280,7 @@ class UXCam {
         UXCamBridge.occludeSensitiveView(findNodeHandle(ref));
     }
 
+
     /**
      * Stop hiding a view that was previously hidden
      * If the view passed in was not previously occluded then no action is taken and this method will just return
@@ -276,6 +289,15 @@ class UXCam {
      */
     static unOccludeSensitiveView(ref){
         UXCamBridge.unOccludeSensitiveView(findNodeHandle(ref));
+    }
+
+    /**
+     * Hide a view that contains sensitive information or that you do not want recording on the screen video.
+     *
+     * @parameter sensitiveView The view to occlude in the screen recording
+     */
+    static occludeSensitiveViewWithoutGesture(ref){
+        UXCamBridge.occludeSensitiveViewWithoutGesture(findNodeHandle(ref));
     }
 
 }
