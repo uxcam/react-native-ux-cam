@@ -14,7 +14,7 @@ import com.facebook.react.uimanager.UIBlock;
 import com.facebook.react.uimanager.UIManagerModule;
 import java.util.HashMap;
 import android.view.View;
-
+import android.util.Log;
 import com.uxcam.UXCam;
 
 public class RNUxcamModule extends ReactContextBaseJavaModule {
@@ -45,10 +45,15 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void occludeSensitiveScreen(boolean occlude) {
-    UXCam.occludeSensitiveScreen(occlude);
+    UXCam.occludeSensitiveScreen(occlude,false);
   }
   
-  
+  @ReactMethod
+  public void occludeSensitiveScreen(boolean occlude,boolean hideGesture) {
+    UXCam.occludeSensitiveScreen(occlude,hideGesture);
+    
+  }
+
   @ReactMethod
   public void occludeAllTextView() {
     UXCam.occludeAllTextView();
@@ -79,22 +84,27 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
     UXCam.setSessionProperty(key, value);
   }
 
-  @ReactMethod
-  public void logEvent(String event) {
-    UXCam.logEvent(event);
-  }
+  // @ReactMethod
+  // public void logEvent(String event) {
+  //   UXCam.logEvent(event);
+  // }
 
   @ReactMethod
-  public void logEvent(String tag, ReadableMap properties) {
-    HashMap<String, String> map = new HashMap<String, String>();
+  public void logEvent(String event, ReadableMap properties) {
+    if(properties != null ){
+      HashMap<String, String> map = new HashMap<String, String>();
 
-    ReadableMapKeySetIterator iterator = properties.keySetIterator();
-    while (iterator.hasNextKey()) {
-      String key = iterator.nextKey();
-      String value = properties.getString(key);
-      map.put(key, value);
+      ReadableMapKeySetIterator iterator = properties.keySetIterator();
+      while (iterator.hasNextKey()) {
+        String key = iterator.nextKey();
+        String value = properties.getString(key);
+        map.put(key, value);
+      }
+      UXCam.logEvent(event, map);
+    }else{
+      UXCam.logEvent(event);
     }
-    UXCam.logEvent(tag, map);
+    
   }
 
   @ReactMethod
@@ -233,6 +243,29 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
                     catch(Exception e)
                     {
                         
+                    }
+			    }
+		    });
+    
+  }
+  @ReactMethod
+  public void occludeSensitiveViewWithoutGesture(final int id){
+    UIManagerModule uiManager = getReactApplicationContext().getNativeModule(UIManagerModule.class);
+		    uiManager.addUIBlock(new UIBlock()
+		    {
+			    @Override
+			    public void execute(NativeViewHierarchyManager nativeViewHierarchyManager)
+			    {
+                    try
+                    {
+                        View view = nativeViewHierarchyManager.resolveView(id);
+                        
+                        if (view != null)
+                        UXCam.occludeSensitiveViewWithoutGesture(view);
+                    }
+                    catch(Exception e)
+                    {
+                        e.printStackTrace();
                     }
 			    }
 		    });

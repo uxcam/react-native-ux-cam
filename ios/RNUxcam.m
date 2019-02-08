@@ -51,7 +51,11 @@ RCT_EXPORT_METHOD(disableCrashHandling:(BOOL)disable) {
 }
 
 RCT_EXPORT_METHOD(occludeSensitiveScreen:(BOOL)hideScreen) {
-    [UXCam occludeSensitiveScreen:hideScreen];
+    [UXCam occludeSensitiveScreen:hideScreen hideGestures:true];
+}
+
+RCT_EXPORT_METHOD(occludeSensitiveScreen:(BOOL)hideScreen hideGestures:(BOOL) hideGesture) {
+    [UXCam occludeSensitiveScreen:hideScreen hideGestures:hideGesture];
 }
 
 RCT_EXPORT_METHOD(occludeAllTextFields:(BOOL)occludeAll) {
@@ -197,6 +201,12 @@ RCT_EXPORT_METHOD(unOccludeSensitiveView: (nonnull NSNumber *) tag){
     });
 }
 
+RCT_EXPORT_METHOD(occludeSensitiveViewWithoutGesture: (nonnull NSNumber *) tag){
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIView* view = [self.bridge.uiManager viewForReactTag:tag];
+        [UXCam occludeSensitiveViewWithoutGesture:view];
+    });
+}
 
 @end
   
