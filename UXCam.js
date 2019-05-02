@@ -176,7 +176,6 @@ class UXCam {
         UXCamBridge.pauseScreenRecording();
     }
 
-
     /**
      *	Resumes a paused session - will cancel any remaining pause time and resume screen recording
      */
@@ -185,10 +184,50 @@ class UXCam {
     }
 
     /**
+     *  This will cancel any current session recording and opt this device out of future session recordings until @c optInOverall is called
+     *  @note The default is to opt-in to session recordings, but not to screen recordings, and the defaults will be reset if the user un-installs and re-installs the app
+     */
+    static optOutOverall(){
+        UXCamBridge.optOutOverall();
+    }
+
+    /**
+     *  This will opt this device out of schematic recordings for future settings
+     *  - any current session will be stopped and restarted with the last settings passed to @c startWithKey:
+     */
+    static optOutOfSchematicRecordings(){
+        UXCamBridge.optOutOfSchematicRecordings();
+    }
+
+    /**
+     *  This will opt this device into session recordings
+     *  - any current session will be stopped and a new session will be started with the last settings passed to @c startWithKey:
+     */
+    static optInOverall(){
+        UXCamBridge.optInOverall();
+    }
+
+    /**
      *	This will opt this device back into session recordings - you will need to call @c startWithKey: @i after opting the device back in
      */
-    static optIn() {
-        UXCamBridge.optIn();
+    static optIntoSchematicRecordings() {
+        UXCamBridge.optIntoSchematicRecordings();
+    }
+
+    /**
+     *  Returns the opt-in status of this device
+     *  @return YES if the device is opted in to session recordings, NO otherwise. The default is YES.
+     */
+    static optInOverallStatus(){
+        return UXCamBridge.optInOverallStatus();
+    }
+
+    /** Returns the opt-in status of this device for schematic recordings
+     *  @returns YES if the device is opted in to schematic recordings, NO otherwise. The default is NO.
+     *  @note Use in conjunction with optInOverallStatus to control the overall recording status for the device
+     */
+    static optInSchematicRecordingStatus(){
+        return UXCamBridge.optInSchematicRecordingStatus();
     }
 
     /**
@@ -200,8 +239,15 @@ class UXCam {
     }
 
     /**
-     *	Returns the opt-in status of this device
-     *	@return YES if the device is opted in to session recordings, NO otherwise
+     *  This will opt this device back into session recordings - you will need to call @c startWithKey: @i after opting the device back in
+     */
+    static optIn() {
+        UXCamBridge.optIn();
+    }
+
+    /**
+     *  Returns the opt-in status of this device
+     *  @return YES if the device is opted in to session recordings, NO otherwise
     */
     static optStatus() {
         return UXCamBridge.optInStatus()
