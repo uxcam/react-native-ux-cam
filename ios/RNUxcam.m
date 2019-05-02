@@ -174,7 +174,7 @@ RCT_EXPORT_METHOD(isRecording:(RCTPromiseResolveBlock)resolve
         NSString *message = @"Could not retrieve recording status for the current session.";
         NSError *error = [NSError errorWithDomain:@"RNUXCam" code:0 userInfo:nil];
         reject(code, message, error);
-    },
+    }
 }
 
 RCT_EXPORT_METHOD(getMultiSessionRecord:(RCTPromiseResolveBlock)resolve
