@@ -118,12 +118,49 @@ RCT_EXPORT_METHOD(urlForCurrentSession:(RCTPromiseResolveBlock)resolve
         reject(code, message, error);
     }
 }
-RCT_EXPORT_METHOD(optOut) {
-    [UXCam optOut];
+
+RCT_EXPORT_METHOD(optOutOverall) {
+    [UXCam optOutOverall];
 }
 
-RCT_EXPORT_METHOD(optIn) {
-    [UXCam optIn];
+RCT_EXPORT_METHOD(optOutOfSchematicRecordings) {
+    [UXCam optOutOfSchematicRecordings];
+}
+RCT_EXPORT_METHOD(optInOverall) {
+    [UXCam optInOverall];
+}
+
+RCT_EXPORT_METHOD(optIntoSchematicRecordings) {
+    [UXCam optIntoSchematicRecordings];
+}
+
+RCT_EXPORT_METHOD(optInOverallStatus:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject) {
+    BOOL optInOverallStatus = [UXCam optInOverallStatus];
+    NSNumber *boolNumber = [NSNumber numberWithBool:optInOverallStatus];
+    if ([boolNumber isEqualToNumber:[NSNumber numberWithBool:YES]]) {
+        resolve(boolNumber);
+    } else {
+        NSString *code = @"no_recording_status";
+        NSString *message = @"Could not retrieve optInOverallStatus for the current session.";
+        NSError *error = [NSError errorWithDomain:@"RNUXCam" code:0 userInfo:nil];
+        reject(code, message, error);
+    }
+}
+
+RCT_EXPORT_METHOD(optInSchematicRecordingStatus:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject) {
+    BOOL optInSchematicRecordingStatus = [UXCam optInSchematicRecordingStatus];
+    NSNumber *boolNumber = [NSNumber numberWithBool:optInSchematicRecordingStatus];
+    if ([boolNumber isEqualToNumber:[NSNumber numberWithBool:YES]]) {
+        resolve(boolNumber);
+    } else {
+        NSString *code = @"no_recording_status";
+        NSString *message = @"Could not retrieve optInSchematicRecordingStatus for the current session.";
+        NSError *error = [NSError errorWithDomain:@"RNUXCam" code:0 userInfo:nil];
+        reject(code, message, error);
+    }
+    
 }
 
 RCT_EXPORT_METHOD(isRecording:(RCTPromiseResolveBlock)resolve
@@ -138,22 +175,6 @@ RCT_EXPORT_METHOD(isRecording:(RCTPromiseResolveBlock)resolve
         NSError *error = [NSError errorWithDomain:@"RNUXCam" code:0 userInfo:nil];
         reject(code, message, error);
     }
-   
-}
-
-RCT_EXPORT_METHOD(optInStatus:(RCTPromiseResolveBlock)resolve
-                  rejecter:(RCTPromiseRejectBlock)reject) {
-    BOOL optInStatus = [UXCam optInStatus];
-    NSNumber *boolNumber = [NSNumber numberWithBool:optInStatus];
-    if ([boolNumber isEqualToNumber:[NSNumber numberWithBool:YES]]) {
-        resolve(boolNumber);
-    } else {
-        NSString *code = @"no_recording_status";
-        NSString *message = @"Could not retrieve opt in status for the current session.";
-        NSError *error = [NSError errorWithDomain:@"RNUXCam" code:0 userInfo:nil];
-        reject(code, message, error);
-    }
-    
 }
 
 RCT_EXPORT_METHOD(getMultiSessionRecord:(RCTPromiseResolveBlock)resolve

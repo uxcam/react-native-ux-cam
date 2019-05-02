@@ -3,7 +3,7 @@
 //
 //  Copyright (c) 2013-2019 UXCam Ltd. All rights reserved.
 //
-//  UXCam SDK VERSION: 3.0.6
+//  UXCam SDK VERSION: 3.1.1-beta1
 //
 
 #import <Foundation/Foundation.h>
@@ -361,35 +361,47 @@ NS_ASSUME_NONNULL_BEGIN
 + (nullable NSString*) urlForCurrentSession;
 
 
-#pragma mark Methods for controlling if this device is opted out of session recordings
+#pragma mark Methods for controlling if this device is opted out of session and/or screen recordings
 /**
- *	This will cancel any current session recording and opt this device out of future session recordings until @c optIn is called
- *	@note The default is to opt-in to recordings, and the default will be reset if the user un-installs and re-installs the app
+ *	This will cancel any current session recording and opt this device out of future session recordings until @c optInOverall is called
+ *	@note The default is to opt-in to session recordings, but not to screen recordings, and the defaults will be reset if the user un-installs and re-installs the app
  */
-+ (void) optOut;
++ (void) optOutOverall;
 
 
 /**
- *	This will opt this device back into session recordings - you will need to call @c startWithKey: @i after opting the device back in
+ *	This will opt this device out of schematic recordings for future settings
+ *	- any current session will be stopped and restarted with the last settings passed to @c startWithKey:
  */
-+ (void) optIn;
++ (void) optOutOfSchematicRecordings;
+
+
+/**
+ *	This will opt this device into session recordings
+ *	- any current session will be stopped and a new session will be started with the last settings passed to @c startWithKey:
+ */
++ (void) optInOverall;
+
+
+/**
+ *	This will opt this device into schematic recordings for future sessions (subject to dashboard/verify settings settings as well)
+ *	- any current session will be stopped and a new session will be started with the last settings passed to @c startWithKey:
+ */
+ + (void) optIntoSchematicRecordings;
 
 
 /**
  *	Returns the opt-in status of this device
- *	@return YES if the device is opted in to session recordings, NO otherwise
+ *	@return YES if the device is opted in to session recordings, NO otherwise. The default is YES.
  */
-+ (BOOL) optInStatus;
++ (BOOL) optInOverallStatus;
 
 
-/***
- * This is a workaround if you are having problems with stuttering scrolling views in iOS11.2+
- * Default is TRUE - the system will spot the problem and enable a workaround, but set FALSE to disable this and behave in default manner
+/** Returns the opt-in status of this device for schematic recordings
+ *	@returns YES if the device is opted in to schematic recordings, NO otherwise. The default is NO.
+ *	@note Use in conjunction with optInOverallStatus to control the overall recording status for the device
  */
-+ (void) stopRecordingScrollingOnStutterOS:(BOOL)stopScrollRecording;
-
-
-
++ (BOOL) optInSchematicRecordingStatus;
 
 
 #pragma mark Internal use only methods
@@ -400,9 +412,10 @@ NS_ASSUME_NONNULL_BEGIN
 + (void) pluginType:(NSString*)type version:(NSString*)versionNumber;
 
 
-
-
 #pragma mark - Deprecated methods
+/// Deprecated - old workaround for iOS 11.2+ screen recordings that is no longer needed with schematic recordings
++ (void) stopRecordingScrollingOnStutterOS:(BOOL)stopScrollRecording __attribute__((deprecated("from SDK 3.1.0 - no longer needed with schematic recordings")));
+
 /// Deprecated - will fall through to the new method `uploadingPendingSessions`
 + (void) UploadingPendingSessions:(void (^)(void))block __attribute__((deprecated("from SDK 3.0 - use - uploadingPendingSessions"))) NS_SWIFT_UNAVAILABLE("Deprecated method not available in Swift");
 
@@ -466,6 +479,14 @@ NS_ASSUME_NONNULL_BEGIN
 /// Deprecated - use setUserIdentity: instead
 + (void) tagUsersName:(NSString*)userName __attribute__((deprecated("from SDK 3.0.0 - use setUserIdentity: now")));
 
+/// Deprecated - use optOutOverall instead
++ (void) optOut __attribute__((deprecated("from SDK 3.1.0 - use optOutOverall now")));
+
+/// Deprecated - use optInOverall: instead
++ (void) optIn __attribute__((deprecated("from SDK 3.1.0 - use optInOverall: now")));
+
+/// Deprecated - use optInOverallStatus instead
++ (BOOL) optInStatus __attribute__((deprecated("from SDK 3.1.0 - use optInOverallStatus now")));;
 @end
 
 NS_ASSUME_NONNULL_END
