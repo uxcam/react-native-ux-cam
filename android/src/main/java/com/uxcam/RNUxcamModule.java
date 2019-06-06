@@ -31,10 +31,9 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
     return "RNUxcam";
   }
 
-
-
   @ReactMethod
   public void startWithKey(String key) {
+    UXCam.pluginType("react-native", "5.1.0");
     UXCam.startApplicationWithKeyForCordova(getCurrentActivity(), key);
   }
 
