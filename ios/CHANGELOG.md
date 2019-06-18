@@ -3,15 +3,34 @@
 
 ## Release Notes ##
 
-Version | Changes
-------- | ----------
-3.0.0-beta-3 | Beta version of SDK v3 
+Version   | Changes
+---------- | ----------
+3.1.1	| Internal changes for performance and stability 
+3.1.0	| Change screen capture to schematic capture process
+		| Opt In changes to split out screen recording as specific option - **screen recording off by default** 
+		| Fix session video when starting up with occluded screen
+		| Add reasons why screen video hasn't been recorded
+		|  
+		|
+3.0.6	| Add `occludeSensitiveViewWithoutGesture` and `occludeSensitiveScreen:hideGestures:` API methods
+		| Adjust work queues for event capture 
+		| Add nullable decoration to session and user url methods
+		| Adjust some internal timers to handle external time changes
+		| Fix an orientation regression with sessions that start in landscape orientation
+3.0.5	| Stop recording gestures when screen recording is paused or full screen is occluded
+		| Fix an issue on initial setup of data capture
+3.0.4	| Improvements to filter handling when account is low on sessions left to record
+3.0.3	| Fix a session management issue
+3.0.2 	| Work around the iOS bug that causes excessive screen capture time on wide colour devices
+3.0.1	| Fixing some header file deprecations to avoid ambiguous method errors in Swift
+		| Improved handling of devices with low levels of available storage
 3.0.0  	| Extensive refactoring of the internals of the SDK to support new features
 		| Added session filters for screen name, session duration, number of interactions
 		| Added support for offline session recording
 		| Added support for data-only sessions (screens visited, number of interactions, event timeline etc. without a screen video)
 		| Re-factored the UXCam API on iOS and Android to be more similar and iOS to better conform with standard naming practices
 		| Re-factored the event recording system to include user and session events as well as general timeline events
+		| Note: Sep 2018: Several v3 features require using the new dashboard that is coming soon - talk to support to get preview access 
 		|
 2.5.18	| Adding `unOccludeSensitiveView` method
 		| Fixing a problem that exposed sensitives views for their first frame on screen in some circumstances
@@ -72,5 +91,3 @@ Version | Changes
 2.0.2	| Fixing some version number values in the uploaded data
 2.0.1	| Removed unused data fields from uploaded data
 2.0.0	| Major re-engineering of the SDK in terms of backend used
-
-
