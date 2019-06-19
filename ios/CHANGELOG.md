@@ -5,6 +5,8 @@
 
 Version   | Changes
 ---------- | ----------
+3.1.2 	| Fix to mobile data upload limits
+		| Fix for symbol conflict in internal copy of 3rd party library
 3.1.1	| Internal changes for performance and stability 
 3.1.0	| Change screen capture to schematic capture process
 		| Opt In changes to split out screen recording as specific option - **screen recording off by default** 

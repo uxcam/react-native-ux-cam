@@ -3,7 +3,7 @@
 //
 //  Copyright (c) 2013-2019 UXCam Ltd. All rights reserved.
 //
-//  UXCam SDK VERSION: 3.1.1
+//  UXCam SDK VERSION: 3.1.2
 //
 
 #import <Foundation/Foundation.h>
@@ -12,9 +12,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- *	UXCam SDK captures User experience data when a user uses an app, analyses this data on the cloud and provides insights to improve usability of the app.
+ *	UXCam SDK captures user experience data when a user uses an app, analyses this data on the cloud and provides insights to improve usability of the app.
  */
-
 @interface UXCam : NSObject
 
 #pragma mark Methods for controlling if this device is opted out of session and/or schematic recordings
