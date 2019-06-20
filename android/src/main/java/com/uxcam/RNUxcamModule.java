@@ -50,12 +50,11 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
   @ReactMethod
   public void occludeSensitiveScreen(boolean occlude,boolean hideGesture) {
     UXCam.occludeSensitiveScreen(occlude,hideGesture);
-    
   }
 
   @ReactMethod
-  public void occludeAllTextView() {
-    UXCam.occludeAllTextView();
+  public void occludeAllTextFields(boolean occlude) {
+    UXCam.occludeAllTextFields(occlude);
   }
 
   @ReactMethod

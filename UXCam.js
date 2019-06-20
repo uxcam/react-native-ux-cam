@@ -66,7 +66,18 @@ class UXCam {
         @parameter occludeAll Set YES to hide all UITextField views on the screen in the recording, NO to stop occluding them from the screen recording.
      */
     static occludeAllTextView() {
-        UXCamBridge.occludeAllTextFields();
+        UXCamBridge.occludeAllTextFields(true);
+    }
+
+    /**
+        Hide / un-hide all UITextField views on the screen
+     
+        Call this when you want to hide the contents of all UITextFields from the screen capture. Default is NO.
+     
+        @parameter occludeAll Set YES to hide all UITextField views on the screen in the recording, NO to stop occluding them from the screen recording.
+     */
+    static occludeAllTextFields(occludeAll) {
+        UXCamBridge.occludeAllTextFields(occludeAll);
     }
 
     /**
@@ -188,7 +199,9 @@ class UXCam {
      *  @note The default is to opt-in to session recordings, but not to screen recordings, and the defaults will be reset if the user un-installs and re-installs the app
      */
     static optOutOverall(){
-        UXCamBridge.optOutOverall();
+        if (Platform.select == "ios") {
+            UXCamBridge.optOutOverall();
+        }
     }
 
     /**
@@ -196,7 +209,9 @@ class UXCam {
      *  - any current session will be stopped and restarted with the last settings passed to @c startWithKey:
      */
     static optOutOfSchematicRecordings(){
-        UXCamBridge.optOutOfSchematicRecordings();
+        if (Platform.select == "ios") {
+            UXCamBridge.optOutOfSchematicRecordings();
+        }
     }
 
     /**
@@ -204,14 +219,18 @@ class UXCam {
      *  - any current session will be stopped and a new session will be started with the last settings passed to @c startWithKey:
      */
     static optInOverall(){
-        UXCamBridge.optInOverall();
+        if (Platform.select == "ios") {
+            UXCamBridge.optInOverall();
+        }
     }
 
     /**
-     *	This will opt this device back into session recordings - you will need to call @c startWithKey: @i after opting the device back in
+     *  This will opt this device back into session recordings - you will need to call @c startWithKey: @i after opting the device back in
      */
     static optIntoSchematicRecordings() {
-        UXCamBridge.optIntoSchematicRecordings();
+        if (Platform.select == "ios") {
+            UXCamBridge.optIntoSchematicRecordings();
+        }
     }
 
     /**
@@ -219,7 +238,10 @@ class UXCam {
      *  @return YES if the device is opted in to session recordings, NO otherwise. The default is YES.
      */
     static optInOverallStatus(){
-        return UXCamBridge.optInOverallStatus();
+        if (Platform.select == "ios") {
+            return UXCamBridge.optInOverallStatus();
+        }
+        return false;
     }
 
     /** Returns the opt-in status of this device for schematic recordings
@@ -227,7 +249,10 @@ class UXCam {
      *  @note Use in conjunction with optInOverallStatus to control the overall recording status for the device
      */
     static optInSchematicRecordingStatus(){
-        return UXCamBridge.optInSchematicRecordingStatus();
+        if (Platform.select == "ios") {
+            return UXCamBridge.optInSchematicRecordingStatus();
+        }
+        return false;
     }
 
     /**
