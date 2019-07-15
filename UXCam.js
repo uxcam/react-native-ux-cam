@@ -2,6 +2,10 @@
 var { Platform, NativeModules, findNodeHandle, InteractionManager } = require('react-native');
 var UXCamBridge = NativeModules.RNUxcam;
 
+// Capture the platform we are running on
+const platform = Platform.OS;
+const platformIOS = platform = "ios" ? true : false;
+const platformAndroid = platform = "android" ? true : false;
 
 class UXCam {
     /**
@@ -199,7 +203,7 @@ class UXCam {
      *  @note The default is to opt-in to session recordings, but not to screen recordings, and the defaults will be reset if the user un-installs and re-installs the app
      */
     static optOutOverall(){
-        if (Platform.select == "ios") {
+        if (platformIOS) {
             UXCamBridge.optOutOverall();
         }
     }
@@ -209,7 +213,7 @@ class UXCam {
      *  - any current session will be stopped and restarted with the last settings passed to @c startWithKey:
      */
     static optOutOfSchematicRecordings(){
-        if (Platform.select == "ios") {
+        if (platformIOS) {
             UXCamBridge.optOutOfSchematicRecordings();
         }
     }
@@ -219,18 +223,19 @@ class UXCam {
      *  - any current session will be stopped and a new session will be started with the last settings passed to @c startWithKey:
      */
     static optInOverall(){
-        if (Platform.select == "ios") {
+        if (platformIOS) {
             UXCamBridge.optInOverall();
         }
     }
 
     /**
-     *  This will opt this device back into session recordings - you will need to call @c startWithKey: @i after opting the device back in
+     *  This will opt this device back into session recordings
      */
-    static optIntoSchematicRecordings() {
-        if (Platform.select == "ios") {
-            UXCamBridge.optIntoSchematicRecordings();
-        }
+    static optIntoSchematicRecordings() 
+    {
+	    if (platformIOS) {
+			UXCamBridge.optIntoSchematicRecordings();
+		}
     }
 
     /**
@@ -238,7 +243,7 @@ class UXCam {
      *  @return YES if the device is opted in to session recordings, NO otherwise. The default is YES.
      */
     static optInOverallStatus(){
-        if (Platform.select == "ios") {
+        if (platformIOS) {
             return UXCamBridge.optInOverallStatus();
         }
         return false;
@@ -249,7 +254,7 @@ class UXCam {
      *  @note Use in conjunction with optInOverallStatus to control the overall recording status for the device
      */
     static optInSchematicRecordingStatus(){
-        if (Platform.select == "ios") {
+        if (platformIOS) {
             return UXCamBridge.optInSchematicRecordingStatus();
         }
         return false;
