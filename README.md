@@ -2,6 +2,7 @@
 
 ## installation
 `$yarn add file:/path-to-the-uxcam-react-wrapper`
+
 `$react-native link react-native-ux-cam`
 
 ## Usage
@@ -14,6 +15,7 @@ RNUxcam.startWithKey('YOUR API KEY');
 # For testing example app
 ## Setup
 `yarn install`
+
 `yarn add react-native-ux-cam`
 ### or if adding locally
 `yarn add file:/path-to-uxcam-plugin`
@@ -22,6 +24,7 @@ RNUxcam.startWithKey('YOUR API KEY');
 
 ## Running
 `react-native run-android`
+
 `react-native run-ios`
 
 
