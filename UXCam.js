@@ -4,8 +4,8 @@ var UXCamBridge = NativeModules.RNUxcam;
 
 // Capture the platform we are running on
 const platform = Platform.OS;
-const platformIOS = platform = "ios" ? true : false;
-const platformAndroid = platform = "android" ? true : false;
+const platformIOS = platform === "ios" ? true : false;
+const platformAndroid = platform === "android" ? true : false;
 
 class UXCam {
     /**
