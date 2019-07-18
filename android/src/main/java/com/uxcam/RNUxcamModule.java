@@ -37,6 +37,11 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public void startNewSession() {
+    UXCam.startNewSession();
+  }
+
+  @ReactMethod
   public void stopSessionAndUploadData() {
     UXCam.stopSessionAndUploadData();
   }

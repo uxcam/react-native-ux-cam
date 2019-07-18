@@ -20,6 +20,23 @@ class UXCam {
     }
 
     /**
+     * Starts a new session after the {@link #stopSessionAndUploadData()} method has been called.
+     * This happens automatically when the app returns from background.
+     */
+    static startNewSession() {
+        UXCamBridge.startNewSession();
+    }
+    
+    /**
+     * Stop current uxcam session and send captured data to server.<br>
+     * Use this to start sending the data on UXCam server without the app going into the background.<br>
+     * This starts an asynchronous process and returns immediately.
+     */
+    static stopSessionAndUploadData() {
+        UXCamBridge.stopSessionAndUploadData();
+    }
+
+    /**
      *  Returns a URL path that shows the current session when it compeletes
      *
      *  @note This can be used for tying in the current session with other analytics systems
