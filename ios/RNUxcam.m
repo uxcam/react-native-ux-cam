@@ -12,7 +12,7 @@ RCT_EXPORT_MODULE();
 }
 
 RCT_EXPORT_METHOD(startWithKey:(NSString *)userAPIKey) {
-    [UXCam pluginType:@"react-native" version:@"5.1.0"];
+    [UXCam pluginType:@"react-native" version:@"5.1.3"];
     [UXCam startWithKey:userAPIKey];
 }
 
@@ -136,77 +136,39 @@ RCT_EXPORT_METHOD(optIntoSchematicRecordings) {
 }
 
 RCT_EXPORT_METHOD(optInOverallStatus:(RCTPromiseResolveBlock)resolve
-                  rejecter:(RCTPromiseRejectBlock)reject) {
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
     BOOL optInOverallStatus = [UXCam optInOverallStatus];
-    NSNumber *boolNumber = [NSNumber numberWithBool:optInOverallStatus];
-    if ([boolNumber isEqualToNumber:[NSNumber numberWithBool:YES]]) {
-        resolve(boolNumber);
-    } else {
-        NSString *code = @"no_recording_status";
-        NSString *message = @"Could not retrieve optInOverallStatus for the current session.";
-        NSError *error = [NSError errorWithDomain:@"RNUXCam" code:0 userInfo:nil];
-        reject(code, message, error);
-    }
+	NSNumber *boolNumber = [NSNumber numberWithBool:optInOverallStatus];
+	resolve(boolNumber);
 }
 
 RCT_EXPORT_METHOD(optInSchematicRecordingStatus:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject) {
     BOOL optInSchematicRecordingStatus = [UXCam optInSchematicRecordingStatus];
-    NSNumber *boolNumber = [NSNumber numberWithBool:optInSchematicRecordingStatus];
-    if ([boolNumber isEqualToNumber:[NSNumber numberWithBool:YES]]) {
-        resolve(boolNumber);
-    } else {
-        NSString *code = @"no_recording_status";
-        NSString *message = @"Could not retrieve optInSchematicRecordingStatus for the current session.";
-        NSError *error = [NSError errorWithDomain:@"RNUXCam" code:0 userInfo:nil];
-        reject(code, message, error);
-    }
-    
+	NSNumber *boolNumber = [NSNumber numberWithBool:optInSchematicRecordingStatus];
+	resolve(boolNumber);
 }
 
 RCT_EXPORT_METHOD(isRecording:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject) {
     BOOL isRecording = [UXCam isRecording];
     NSNumber *boolNumber = [NSNumber numberWithBool:isRecording];
-    if ([boolNumber isEqualToNumber:[NSNumber numberWithBool:YES]]) {
-        resolve(boolNumber);
-    } else {
-        NSString *code = @"no_recording_status";
-        NSString *message = @"Could not retrieve recording status for the current session.";
-        NSError *error = [NSError errorWithDomain:@"RNUXCam" code:0 userInfo:nil];
-        reject(code, message, error);
-    }
+	resolve(boolNumber);
 }
 
 RCT_EXPORT_METHOD(getMultiSessionRecord:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject) {
     BOOL getMultiSessionRecord = [UXCam getMultiSessionRecord];
     NSNumber *boolNumber = [NSNumber numberWithBool:getMultiSessionRecord];
-    if ([boolNumber isEqualToNumber:[NSNumber numberWithBool:YES]]) {
-        resolve(boolNumber);
-    } else {
-        NSString *code = @"no_recording_status";
-        NSString *message = @"Could not retrieve getMultiSessionRecord status for the current session.";
-        NSError *error = [NSError errorWithDomain:@"RNUXCam" code:0 userInfo:nil];
-        reject(code, message, error);
-    }
-    
+	resolve(boolNumber);
 }
 
 RCT_EXPORT_METHOD(pendingSessionCount:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject) {
     
     NSNumber *pendingCount = [NSNumber numberWithUnsignedInteger:[UXCam pendingUploads]];
-   
-    if (pendingCount) {
-        resolve(pendingCount);
-    } else {
-        NSString *code = @"no_recording_status";
-        NSString *message = @"Could not retrieve pendingSessionCount status for the current session.";
-        NSError *error = [NSError errorWithDomain:@"RNUXCam" code:0 userInfo:nil];
-        reject(code, message, error);
-    }
-    
+	resolve(pendingCount);
 }
 
 RCT_EXPORT_METHOD(occludeSensitiveView: (nonnull NSNumber *) tag){
@@ -231,4 +193,3 @@ RCT_EXPORT_METHOD(occludeSensitiveViewWithoutGesture: (nonnull NSNumber *) tag){
 }
 
 @end
-  

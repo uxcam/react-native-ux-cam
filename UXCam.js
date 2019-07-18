@@ -2,14 +2,18 @@
 var { Platform, NativeModules, findNodeHandle, InteractionManager } = require('react-native');
 var UXCamBridge = NativeModules.RNUxcam;
 
+// Capture the platform we are running on
+const platform = Platform.OS;
+const platformIOS = platform === "ios" ? true : false;
+const platformAndroid = platform === "android" ? true : false;
 
 class UXCam {
     /**
-     *	Call this method from applicationDidFinishLaunching to start UXCam recording your application's session.
-     *	This will start the UXCam system, get the settings configurations from our server and start capturing the data according to the configuration.
+     *  Call this method from applicationDidFinishLaunching to start UXCam recording your application's session.
+     *  This will start the UXCam system, get the settings configurations from our server and start capturing the data according to the configuration.
      *
-     *	@brief Start the UXCam session
-     *	@parameter userAPIKey	The key to identify your UXCam account - find it in the UXCam dashboard for your account at https://dashboard.uxcam.com/user/settings
+     *  @brief Start the UXCam session
+     *  @parameter userAPIKey   The key to identify your UXCam account - find it in the UXCam dashboard for your account at https://dashboard.uxcam.com/user/settings
      */
     static startWithKey(apiKey) {
         UXCamBridge.startWithKey(apiKey);
@@ -18,20 +22,19 @@ class UXCam {
     /**
      *  Returns a URL path that shows the current session when it compeletes
      *
-     *	@note This can be used for tying in the current session with other analytics systems
+     *  @note This can be used for tying in the current session with other analytics systems
      *
      *  @return url path for current session or nil if no verified session is active
      */
     static urlForCurrentSession() {
         return UXCamBridge.urlForCurrentSession();
-
     }
 
 
     /**
      *  Returns a URL path for showing all the current users sessions
      *
-     *	@note This can be used for tying in the current user with other analytics systems
+     *  @note This can be used for tying in the current user with other analytics systems
      *
      *  @return url path for user session or nil if no verified session is active
      */
@@ -94,7 +97,7 @@ class UXCam {
 
     /**
         Enable / disable the automatic tagging of screen names
-    	
+        
         @note By default UXCam will tag new screen names automatically. You can override this using the @c tagScreenName: method or use this method to disable the automatic tagging.
      
         @parameters enable Set to TRUE to enable automatic screen name tagging (the default) or FALSE to disable it
@@ -172,9 +175,9 @@ class UXCam {
     }
 
     /**
-     *	Returns the current recording status
+     *  Returns the current recording status
      *
-     *	@return YES if the session is being recorded
+     *  @return YES if the session is being recorded
      */
     static isRecording() {
         return UXCamBridge.isRecording();
@@ -188,7 +191,7 @@ class UXCam {
     }
 
     /**
-     *	Resumes a paused session - will cancel any remaining pause time and resume screen recording
+     *  Resumes a paused session - will cancel any remaining pause time and resume screen recording
      */
     static resumeScreenRecording() {
         UXCamBridge.resumeScreenRecording();
@@ -199,7 +202,7 @@ class UXCam {
      *  @note The default is to opt-in to session recordings, but not to screen recordings, and the defaults will be reset if the user un-installs and re-installs the app
      */
     static optOutOverall(){
-        if (Platform.select == "ios") {
+        if (platformIOS) {
             UXCamBridge.optOutOverall();
         }
     }
@@ -209,7 +212,7 @@ class UXCam {
      *  - any current session will be stopped and restarted with the last settings passed to @c startWithKey:
      */
     static optOutOfSchematicRecordings(){
-        if (Platform.select == "ios") {
+        if (platformIOS) {
             UXCamBridge.optOutOfSchematicRecordings();
         }
     }
@@ -219,16 +222,17 @@ class UXCam {
      *  - any current session will be stopped and a new session will be started with the last settings passed to @c startWithKey:
      */
     static optInOverall(){
-        if (Platform.select == "ios") {
+        if (platformIOS) {
             UXCamBridge.optInOverall();
         }
     }
 
     /**
-     *  This will opt this device back into session recordings - you will need to call @c startWithKey: @i after opting the device back in
+     *  This will opt this device back into session recordings
      */
-    static optIntoSchematicRecordings() {
-        if (Platform.select == "ios") {
+    static optIntoSchematicRecordings() 
+    {
+        if (platformIOS) {
             UXCamBridge.optIntoSchematicRecordings();
         }
     }
@@ -238,7 +242,7 @@ class UXCam {
      *  @return YES if the device is opted in to session recordings, NO otherwise. The default is YES.
      */
     static optInOverallStatus(){
-        if (Platform.select == "ios") {
+        if (platformIOS) {
             return UXCamBridge.optInOverallStatus();
         }
         return false;
@@ -249,15 +253,15 @@ class UXCam {
      *  @note Use in conjunction with optInOverallStatus to control the overall recording status for the device
      */
     static optInSchematicRecordingStatus(){
-        if (Platform.select == "ios") {
+        if (platformIOS) {
             return UXCamBridge.optInSchematicRecordingStatus();
         }
         return false;
     }
 
     /**
-     *	This will cancel any current session recording and opt this device out of future session recordings until @c optIn is called
-     *	@note The default is to opt-in to recordings, and the default will be reset if the user un-installs and re-installs the app
+     *  This will cancel any current session recording and opt this device out of future session recordings until @c optIn is called
+     *  @note The default is to opt-in to recordings, and the default will be reset if the user un-installs and re-installs the app
     */
     static optOut() {
         UXCamBridge.optOut();
@@ -279,7 +283,7 @@ class UXCam {
     }
 
     /**
-     *	Cancels the recording of the current session and discards the data
+     *  Cancels the recording of the current session and discards the data
      *
      * @note A new session will start as normal when the app nexts come out of the background (depending on the state of the MultiSessionRecord flag), or if you call @c startNewSession
     */
@@ -288,11 +292,11 @@ class UXCam {
     }
 
     /**
-     *	By default UXCam will end a session immediately when your app goes into the background. But if you are switching over to another app for authorisation, or some other short action, and want the session to continue when the user comes back to your app then call this method with a value of TRUE before switching away to the other app.
-     *	UXCam will pause the current session as your app goes into the background and then continue the session when your app resumes. If your app doesn't resume within a couple of minutes the original session will be closed as normal and a new session will start when your app eventually is resumed.
+     *  By default UXCam will end a session immediately when your app goes into the background. But if you are switching over to another app for authorisation, or some other short action, and want the session to continue when the user comes back to your app then call this method with a value of TRUE before switching away to the other app.
+     *  UXCam will pause the current session as your app goes into the background and then continue the session when your app resumes. If your app doesn't resume within a couple of minutes the original session will be closed as normal and a new session will start when your app eventually is resumed.
      *
-     *	@brief Prevent a short trip to another app causing a break in a session
-     *	@param continueSession Set to TRUE to continue the current session after a short trip out to another app. Default is FALSE - stop the session as soon as the app enters the background.
+     *  @brief Prevent a short trip to another app causing a break in a session
+     *  @param continueSession Set to TRUE to continue the current session after a short trip out to another app. Default is FALSE - stop the session as soon as the app enters the background.
      */
     static allowShortBreakForAnotherApp(continueSession) {
         UXCamBridge.allowShortBreakForAnotherApp(continueSession);
@@ -300,33 +304,33 @@ class UXCam {
 
     /**
      
-     *	@brief Resume after short break. Only available in android
-     *	@parameter continueSession Set to TRUE to continue the current session after a short trip out to another app. Default is FALSE - stop the session as soon as the app enters the background.
+     *  @brief Resume after short break. Only available in android
+     *  @parameter continueSession Set to TRUE to continue the current session after a short trip out to another app. Default is FALSE - stop the session as soon as the app enters the background.
      */
     static resumeShortBreakForAnotherApp() {
         UXCamBridge.resumeShortBreakForAnotherApp();
     }
 
     /**
-     *	Get whether UXCam is set to automatically record a new session when the app resumes from the background
+     *  Get whether UXCam is set to automatically record a new session when the app resumes from the background
     */
     static getMultiSessionRecord() {
         return UXCamBridge.getMultiSessionRecord();
     }
 
     /**
-     *	Set whether to record multiple sessions or not
+     *  Set whether to record multiple sessions or not
      *
-     *	@parameter recordMultipleSessions YES to record a new session automatically when the device comes out of the background. If NO then a single session is recorded, when stopped (either programmatically with @c stopApplicationAndUploadData or by the app going to the background) then no more sessions are recorded until @c startWithKey is called again).
-     *	@note The default setting is to record a new session each time a device comes out of the background. This flag can be set to NO to stop that. You can also set this with the appropriate startWithKey: variant. (This will be reset each time startWithKey is called)
+     *  @parameter recordMultipleSessions YES to record a new session automatically when the device comes out of the background. If NO then a single session is recorded, when stopped (either programmatically with @c stopApplicationAndUploadData or by the app going to the background) then no more sessions are recorded until @c startWithKey is called again).
+     *  @note The default setting is to record a new session each time a device comes out of the background. This flag can be set to NO to stop that. You can also set this with the appropriate startWithKey: variant. (This will be reset each time startWithKey is called)
     */
     static setMultiSessionRecord(multiSessionRecord) {
         UXCamBridge.setMultiSessionRecord(multiSessionRecord);
     }
 
     /**
-     *	@brief Deletes any sessions that are awaiting upload
-     *	@note Advanced use only. This is not needed for most developers. This can't be called until UXCam startWithKey: has completed
+     *  @brief Deletes any sessions that are awaiting upload
+     *  @note Advanced use only. This is not needed for most developers. This can't be called until UXCam startWithKey: has completed
      */
     static deletePendingUploads() {
         UXCamBridge.deletePendingUploads();
@@ -334,9 +338,9 @@ class UXCam {
 
 
     /**
-     *	@brief Returns how many sessions are waiting to be uploaded
+     *  @brief Returns how many sessions are waiting to be uploaded
      *
-     *	Sessions can be in the Pending state if UXCam was unable to upload them at the end of the last session. Normally they will be sent at the end of the next session.
+     *  Sessions can be in the Pending state if UXCam was unable to upload them at the end of the last session. Normally they will be sent at the end of the next session.
      */
     static pendingSessionCount() {
         return UXCamBridge.pendingSessionCount();

@@ -1,7 +1,7 @@
 
 {
   "name": "react-native-ux-cam",
-  "version": "5.1.1",
+  "version": "5.1.3",
   "description": "React Native wrapper for uxcam.com.",
   "license": "MIT",
   "author": "UXCam Inc. after Mark Miyashita <negativetwelve@gmail.com>",
