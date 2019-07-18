@@ -1,4 +1,3 @@
-
 package com.uxcam;
 
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -40,6 +39,11 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
   @ReactMethod
   public void startNewSession() {
     UXCam.startNewSession();
+  }
+
+  @ReactMethod
+  public void stopSessionAndUploadData() {
+    UXCam.stopSessionAndUploadData();
   }
 
   @ReactMethod
@@ -163,7 +167,7 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void cancelCurrentSession() {
-//    UXCam.cancelCurrentSession();
+   UXCam.cancelCurrentSession();
   }
 
   @ReactMethod
@@ -203,11 +207,11 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
   @ReactMethod
   public void occludeSensitiveView(final int id){
     UIManagerModule uiManager = getReactApplicationContext().getNativeModule(UIManagerModule.class);
-		    uiManager.addUIBlock(new UIBlock()
-		    {
-			    @Override
-			    public void execute(NativeViewHierarchyManager nativeViewHierarchyManager)
-			    {
+        uiManager.addUIBlock(new UIBlock()
+        {
+          @Override
+          public void execute(NativeViewHierarchyManager nativeViewHierarchyManager)
+          {
                     try
                     {
                         View view = nativeViewHierarchyManager.resolveView(id);
@@ -219,18 +223,18 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
                     {
                         
                     }
-			    }
-		    });
+          }
+        });
     
   }
   @ReactMethod
   public void unOccludeSensitiveView(final int id){
     UIManagerModule uiManager = getReactApplicationContext().getNativeModule(UIManagerModule.class);
-		    uiManager.addUIBlock(new UIBlock()
-		    {
-			    @Override
-			    public void execute(NativeViewHierarchyManager nativeViewHierarchyManager)
-			    {
+        uiManager.addUIBlock(new UIBlock()
+        {
+          @Override
+          public void execute(NativeViewHierarchyManager nativeViewHierarchyManager)
+          {
                     try
                     {
                         View view = nativeViewHierarchyManager.resolveView(id);
@@ -242,18 +246,18 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
                     {
                         
                     }
-			    }
-		    });
+          }
+        });
     
   }
   @ReactMethod
   public void occludeSensitiveViewWithoutGesture(final int id){
     UIManagerModule uiManager = getReactApplicationContext().getNativeModule(UIManagerModule.class);
-		    uiManager.addUIBlock(new UIBlock()
-		    {
-			    @Override
-			    public void execute(NativeViewHierarchyManager nativeViewHierarchyManager)
-			    {
+        uiManager.addUIBlock(new UIBlock()
+        {
+          @Override
+          public void execute(NativeViewHierarchyManager nativeViewHierarchyManager)
+          {
                     try
                     {
                         View view = nativeViewHierarchyManager.resolveView(id);
@@ -265,8 +269,8 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
                     {
                         e.printStackTrace();
                     }
-			    }
-		    });
+          }
+        });
     
   }
 }
