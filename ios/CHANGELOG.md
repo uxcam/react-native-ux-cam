@@ -5,6 +5,8 @@
 
 Version   | Changes
 ---------- | ----------
+3.1.3	| Added marker of keyboard location to the schematic recording
+		| Added an 'ultra low' video quality setting
 3.1.2 	| Fix to mobile data upload limits
 		| Fix for symbol conflict in internal copy of 3rd party library
 3.1.1	| Internal changes for performance and stability 
