@@ -32,7 +32,7 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void startWithKey(String key) {
-    UXCam.pluginType("react-native", "5.1.4");
+    UXCam.pluginType("react-native", "5.1.5");
     UXCam.startApplicationWithKeyForCordova(getCurrentActivity(), key);
   }
 
