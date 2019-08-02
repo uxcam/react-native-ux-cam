@@ -72,6 +72,35 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public void addScreenNameToIgnore(String screenName) {
+    UXCam.addScreenNameToIgnore(screenName);
+  }
+
+  @ReactMethod
+  public void addScreenNamesToIgnore(List<String> screenNames) {
+    UXCam.addScreenNamesToIgnore(screenNames);
+  }
+
+  @ReactMethod
+  public void removeScreenNameToIgnore(String screenName) {
+    UXCam.removeScreenNameToIgnore(screenName);
+  }
+
+  @ReactMethod
+  public void removeScreenNamesToIgnore(List<String> screenNames) {
+    UXCam.removeScreenNamesToIgnore(screenNames);
+  }
+
+  @ReactMethod
+  public void removeScreenNameToIgnore(){
+    UXCam.removeScreenNameToIgnore();
+  }
+
+  @ReactMethod public void screenNamesBeingIgnored(Promise promise) {
+    promise.resolve(UXCam.screenNamesBeingIgnored());
+  }
+
+  @ReactMethod
   public void setUserIdentity(String id) {
     UXCam.setUserIdentity(id);
   }
