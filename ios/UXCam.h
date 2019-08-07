@@ -3,7 +3,7 @@
 //
 //  Copyright (c) 2013-2019 UXCam Ltd. All rights reserved.
 //
-//  UXCam SDK VERSION: 3.1.3
+//  UXCam SDK VERSION: 3.1.4
 //
 
 #import <Foundation/Foundation.h>
@@ -299,29 +299,80 @@ NS_ASSUME_NONNULL_BEGIN
 + (void) occludeAllTextFields:(BOOL)occludeAll;
 
 
-#pragma mark Methods for adding events and data to the current session
+#pragma mark Methods for controlling screen naming
 
 /**
-	Enable / disable the automatic tagging of screen names
-	
-	@note By default UXCam will tag new screen names automatically. You can override this using the @c tagScreenName: method or use this method to disable the automatic tagging.
+ UXCam normally captures the view controller name automatically but in cases where it this is not sufficient (such as in OpenGL applications)
+ or where you would like to set a different unique name, use this function to set the name.
  
-	@param enable Set to TRUE to enable automatic screen name tagging (the default) or FALSE to disable it
+ @note Call this in @c [UIViewController viewDidAppear:] after the call to @c [super ...] or automatic screen name tagging will override your value
+ 
+ @param screenName Name to apply to the current screen in the session
+ */
++ (void) tagScreenName:(NSString*)screenName;
+
+/**
+ Enable / disable the automatic tagging of screen names
+ 
+ By default UXCam will tag new screen names automatically. You can override this using the @c tagScreenName: method, or use this method to disable the automatic tagging. Build a list of screen names to ignore with the @c addScreenNamesToIgnore: method
+ 
+ @param enable Set to TRUE to enable automatic screen name tagging (the default) or FALSE to disable it
  
  */
 + (void) setAutomaticScreenNameTagging:(BOOL)enable;
 
 
 /**
-	UXCam normally captures the view controller name automatically but in cases where it this is not sufficient (such as in OpenGL applications)
-	or where you would like to set a different unique name, use this function to set the name.
+ Add a name to the list of screens names that wont be added to the timeline in automatic screen name tagging mode
  
-	@note Call this in @c [UIViewController viewDidAppear:] after the call to @c [super ...] or automatic screen name tagging will override your value
+ This will not impact gesture or action recording - just that the timeline on the dashboard will not contain an entry for this screen name if it appears after this call.
+ Use this if you have view controllers that are presented but which are not primary user interaction screens to make your dashboard timeline easier to understand.
+ 
+ @param nameToIgnore A name to add to the list of screens to ignore
+ 
+ @note This is a convenience method for @c addScreenNamesToIgnore:\@[nameToIgnore]
+ 
+ */
++ (void) addScreenNameToIgnore:(NSString*)nameToIgnore;
 
-	@param screenName Name to apply to the current screen in the session
-*/
-+ (void) tagScreenName:(NSString*)screenName;
+/**
+ Add a list of names to the list of screens names that wont be added to the timeline in automatic screen name tagging mode
+ 
+ This will not impact gesture or action recording - just that the timeline on the dashboard will not contain an entry for any of the screens in this list encountered after this call.
+ Use this if you have view controllers that are presented but which are not primary user interaction screens to make your dashboard timeline easier to understand.
+ 
+ @param namesToIgnore A list of screen names to add to the ignore list
+ 
+ */
++ (void) addScreenNamesToIgnore:(NSArray<NSString*>*)namesToIgnore;
 
+/**
+ Remove the a name from the list of screens to be ignored in automatic screen name tagging mode
+ 
+ @param nameToRemove The name to remove from the list of ignored screens
+ @note This is a convenience method for @c removeScreenNamesToIgnore:\@[nameToRemove]
+ */
++ (void) removeScreenNameToIgnore:(NSString*)nameToRemove;
+
+/**
+ Remove the a list of names from the list of screens to be ignored in automatic screen name tagging mode
+ 
+ @param nameToRemove A list of names to remove from the ignore list
+ */
++ (void) removeScreenNamesToIgnore:(NSArray<NSString*>*)namesToRemove;
+
+/**
+ Remove all entries from the list of screen names to be ignored in automatic screen name tagging mode
+ */
++ (void) removeAllScreenNamesToIgnore;
+
+/**
+ Get the list of screen names that are being ignored in automatic screen name tagging mode
+ */
++ (NSArray<NSString*>*)screenNamesBeingIgnored;
+
+
+#pragma mark Methods for adding events and data to the current session
 
 /**
 	UXCam uses a unique number to tag a device.

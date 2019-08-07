@@ -5,6 +5,7 @@
 
 Version   | Changes
 ---------- | ----------
+3.1.4	| Added API to create a list of screen names to not add to the timeline in automatic screen tagging mode
 3.1.3	| Added marker of keyboard location to the schematic recording
 		| Added an 'ultra low' video quality setting
 3.1.2 	| Fix to mobile data upload limits

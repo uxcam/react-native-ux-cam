@@ -12,7 +12,7 @@ RCT_EXPORT_MODULE();
 }
 
 RCT_EXPORT_METHOD(startWithKey:(NSString *)userAPIKey) {
-    [UXCam pluginType:@"react-native" version:@"5.1.5"];
+    [UXCam pluginType:@"react-native" version:@"5.1.6"];
     [UXCam startWithKey:userAPIKey];
 }
 
@@ -27,6 +27,7 @@ RCT_EXPORT_METHOD(restartSession) {
 RCT_EXPORT_METHOD(allowShortBreakForAnotherApp:(BOOL)continueSession) {
     [UXCam allowShortBreakForAnotherApp:continueSession];
 }
+
 RCT_EXPORT_METHOD(startNewSession) {
     [UXCam startNewSession];
 }
@@ -61,14 +62,6 @@ RCT_EXPORT_METHOD(occludeSensitiveScreen:(BOOL)hideScreen hideGestures:(BOOL) hi
 
 RCT_EXPORT_METHOD(occludeAllTextFields:(BOOL)occludeAll) {
     [UXCam occludeAllTextFields:occludeAll];
-}
-
-RCT_EXPORT_METHOD(setAutomaticScreenNameTagging:(BOOL)enable) {
-    [UXCam setAutomaticScreenNameTagging:enable];
-}
-
-RCT_EXPORT_METHOD(tagScreenName:(NSString *)screenName) {
-    [UXCam tagScreenName:screenName];
 }
 
 RCT_EXPORT_METHOD(setUserIdentity:(NSString*)userIdentity) {
@@ -190,6 +183,49 @@ RCT_EXPORT_METHOD(occludeSensitiveViewWithoutGesture: (nonnull NSNumber *) tag){
         UIView* view = [self.bridge.uiManager viewForReactTag:tag];
         [UXCam occludeSensitiveViewWithoutGesture:view];
     });
+}
+
+#pragma mark Screen name methods
+RCT_EXPORT_METHOD(setAutomaticScreenNameTagging:(BOOL)enable)
+{
+	[UXCam setAutomaticScreenNameTagging:enable];
+}
+
+RCT_EXPORT_METHOD(tagScreenName:(NSString*)screenName)
+{
+	[UXCam tagScreenName:screenName];
+}
+
+RCT_EXPORT_METHOD(addScreenNameToIgnore:(NSString*)screenName)
+{
+	[UXCam addScreenNameToIgnore:screenName];
+}
+
+RCT_EXPORT_METHOD(addScreenNamesToIgnore:(NSArray<NSString*>*)screenNames)
+{
+	[UXCam addScreenNamesToIgnore:screenNames];
+}
+
+RCT_EXPORT_METHOD(removeScreenNameToIgnore:(NSString*)screenName)
+{
+	[UXCam removeScreenNameToIgnore:screenName];
+}
+
+RCT_EXPORT_METHOD(removeScreenNamesToIgnore:(NSArray<NSString*>*)screenNames)
+{
+	[UXCam removeScreenNamesToIgnore:screenNames];
+}
+
+RCT_EXPORT_METHOD(removeAllScreenNamesToIgnore)
+{
+	[UXCam removeAllScreenNamesToIgnore];
+}
+
+RCT_EXPORT_METHOD(screenNamesBeingIgnored:(RCTPromiseResolveBlock)resolve
+				  rejecter:(RCTPromiseRejectBlock)reject)
+{
+	NSArray<NSString*>* ingoreList = [UXCam screenNamesBeingIgnored];
+	resolve(ingoreList);
 }
 
 @end
