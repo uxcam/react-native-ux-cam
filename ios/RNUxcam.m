@@ -16,7 +16,7 @@ RCT_EXPORT_METHOD(startWithKey:(NSString *)userAPIKey) {
     [UXCam startWithKey:userAPIKey];
 }
 
-RCT_EXPORT_METHOD(stopApplicationAndUploadData) {
+RCT_EXPORT_METHOD(stopSessionAndUploadData) {
     [UXCam stopSessionAndUploadData];
 }
 
