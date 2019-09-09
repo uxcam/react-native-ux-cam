@@ -123,14 +123,17 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
         UXCam.setSessionProperty(key, value);
     }
 
-    // @ReactMethod
-    // public void logEvent(String event) {
-    //   UXCam.logEvent(event);
-    // }
+    @ReactMethod
+    public void logEvent(String event) {
+      UXCam.logEvent(event);
+    }
+
+    
 
     @ReactMethod
     public void logEvent(String event, ReadableMap properties) {
         if (properties != null) {
+            
             HashMap<String, String> map = new HashMap<String, String>();
 
             ReadableMapKeySetIterator iterator = properties.keySetIterator();
