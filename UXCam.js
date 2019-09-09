@@ -154,10 +154,10 @@ class UXCam {
      */
     static logEvent(eventName, properties) {
         
-        if(typeof properties !== "undefined"){
+        if(typeof properties !== "undefined" || properties !== null){
             UXCamBridge.logEvent(eventName, properties);
         }else{
-            UXCamBridge.logEvent(eventName,undefined);
+            UXCamBridge.logEvent(eventName);
         }
         
     }
