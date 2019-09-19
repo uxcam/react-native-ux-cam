@@ -15,6 +15,7 @@ Pod::Spec.new do |s|
   s.source_files = "ios/**/*.{h,m}"
   s.requires_arc = true
 
-  s.dependency "React"
+  s.dependency 'React'
+  s.dependency 'UXCam' , '~> 3.1.6'
 end
 

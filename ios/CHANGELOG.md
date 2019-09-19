@@ -5,6 +5,10 @@
 
 Version   | Changes
 ---------- | ----------
+3.1.5	| Additional symbols from 3rd party libraries changed. 
+3.1.4	| Added API to create a list of screen names to not add to the timeline in automatic screen tagging mode
+3.1.3	| Added marker of keyboard location to the schematic recording
+		| Added an 'ultra low' video quality setting
 3.1.2 	| Fix to mobile data upload limits
 		| Fix for symbol conflict in internal copy of 3rd party library
 3.1.1	| Internal changes for performance and stability 
