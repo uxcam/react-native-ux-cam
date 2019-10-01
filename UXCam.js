@@ -16,7 +16,7 @@ class UXCam {
      *  @parameter userAPIKey   The key to identify your UXCam account - find it in the UXCam dashboard for your account at https://dashboard.uxcam.com/user/settings
      */
     static startWithKey(apiKey) {
-        UXCamBridge.startWithKey(apiKey);
+		UXCamBridge.startWithKey(apiKey);
     }
 
     /**
@@ -24,7 +24,7 @@ class UXCam {
      * This happens automatically when the app returns from background.
      */
     static startNewSession() {
-        UXCamBridge.startNewSession();
+		UXCamBridge.startNewSession();
     }
     
     /**
@@ -44,9 +44,8 @@ class UXCam {
      *  @return url path for current session or nil if no verified session is active
      */
     static urlForCurrentSession() {
-        return UXCamBridge.urlForCurrentSession();
+		return UXCamBridge.urlForCurrentSession();
     }
-
 
     /**
      *  Returns a URL path for showing all the current users sessions
@@ -68,13 +67,12 @@ class UXCam {
         @parameter hideScreen Set TRUE to hide the screen from the recording, FALSE to start recording the screen contents again
         @parameter hideGesture Set TRUE to hide the gestures in the screen from the recording, FALSE to start recording the gestures in the screen again
     */
-    static occludeSensitiveScreen(hideScreen,hideGesture) {
+    static occludeSensitiveScreen(hideScreen, hideGesture) {
         if(typeof hideGesture !== "undefined"){
-            UXCamBridge.occludeSensitiveScreen(hideScreen,hideGesture);
+            UXCamBridge.occludeSensitiveScreen(hideScreen, hideGesture);
         }else{
-            UXCamBridge.occludeSensitiveScreen(hideScreen,true);
+            UXCamBridge.occludeSensitiveScreen(hideScreen, true);
         }
-        
     }
 
     /**
@@ -128,7 +126,7 @@ class UXCam {
      @parameter propertyName Name of the property to attach to the session recording
      @parameter value A value to associate with this property
      
-     @note Only NSNumber and NSString value types are supported to a maximum size per entry of 1KiB
+     @note Only number and string value types are supported to a maximum size per entry of 1KiB
      */
     static setSessionProperty(propertyName, value) {
         UXCamBridge.setSessionProperty(propertyName, value);
@@ -149,19 +147,20 @@ class UXCam {
         @parameter eventName Name of the event to attach to the session recording at the current time
         @parameter properties An NSDictionary of properties to associate with this event
      
-        @note Only NSNumber and NSString property types are supported to a maximum count of 100 and maximum size per entry of 1KiB
+        @note Only number and string property types are supported to a maximum count of 100 and maximum size per entry of 1KiB
      */
     static logEvent(eventName, properties) {
-        
         if(typeof properties !== "undefined" || properties !== null){
             UXCamBridge.logEvent(eventName, properties);
         }else{
             UXCamBridge.logEvent(eventName);
         }
-        
     }
 
-
+	/**
+		Returns a promise that will be resolved with the result of the next session verification call
+		resolves with "success" if verification completes OK, or rejects with an error if the verification fails
+	*/
     static addVerificationListener() {
         return UXCamBridge.addVerificationListener();
     }
@@ -222,8 +221,7 @@ class UXCam {
     /**
      *  This will opt this device back into session recordings
      */
-    static optIntoSchematicRecordings() 
-    {
+    static optIntoSchematicRecordings(){
         if (platformIOS) {
             UXCamBridge.optIntoSchematicRecordings();
         }
@@ -295,7 +293,6 @@ class UXCam {
     }
 
     /**
-     
      *  @brief Resume after short break. Only used in android, does nothing on iOS
      */
     static resumeShortBreakForAnotherApp() {
@@ -398,8 +395,7 @@ class UXCam {
     
         @note This is a convenience method for `addScreenNamesToIgnore([nameToIgnore])`
     */
-    static addScreenNameToIgnore(screenName)
-    {
+    static addScreenNameToIgnore(screenName){
         UXCamBridge.addScreenNameToIgnore(screenName);
     }
     
@@ -434,7 +430,7 @@ class UXCam {
         UXCamBridge.removeScreenNamesToIgnore(screenNames);
     }
     
-    //  Remove all entries from the list of screen names to be ignored in automatic screen name tagging mode
+    // Remove all entries from the list of screen names to be ignored in automatic screen name tagging mode
     static removeAllScreenNamesToIgnore(){
         UXCamBridge.removeAllScreenNamesToIgnore();
     }
@@ -443,6 +439,6 @@ class UXCam {
     static screenNamesBeingIgnored(){
         return UXCamBridge.screenNamesBeingIgnored();
     }
-
 }
+
 module.exports = UXCam;
