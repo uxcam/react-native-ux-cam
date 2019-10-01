@@ -59,7 +59,6 @@ class UXCam {
         return UXCamBridge.urlForCurrentUser();
     }
 
-
     /**
         Hide / un-hide the whole screen from the recording
      
@@ -297,8 +296,7 @@ class UXCam {
 
     /**
      
-     *  @brief Resume after short break. Only available in android
-     *  @parameter continueSession Set to TRUE to continue the current session after a short trip out to another app. Default is FALSE - stop the session as soon as the app enters the background.
+     *  @brief Resume after short break. Only used in android, does nothing on iOS
      */
     static resumeShortBreakForAnotherApp() {
         UXCamBridge.resumeShortBreakForAnotherApp();
@@ -365,7 +363,6 @@ class UXCam {
     static occludeSensitiveViewWithoutGesture(ref){
         UXCamBridge.occludeSensitiveViewWithoutGesture(findNodeHandle(ref));
     }
-
 
     /**
         UXCam normally captures the view controller name automatically but in cases where it this is not sufficient (such as in OpenGL applications)
