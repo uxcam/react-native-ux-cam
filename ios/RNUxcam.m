@@ -1,6 +1,13 @@
 #import "RNUxcam.h"
 #import "UXCam.h"
 
+static NSString* const Notification_RNUxcamVerifyCompleted = @"RNUxcamVerifyCompleted";
+static NSString* const RNUxcam_VerifyResult_Key = @"RNUxcam_VerifyResult";
+
+@interface RNUxcam ()
+@property (atomic, strong) NSNumber* lastVerifyResult;
+@property (nonatomic, strong) id<NSObject> verifyObserver;
+@end
 
 @implementation RNUxcam
 @synthesize bridge = _bridge;
@@ -8,13 +15,49 @@ RCT_EXPORT_MODULE();
 
 - (dispatch_queue_t)methodQueue
 {
-    return dispatch_get_main_queue();
+	return dispatch_get_main_queue();
 }
 
 RCT_EXPORT_METHOD(startWithKey:(NSString *)userAPIKey)
 {
-    [UXCam pluginType:@"react-native" version:@"5.1.10"];
-    [UXCam startWithKey:userAPIKey];
+	self.lastVerifyResult = nil;
+	[UXCam pluginType:@"react-native" version:@"5.1.10"];
+	[UXCam startWithKey:userAPIKey
+		buildIdentifier:nil
+		completionBlock:^(BOOL started)
+	 {
+		 self.lastVerifyResult = @(started);
+		 [NSNotificationCenter.defaultCenter postNotificationName:Notification_RNUxcamVerifyCompleted
+														   object:self
+														 userInfo:@{RNUxcam_VerifyResult_Key : self.lastVerifyResult}];
+	 }
+	 ];
+}
+
+RCT_EXPORT_METHOD(addVerificationListener:(RCTPromiseResolveBlock)resolve
+				  				 rejecter:(RCTPromiseRejectBlock)reject)
+{
+	if (self.lastVerifyResult)
+	{
+		resolve(self.lastVerifyResult);
+	}
+	else
+	{
+		NSNotificationCenter * __weak center = NSNotificationCenter.defaultCenter;
+		id __block token = [center addObserverForName:Notification_RNUxcamVerifyCompleted
+											   object:self
+												queue:[NSOperationQueue mainQueue]
+										   usingBlock:^(NSNotification *note)
+							{
+								if (self.lastVerifyResult)
+								{
+									resolve(self.lastVerifyResult);
+									self.lastVerifyResult = nil;
+								}
+								
+								[center removeObserver:token];
+							}];
+	}
 }
 
 RCT_EXPORT_METHOD(stopSessionAndUploadData)
@@ -198,11 +241,6 @@ RCT_EXPORT_METHOD(deletePendingUploads)
 RCT_EXPORT_METHOD(resumeShortBreakForAnotherApp)
 {
 	// A do nothing method on iOS - used in Android
-}
-
-RCT_EXPORT_METHOD(addVerificationListener)
-{
-	// Does nothing on iOS, but could we use it to attach a verify completed block?
 }
 
 RCT_EXPORT_METHOD(occludeSensitiveView: (nonnull NSNumber *) tag)
