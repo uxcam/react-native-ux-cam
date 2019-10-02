@@ -6,10 +6,11 @@ static NSString* const RNUxcam_VerifyResult_Key = @"RNUxcam_VerifyResult";
 
 @interface RNUxcam ()
 @property (atomic, strong) NSNumber* lastVerifyResult;
-@property (nonatomic, strong) id<NSObject> verifyObserver;
+@property (nonatomic, strong) id<NSObject> verifyListener;
 @end
 
 @implementation RNUxcam
+
 @synthesize bridge = _bridge;
 RCT_EXPORT_MODULE();
 
@@ -25,38 +26,62 @@ RCT_EXPORT_METHOD(startWithKey:(NSString *)userAPIKey)
 	[UXCam startWithKey:userAPIKey
 		buildIdentifier:nil
 		completionBlock:^(BOOL started)
-	 {
-		 self.lastVerifyResult = @(started);
-		 [NSNotificationCenter.defaultCenter postNotificationName:Notification_RNUxcamVerifyCompleted
-														   object:self
-														 userInfo:@{RNUxcam_VerifyResult_Key : self.lastVerifyResult}];
-	 }
+						 {
+							 self.lastVerifyResult = @(started);
+							 [NSNotificationCenter.defaultCenter postNotificationName:Notification_RNUxcamVerifyCompleted
+																			   object:self
+																			 userInfo:@{RNUxcam_VerifyResult_Key : self.lastVerifyResult}];
+						 }
 	 ];
 }
 
 RCT_EXPORT_METHOD(addVerificationListener:(RCTPromiseResolveBlock)resolve
-				  				 rejecter:(RCTPromiseRejectBlock)reject)
+				  rejecter:(RCTPromiseRejectBlock)reject)
 {
+	
+	void (^sendResultBlock)(BOOL result) = ^void(BOOL result)
+											{
+												if (result)
+												{
+													resolve(@"success");
+												}
+												else
+												{
+													NSString *code = @"failed";
+													NSString *message = @"UXCam session verification failed";
+													NSError *error = [NSError errorWithDomain:@"RNUXCam" code:1 userInfo:nil];
+													
+													reject(code, message, error);
+												}
+											};
+	
 	if (self.lastVerifyResult)
 	{
-		resolve(self.lastVerifyResult);
+		sendResultBlock(self.lastVerifyResult.boolValue);
+		self.lastVerifyResult = nil;
 	}
 	else
 	{
 		NSNotificationCenter * __weak center = NSNotificationCenter.defaultCenter;
-		id __block token = [center addObserverForName:Notification_RNUxcamVerifyCompleted
-											   object:self
-												queue:[NSOperationQueue mainQueue]
-										   usingBlock:^(NSNotification *note)
-							{
-								if (self.lastVerifyResult)
-								{
-									resolve(self.lastVerifyResult);
-									self.lastVerifyResult = nil;
-								}
-								
-								[center removeObserver:token];
-							}];
+		if (self.verifyListener)
+		{
+			[center removeObserver:self.verifyListener];
+		}
+		
+		self.verifyListener = [center addObserverForName:Notification_RNUxcamVerifyCompleted
+												  object:self
+												   queue:[NSOperationQueue mainQueue]
+											  usingBlock:^(NSNotification *note)
+														   {
+															   if (self.lastVerifyResult)
+															   {
+																   sendResultBlock(self.lastVerifyResult.boolValue);
+																   self.lastVerifyResult = nil;
+															   }
+															   
+															   [center removeObserver:self.verifyListener];
+														   }
+							   ];
 	}
 }
 
