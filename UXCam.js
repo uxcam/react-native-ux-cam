@@ -59,7 +59,6 @@ class UXCam {
         return UXCamBridge.urlForCurrentUser();
     }
 
-
     /**
         Hide / un-hide the whole screen from the recording
      
@@ -101,35 +100,11 @@ class UXCam {
     }
 
     /**
-        UXCam normally captures the view controller name automatically but in cases where it this is not sufficient (such as in OpenGL applications)
-        or where you would like to set a different unique name, use this function to set the name.
-     
-        @note Call this in @c [UIViewController viewDidAppear:] after the call to @c [super ...] or automatic screen name tagging will override your value
-    
-        @parameter screenName Name to apply to the current screen in the session video
-    */
-    static tagScreenName(screenName) {
-        UXCamBridge.tagScreenName(screenName);
-    }
-
-    /**
-        Enable / disable the automatic tagging of screen names
-        
-        @note By default UXCam will tag new screen names automatically. You can override this using the @c tagScreenName: method or use this method to disable the automatic tagging.
-     
-        @parameters enable Set to TRUE to enable automatic screen name tagging (the default) or FALSE to disable it
-     
-     */
-    static setAutomaticScreenNameTagging(autoScreenTagging) {
-        UXCamBridge.setAutomaticScreenNameTagging(autoScreenTagging);
-    }
-
-    /**
      UXCam uses a unique number to tag a device.
      You can set a user identity for a device allowing you to more easily search for it on the dashboard and review their sessions further.
      
      @parameters userIdentity String to apply to this user (device) in this recording session
-     @note Starting with SDK v2.5.11 there is no default for this value - to have the previous behaviour call @c [UXCam setUserIdentity:UIDevice.currentDevice.name];
+     @note Starting with SDK v2.5.11 there is no default for this value - to have the previous behaviour call `UXCam.setUserIdentity(UIDevice.currentDevice.name);`
      */
     static setUserIdentity(userIdentity) {
         UXCamBridge.setUserIdentity(userIdentity);
@@ -178,10 +153,10 @@ class UXCam {
      */
     static logEvent(eventName, properties) {
         
-        if(typeof properties !== "undefined"){
+        if(typeof properties !== "undefined" || properties !== null){
             UXCamBridge.logEvent(eventName, properties);
         }else{
-            UXCamBridge.logEvent(eventName,undefined);
+            UXCamBridge.logEvent(eventName);
         }
         
     }
@@ -215,7 +190,7 @@ class UXCam {
     }
 
     /**
-     *  This will cancel any current session recording and opt this device out of future session recordings until @c optInOverall is called
+     *  This will cancel any current session recording and opt this device out of future session recordings until `optInOverall` is called
      *  @note The default is to opt-in to session recordings, but not to screen recordings, and the defaults will be reset if the user un-installs and re-installs the app
      */
     static optOutOverall(){
@@ -226,7 +201,7 @@ class UXCam {
 
     /**
      *  This will opt this device out of schematic recordings for future settings
-     *  - any current session will be stopped and restarted with the last settings passed to @c startWithKey:
+     *  - any current session will be stopped and restarted with the last settings passed to `startWithKey`
      */
     static optOutOfSchematicRecordings(){
         if (platformIOS) {
@@ -236,7 +211,7 @@ class UXCam {
 
     /**
      *  This will opt this device into session recordings
-     *  - any current session will be stopped and a new session will be started with the last settings passed to @c startWithKey:
+     *  - any current session will be stopped and a new session will be started with the last settings passed to `startWithKey`
      */
     static optInOverall(){
         if (platformIOS) {
@@ -277,7 +252,7 @@ class UXCam {
     }
 
     /**
-     *  This will cancel any current session recording and opt this device out of future session recordings until @c optIn is called
+     *  This will cancel any current session recording and opt this device out of future session recordings until `optIn` is called
      *  @note The default is to opt-in to recordings, and the default will be reset if the user un-installs and re-installs the app
     */
     static optOut() {
@@ -285,7 +260,7 @@ class UXCam {
     }
 
     /**
-     *  This will opt this device back into session recordings - you will need to call @c startWithKey: @i after opting the device back in
+     *  This will opt this device back into session recordings - you will need to call `startWithKey:` after opting the device back in
      */
     static optIn() {
         UXCamBridge.optIn();
@@ -302,7 +277,7 @@ class UXCam {
     /**
      *  Cancels the recording of the current session and discards the data
      *
-     * @note A new session will start as normal when the app nexts come out of the background (depending on the state of the MultiSessionRecord flag), or if you call @c startNewSession
+     * @note A new session will start as normal when the app nexts come out of the background (depending on the state of the MultiSessionRecord flag), or if you call `startNewSession`
     */
     static cancelCurrentSession() {
         UXCamBridge.cancelCurrentSession();
@@ -321,8 +296,7 @@ class UXCam {
 
     /**
      
-     *  @brief Resume after short break. Only available in android
-     *  @parameter continueSession Set to TRUE to continue the current session after a short trip out to another app. Default is FALSE - stop the session as soon as the app enters the background.
+     *  @brief Resume after short break. Only used in android, does nothing on iOS
      */
     static resumeShortBreakForAnotherApp() {
         UXCamBridge.resumeShortBreakForAnotherApp();
@@ -338,7 +312,7 @@ class UXCam {
     /**
      *  Set whether to record multiple sessions or not
      *
-     *  @parameter recordMultipleSessions YES to record a new session automatically when the device comes out of the background. If NO then a single session is recorded, when stopped (either programmatically with @c stopApplicationAndUploadData or by the app going to the background) then no more sessions are recorded until @c startWithKey is called again).
+     *  @parameter recordMultipleSessions YES to record a new session automatically when the device comes out of the background. If NO then a single session is recorded, when stopped (either programmatically with `stopApplicationAndUploadData` or by the app going to the background) then no more sessions are recorded until `startWithKey` is called again).
      *  @note The default setting is to record a new session each time a device comes out of the background. This flag can be set to NO to stop that. You can also set this with the appropriate startWithKey: variant. (This will be reset each time startWithKey is called)
     */
     static setMultiSessionRecord(multiSessionRecord) {
@@ -352,7 +326,6 @@ class UXCam {
     static deletePendingUploads() {
         UXCamBridge.deletePendingUploads();
     }
-
 
     /**
      *  @brief Returns how many sessions are waiting to be uploaded
@@ -372,7 +345,6 @@ class UXCam {
         UXCamBridge.occludeSensitiveView(findNodeHandle(ref));
     }
 
-
     /**
      * Stop hiding a view that was previously hidden
      * If the view passed in was not previously occluded then no action is taken and this method will just return
@@ -390,6 +362,86 @@ class UXCam {
      */
     static occludeSensitiveViewWithoutGesture(ref){
         UXCamBridge.occludeSensitiveViewWithoutGesture(findNodeHandle(ref));
+    }
+
+    /**
+        UXCam normally captures the view controller name automatically but in cases where it this is not sufficient (such as in OpenGL applications)
+        or where you would like to set a different unique name, use this function to set the name.
+    
+        @note Call this in `[UIViewController viewDidAppear:]` after the call to `[super ...]` or automatic screen name tagging will override your value
+    
+        @parameter screenName Name to apply to the current screen in the session video
+    */
+    static tagScreenName(screenName) {
+        UXCamBridge.tagScreenName(screenName);
+    }
+
+    /**
+        Enable / disable the automatic tagging of screen names
+        
+        @note By default UXCam will tag new screen names automatically. You can override this using the `tagScreenName` method or use this method to disable the automatic tagging.
+    
+        @parameters enable Set to TRUE to enable automatic screen name tagging (the default) or FALSE to disable it
+    
+    */
+    static setAutomaticScreenNameTagging(autoScreenTagging) {
+        UXCamBridge.setAutomaticScreenNameTagging(autoScreenTagging);
+    }
+
+    /**
+        Add a name to the list of screens names that wont be added to the timeline in automatic screen name tagging mode
+    
+        This will not impact gesture or action recording - just that the timeline on the dashboard will not contain an entry for this screen name if it appears after this call.
+        Use this if you have view controllers that are presented but which are not primary user interaction screens to make your dashboard timeline easier to understand.
+    
+        @param nameToIgnore A name to add to the list of screens to ignore
+    
+        @note This is a convenience method for `addScreenNamesToIgnore([nameToIgnore])`
+    */
+    static addScreenNameToIgnore(screenName)
+    {
+        UXCamBridge.addScreenNameToIgnore(screenName);
+    }
+    
+    /**
+        Add a list of names to the list of screens names that wont be added to the timeline in automatic screen name tagging mode
+    
+        This will not impact gesture or action recording - just that the timeline on the dashboard will not contain an entry for any of the screens in this list encountered after this call.
+        Use this if you have view controllers that are presented but which are not primary user interaction screens to make your dashboard timeline easier to understand.
+    
+        @param namesToIgnore A list of screen names to add to the ignore list
+    */
+    static addScreenNamesToIgnore(screenNames){
+        UXCamBridge.addScreenNamesToIgnore(screenNames);
+    }
+
+    /**
+        Remove the a name from the list of screens to be ignored in automatic screen name tagging mode
+
+        @param nameToRemove The name to remove from the list of ignored screens
+        @note This is a convenience method for `removeScreenNamesToIgnore([nameToRemove])`
+    */
+    static removeScreenNameToIgnore(screenName){
+        UXCamBridge.removeScreenNameToIgnore(screenName);
+    }
+    
+    /**
+        Remove the a list of names from the list of screens to be ignored in automatic screen name tagging mode
+    
+        @param nameToRemove A list of names to remove from the ignore list
+    */
+    static removeScreenNamesToIgnore(screenNames){
+        UXCamBridge.removeScreenNamesToIgnore(screenNames);
+    }
+    
+    //  Remove all entries from the list of screen names to be ignored in automatic screen name tagging mode
+    static removeAllScreenNamesToIgnore(){
+        UXCamBridge.removeAllScreenNamesToIgnore();
+    }
+
+    // Get the list of screen names that are being ignored in automatic screen name tagging mode
+    static screenNamesBeingIgnored(){
+        return UXCamBridge.screenNamesBeingIgnored();
     }
 
 }
