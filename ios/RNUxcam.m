@@ -21,7 +21,7 @@ RCT_EXPORT_MODULE();
 RCT_EXPORT_METHOD(startWithKey:(NSString *)userAPIKey)
 {
 	self.lastVerifyResult = nil;
-	[UXCam pluginType:@"react-native" version:@"5.1.10"];
+	[UXCam pluginType:@"react-native" version:@"5.1.11"];
 	[UXCam startWithKey:userAPIKey
 		buildIdentifier:nil
 		completionBlock:^(BOOL started)
