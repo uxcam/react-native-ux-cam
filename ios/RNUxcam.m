@@ -13,7 +13,7 @@ RCT_EXPORT_MODULE();
 
 RCT_EXPORT_METHOD(startWithKey:(NSString *)userAPIKey)
 {
-    [UXCam pluginType:@"react-native" version:@"5.1.10"];
+    [UXCam pluginType:@"react-native" version:@"5.1.11"];
     [UXCam startWithKey:userAPIKey];
 }
 

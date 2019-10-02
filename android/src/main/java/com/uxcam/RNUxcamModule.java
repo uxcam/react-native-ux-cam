@@ -34,7 +34,7 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void startWithKey(String key) {
-        UXCam.pluginType("react-native", "5.1.10");
+        UXCam.pluginType("react-native", "5.1.11");
         UXCam.startApplicationWithKeyForCordova(getCurrentActivity(), key);
     }
 
@@ -105,7 +105,7 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
         for (String screen : list) {
             promiseArray.pushString(screen);
         }
-        promise.resolve(UXCam.screenNamesBeingIgnored());
+        promise.resolve(promiseArray);
     }
 
     @ReactMethod
