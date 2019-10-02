@@ -105,7 +105,7 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
         for (String screen : list) {
             promiseArray.pushString(screen);
         }
-        promise.resolve(UXCam.screenNamesBeingIgnored());
+        promise.resolve(promiseArray);
     }
 
     @ReactMethod
