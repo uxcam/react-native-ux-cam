@@ -12,7 +12,8 @@
 
 #import <React/RCTBridgeModule.h>
 #import <React/RCTUIManager.h>
+
 @interface RNUxcam : NSObject <RCTBridgeModule>
 
 @end
-  
+
