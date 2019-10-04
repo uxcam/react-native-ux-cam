@@ -162,9 +162,20 @@ class UXCam {
     }
 
 
-    static addVerificationListener() {
-        return UXCamBridge.addVerificationListener();
-    }
+  /**
+   * @deprecated use NativeEventEmitter to listen for 'UXCam_Verification_Event' event.
+   * Example:
+   * const eventEmitter = new NativeEventEmitter(RNUxcam);
+   * eventEmitter.addListener('UXCam_Verification_Event', event => {
+   *  if(event.success){
+   *    //do something
+   * }else{
+   *    //do something
+   * }
+   * });
+   */
+  static addVerificationListener(error, success) {
+  }
 
     /**
      *  Returns the current recording status

@@ -5,12 +5,15 @@ import android.view.View;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.WritableArray;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.uimanager.NativeViewHierarchyManager;
 import com.facebook.react.uimanager.UIBlock;
 import com.facebook.react.uimanager.UIManagerModule;
@@ -18,13 +21,45 @@ import com.facebook.react.uimanager.UIManagerModule;
 import java.util.HashMap;
 import java.util.List;
 
+import androidx.annotation.Nullable;
+
 public class RNUxcamModule extends ReactContextBaseJavaModule {
+    private static final String UXCAM_PLUGIN_TYPE = "react-native";
+    private static final String UXCAM_REACT_PLUGIN_VERSION = "5.1.11";
+
+    private static final String UXCAM_VERIFICATION_EVENT_KEY = "UXCam_Verification_Event";
+    private static final String PARAM_SUCCESS_KEY = "success";
+    private static final String PARAM_ERROR_MESSAGE_KEY = "error";
 
     private final ReactApplicationContext reactContext;
 
     public RNUxcamModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
+        UXCam.addVerificationListener(new OnVerificationListener() {
+            @Override
+            public void onVerificationSuccess() {
+                WritableMap params = Arguments.createMap();
+                params.putBoolean(PARAM_SUCCESS_KEY, true);
+                sendEvent(RNUxcamModule.this.reactContext, UXCAM_VERIFICATION_EVENT_KEY, params);
+            }
+
+            @Override
+            public void onVerificationFailed(String errorMessage) {
+                WritableMap params = Arguments.createMap();
+                params.putBoolean(PARAM_SUCCESS_KEY, false);
+                params.putString(PARAM_ERROR_MESSAGE_KEY, errorMessage);
+                sendEvent(RNUxcamModule.this.reactContext, UXCAM_VERIFICATION_EVENT_KEY, params);
+            }
+        });
+    }
+
+    private void sendEvent(ReactContext reactContext,
+                           String eventName,
+                           @Nullable WritableMap params) {
+        reactContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit(eventName, params);
     }
 
     @Override
@@ -34,7 +69,7 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void startWithKey(String key) {
-        UXCam.pluginType("react-native", "5.1.11");
+        UXCam.pluginType(UXCAM_PLUGIN_TYPE, UXCAM_REACT_PLUGIN_VERSION);
         UXCam.startApplicationWithKeyForCordova(getCurrentActivity(), key);
     }
 
