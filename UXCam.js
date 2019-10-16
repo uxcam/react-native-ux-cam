@@ -16,7 +16,7 @@ class UXCam {
      *  @parameter userAPIKey   The key to identify your UXCam account - find it in the UXCam dashboard for your account at https://dashboard.uxcam.com/user/settings
      */
     static startWithKey(apiKey) {
-        UXCamBridge.startWithKey(apiKey);
+		UXCamBridge.startWithKey(apiKey);
     }
 
     /**
@@ -24,7 +24,7 @@ class UXCam {
      * This happens automatically when the app returns from background.
      */
     static startNewSession() {
-        UXCamBridge.startNewSession();
+		UXCamBridge.startNewSession();
     }
     
     /**
@@ -44,9 +44,8 @@ class UXCam {
      *  @return url path for current session or nil if no verified session is active
      */
     static urlForCurrentSession() {
-        return UXCamBridge.urlForCurrentSession();
+		return UXCamBridge.urlForCurrentSession();
     }
-
 
     /**
      *  Returns a URL path for showing all the current users sessions
@@ -68,13 +67,12 @@ class UXCam {
         @parameter hideScreen Set TRUE to hide the screen from the recording, FALSE to start recording the screen contents again
         @parameter hideGesture Set TRUE to hide the gestures in the screen from the recording, FALSE to start recording the gestures in the screen again
     */
-    static occludeSensitiveScreen(hideScreen,hideGesture) {
+    static occludeSensitiveScreen(hideScreen, hideGesture) {
         if(typeof hideGesture !== "undefined"){
-            UXCamBridge.occludeSensitiveScreen(hideScreen,hideGesture);
+            UXCamBridge.occludeSensitiveScreen(hideScreen, hideGesture);
         }else{
-            UXCamBridge.occludeSensitiveScreen(hideScreen,true);
+            UXCamBridge.occludeSensitiveScreen(hideScreen, true);
         }
-        
     }
 
     /**
@@ -104,7 +102,6 @@ class UXCam {
      You can set a user identity for a device allowing you to more easily search for it on the dashboard and review their sessions further.
      
      @parameters userIdentity String to apply to this user (device) in this recording session
-     @note Starting with SDK v2.5.11 there is no default for this value - to have the previous behaviour call `UXCam.setUserIdentity(UIDevice.currentDevice.name);`
      */
     static setUserIdentity(userIdentity) {
         UXCamBridge.setUserIdentity(userIdentity);
@@ -128,20 +125,11 @@ class UXCam {
      @parameter propertyName Name of the property to attach to the session recording
      @parameter value A value to associate with this property
      
-     @note Only NSNumber and NSString value types are supported to a maximum size per entry of 1KiB
+     @note Only number and string value types are supported to a maximum size per entry of 1KiB
      */
     static setSessionProperty(propertyName, value) {
         UXCamBridge.setSessionProperty(propertyName, value);
     }
-
-    /**
-        Insert a general event into the timeline - stores the event with the timestamp when it was added.
-    
-        @parameter eventName Name of the event to attach to the session recording at the current time
-    */
-    // static logEvent(eventName) {
-    //     UXCamBridge.logEvent(eventName);
-    // }
 
     /**
         Insert a general event, with associated properties, into the timeline - stores the event with the timestamp when it was added.
@@ -149,16 +137,14 @@ class UXCam {
         @parameter eventName Name of the event to attach to the session recording at the current time
         @parameter properties An NSDictionary of properties to associate with this event
      
-        @note Only NSNumber and NSString property types are supported to a maximum count of 100 and maximum size per entry of 1KiB
+        @note Only number and string property types are supported to a maximum count of 100 and maximum size per entry of 1KiB
      */
     static logEvent(eventName, properties) {
-        
         if(typeof properties !== "undefined" || properties !== null){
             UXCamBridge.logEvent(eventName, properties);
         }else{
             UXCamBridge.logEvent(eventName);
         }
-        
     }
 
 
@@ -229,8 +215,7 @@ class UXCam {
     /**
      *  This will opt this device back into session recordings
      */
-    static optIntoSchematicRecordings() 
-    {
+    static optIntoSchematicRecordings(){
         if (platformIOS) {
             UXCamBridge.optIntoSchematicRecordings();
         }
@@ -302,7 +287,6 @@ class UXCam {
     }
 
     /**
-     
      *  @brief Resume after short break. Only used in android, does nothing on iOS
      */
     static resumeShortBreakForAnotherApp() {
@@ -319,7 +303,7 @@ class UXCam {
     /**
      *  Set whether to record multiple sessions or not
      *
-     *  @parameter recordMultipleSessions YES to record a new session automatically when the device comes out of the background. If NO then a single session is recorded, when stopped (either programmatically with `stopApplicationAndUploadData` or by the app going to the background) then no more sessions are recorded until `startWithKey` is called again).
+     *  @parameter multiSessionRecord YES to record a new session automatically when the device comes out of the background. If NO then a single session is recorded, when stopped (either programmatically with `stopApplicationAndUploadData` or by the app going to the background) then no more sessions are recorded until `startWithKey` is called again).
      *  @note The default setting is to record a new session each time a device comes out of the background. This flag can be set to NO to stop that. You can also set this with the appropriate startWithKey: variant. (This will be reset each time startWithKey is called)
     */
     static setMultiSessionRecord(multiSessionRecord) {
@@ -348,8 +332,8 @@ class UXCam {
      *
      * @parameter sensitiveView The view to occlude in the screen recording
      */
-    static occludeSensitiveView(ref){
-        UXCamBridge.occludeSensitiveView(findNodeHandle(ref));
+    static occludeSensitiveView(sensitiveView){
+        UXCamBridge.occludeSensitiveView(findNodeHandle(sensitiveView));
     }
 
     /**
@@ -358,8 +342,8 @@ class UXCam {
      *
      * @parameter view The view to show again in the screen recording
      */
-    static unOccludeSensitiveView(ref){
-        UXCamBridge.unOccludeSensitiveView(findNodeHandle(ref));
+    static unOccludeSensitiveView(view){
+        UXCamBridge.unOccludeSensitiveView(findNodeHandle(view));
     }
 
     /**
@@ -367,8 +351,8 @@ class UXCam {
      *
      * @parameter sensitiveView The view to occlude in the screen recording
      */
-    static occludeSensitiveViewWithoutGesture(ref){
-        UXCamBridge.occludeSensitiveViewWithoutGesture(findNodeHandle(ref));
+    static occludeSensitiveViewWithoutGesture(sensitiveView){
+        UXCamBridge.occludeSensitiveViewWithoutGesture(findNodeHandle(sensitiveView));
     }
 
     /**
@@ -388,8 +372,7 @@ class UXCam {
         
         @note By default UXCam will tag new screen names automatically. You can override this using the `tagScreenName` method or use this method to disable the automatic tagging.
     
-        @parameters enable Set to TRUE to enable automatic screen name tagging (the default) or FALSE to disable it
-    
+        @parameters autoScreenTagging Set to TRUE to enable automatic screen name tagging (the default) or FALSE to disable it
     */
     static setAutomaticScreenNameTagging(autoScreenTagging) {
         UXCamBridge.setAutomaticScreenNameTagging(autoScreenTagging);
@@ -401,12 +384,11 @@ class UXCam {
         This will not impact gesture or action recording - just that the timeline on the dashboard will not contain an entry for this screen name if it appears after this call.
         Use this if you have view controllers that are presented but which are not primary user interaction screens to make your dashboard timeline easier to understand.
     
-        @param nameToIgnore A name to add to the list of screens to ignore
+        @param screenName A name to add to the list of screens to ignore
     
         @note This is a convenience method for `addScreenNamesToIgnore([nameToIgnore])`
     */
-    static addScreenNameToIgnore(screenName)
-    {
+    static addScreenNameToIgnore(screenName){
         UXCamBridge.addScreenNameToIgnore(screenName);
     }
     
@@ -416,7 +398,7 @@ class UXCam {
         This will not impact gesture or action recording - just that the timeline on the dashboard will not contain an entry for any of the screens in this list encountered after this call.
         Use this if you have view controllers that are presented but which are not primary user interaction screens to make your dashboard timeline easier to understand.
     
-        @param namesToIgnore A list of screen names to add to the ignore list
+        @param screenNames A list of screen names to add to the ignore list
     */
     static addScreenNamesToIgnore(screenNames){
         UXCamBridge.addScreenNamesToIgnore(screenNames);
@@ -425,7 +407,7 @@ class UXCam {
     /**
         Remove the a name from the list of screens to be ignored in automatic screen name tagging mode
 
-        @param nameToRemove The name to remove from the list of ignored screens
+        @param screenName The name to remove from the list of ignored screens
         @note This is a convenience method for `removeScreenNamesToIgnore([nameToRemove])`
     */
     static removeScreenNameToIgnore(screenName){
@@ -435,13 +417,13 @@ class UXCam {
     /**
         Remove the a list of names from the list of screens to be ignored in automatic screen name tagging mode
     
-        @param nameToRemove A list of names to remove from the ignore list
+        @param screenNames A list of names to remove from the ignore list
     */
     static removeScreenNamesToIgnore(screenNames){
         UXCamBridge.removeScreenNamesToIgnore(screenNames);
     }
     
-    //  Remove all entries from the list of screen names to be ignored in automatic screen name tagging mode
+    // Remove all entries from the list of screen names to be ignored in automatic screen name tagging mode
     static removeAllScreenNamesToIgnore(){
         UXCamBridge.removeAllScreenNamesToIgnore();
     }
@@ -450,6 +432,6 @@ class UXCam {
     static screenNamesBeingIgnored(){
         return UXCamBridge.screenNamesBeingIgnored();
     }
-
 }
+
 module.exports = UXCam;
