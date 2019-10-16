@@ -3,7 +3,7 @@
 //
 //  Copyright (c) 2013-2019 UXCam Ltd. All rights reserved.
 //
-//  UXCam SDK VERSION: 3.1.4
+//  UXCam SDK VERSION: 3.1.6
 //
 
 #import <Foundation/Foundation.h>
@@ -305,7 +305,9 @@ NS_ASSUME_NONNULL_BEGIN
  UXCam normally captures the view controller name automatically but in cases where it this is not sufficient (such as in OpenGL applications)
  or where you would like to set a different unique name, use this function to set the name.
  
- @note Call this in @c [UIViewController viewDidAppear:] after the call to @c [super ...] or automatic screen name tagging will override your value
+ @note Call this in @c [UIViewController viewDidAppear:] after the call to @c [super ...] or automatic screen name tagging will override your value.
+ 
+ Screen names added with this method will not be filtered by the ignore list.
  
  @param screenName Name to apply to the current screen in the session
  */
@@ -445,6 +447,10 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (nullable NSString*) urlForCurrentSession;
 
+#pragma mark Other methodss
+
+/// Gets a list of the gesture recognizers that UXCam has added - might be needed if you are using the UIGestureRecognizerDelegate method `shouldRecognizeSimultaneouslyWithGestureRecognizer`
++ (NSArray<UIGestureRecognizer*>*) GetGestureRecognizers;
 
 #pragma mark Internal use only methods
 /**
