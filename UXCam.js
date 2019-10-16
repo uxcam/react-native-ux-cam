@@ -237,7 +237,10 @@ class UXCam {
         if (platformIOS) {
             return UXCamBridge.optInSchematicRecordingStatus();
         }
-        return false;
+        else {
+        // Just return the general status for Android which doesn't currently split status between session data and video
+        	return UXCamBridge.optInOverallStatus();
+        }
     }
 
     /**
