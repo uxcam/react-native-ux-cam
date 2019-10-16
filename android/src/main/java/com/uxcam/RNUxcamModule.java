@@ -226,17 +226,17 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void optIn() {
+    public void optInOverall() {
         UXCam.optIn();
     }
 
     @ReactMethod
-    public void optOut() {
+    public void optOutOverall() {
         UXCam.optOut();
     }
 
     @ReactMethod
-    public void optStatus(Promise promise) {
+    public void optInOverallStatus(Promise promise) {
         promise.resolve(UXCam.optStatus());
     }
 

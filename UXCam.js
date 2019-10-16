@@ -205,9 +205,7 @@ class UXCam {
      *  @note The default is to opt-in to session recordings, but not to screen recordings, and the defaults will be reset if the user un-installs and re-installs the app
      */
     static optOutOverall(){
-        if (platformIOS) {
-            UXCamBridge.optOutOverall();
-        }
+        UXCamBridge.optOutOverall();
     }
 
     /**
@@ -225,9 +223,7 @@ class UXCam {
      *  - any current session will be stopped and a new session will be started with the last settings passed to `startWithKey`
      */
     static optInOverall(){
-        if (platformIOS) {
-            UXCamBridge.optInOverall();
-        }
+        UXCamBridge.optInOverall();
     }
 
     /**
@@ -245,10 +241,7 @@ class UXCam {
      *  @return YES if the device is opted in to session recordings, NO otherwise. The default is YES.
      */
     static optInOverallStatus(){
-        if (platformIOS) {
-            return UXCamBridge.optInOverallStatus();
-        }
-        return false;
+        return UXCamBridge.optInOverallStatus();
     }
 
     /** Returns the opt-in status of this device for schematic recordings
@@ -263,26 +256,29 @@ class UXCam {
     }
 
     /**
+     *  @Deprecated use optOutOverall() instead
      *  This will cancel any current session recording and opt this device out of future session recordings until `optIn` is called
      *  @note The default is to opt-in to recordings, and the default will be reset if the user un-installs and re-installs the app
     */
     static optOut() {
-        UXCamBridge.optOut();
+        UXCamBridge.optOutOverall();
     }
 
     /**
+     *  @Deprecated use optInOverall() instead
      *  This will opt this device back into session recordings - you will need to call `startWithKey:` after opting the device back in
      */
     static optIn() {
-        UXCamBridge.optIn();
+        UXCamBridge.optInOverall();
     }
 
     /**
+     *  @Deprecated use optInOverallStatus() instead
      *  Returns the opt-in status of this device
      *  @return YES if the device is opted in to session recordings, NO otherwise
     */
     static optStatus() {
-        return UXCamBridge.optInStatus()
+        return UXCamBridge.optInOverallStatus()
     }
 
     /**
