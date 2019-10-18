@@ -21,8 +21,6 @@ import com.facebook.react.uimanager.UIManagerModule;
 import java.util.HashMap;
 import java.util.List;
 
-import androidx.annotation.Nullable;
-
 public class RNUxcamModule extends ReactContextBaseJavaModule {
     private static final String UXCAM_PLUGIN_TYPE = "react-native";
     private static final String UXCAM_REACT_PLUGIN_VERSION = "5.1.11";
@@ -55,8 +53,7 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
     }
 
     private void sendEvent(ReactContext reactContext,
-                           String eventName,
-                           @Nullable WritableMap params) {
+                           String eventName, WritableMap params) {
         reactContext
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit(eventName, params);
