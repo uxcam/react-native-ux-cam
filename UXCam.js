@@ -269,6 +269,31 @@ class UXCam {
         return UXCamBridge.optInOverallStatus()
     }
 
+    static optIntoVideoRecording(){
+      if (platformAndroid) {
+        UXCamBridge.optIntoVideoRecording();
+      }else if(platformIOS){
+        UXCamBridge.optIntoSchematicRecordings();
+      }
+    }
+
+    static optOutOfVideoRecording(){
+      if (platformAndroid) {
+        UXCamBridge.optOutOfVideoRecording();
+      }else if(platformIOS){
+        UXCamBridge.optOutOfSchematicRecordings();
+      }
+    }
+
+    static optInVideoRecordingStatus(){
+      if (platformAndroid) {
+        return UXCamBridge.optInVideoRecordingStatus();
+      }else if(platformIOS){
+        return UXCamBridge.optInSchematicRecordingStatus();
+      }
+      return false;
+    }
+
     /**
      *  Cancels the recording of the current session and discards the data
      *

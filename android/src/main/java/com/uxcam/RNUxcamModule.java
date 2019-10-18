@@ -18,10 +18,9 @@ import com.facebook.react.uimanager.NativeViewHierarchyManager;
 import com.facebook.react.uimanager.UIBlock;
 import com.facebook.react.uimanager.UIManagerModule;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import androidx.annotation.Nullable;
 
 public class RNUxcamModule extends ReactContextBaseJavaModule {
     private static final String UXCAM_PLUGIN_TYPE = "react-native";
@@ -55,8 +54,7 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
     }
 
     private void sendEvent(ReactContext reactContext,
-                           String eventName,
-                           @Nullable WritableMap params) {
+                           String eventName, WritableMap params) {
         reactContext
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit(eventName, params);
@@ -115,7 +113,10 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void addScreenNamesToIgnore(ReadableArray screenNames) {
-        UXCam.addScreenNamesToIgnore(screenNames.toArrayList());
+        ArrayList<Object> list = screenNames.toArrayList();
+        for (Object screenName : list) {
+            UXCam.addScreenNameToIgnore(screenName.toString());
+        }
     }
 
     @ReactMethod
@@ -125,7 +126,10 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void removeScreenNamesToIgnore(ReadableArray screenNames) {
-        UXCam.removeScreenNamesToIgnore(screenNames.toArrayList());
+        ArrayList<Object> list = screenNames.toArrayList();
+        for (Object screenName : list) {
+            UXCam.removeScreenNameToIgnore(screenName.toString());
+        }
     }
 
     @ReactMethod
@@ -163,13 +167,11 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
       UXCam.logEvent(event);
     }
 
-    
-
     @ReactMethod
     public void logEvent(String event, ReadableMap properties) {
         if (properties != null) {
             
-            HashMap<String, String> map = new HashMap<String, String>();
+            HashMap<String, Object> map = new HashMap<String, Object>();
 
             ReadableMapKeySetIterator iterator = properties.keySetIterator();
             while (iterator.hasNextKey()) {
@@ -238,6 +240,21 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void optInOverallStatus(Promise promise) {
         promise.resolve(UXCam.optStatus());
+    }
+
+    @ReactMethod
+    public void optIntoVideoRecording(){
+        UXCam.optIntoVideoRecording();
+    }
+
+    @ReactMethod
+    public void optOutOfVideoRecording(){
+        UXCam.optOutOfVideoRecording();
+    }
+
+    @ReactMethod
+    public void optInVideoRecordingStatus(Promise promise){
+        promise.resolve(UXCam.optInVideoRecordingStatus());
     }
 
     @ReactMethod
