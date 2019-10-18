@@ -242,6 +242,18 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
         promise.resolve(UXCam.optStatus());
     }
 
+    public void optIntoVideoRecording(){
+        UXCam.optIntoVideoRecording();
+    }
+
+    public void optOutOfVideoRecording(){
+        UXCam.optOutOfVideoRecording();
+    }
+
+    public void optInVideoRecordingStatus(Promise promise){
+        promise.resolve(UXCam.optInVideoRecordingStatus());
+    }
+
     @ReactMethod
     public void cancelCurrentSession() {
         UXCam.cancelCurrentSession();
