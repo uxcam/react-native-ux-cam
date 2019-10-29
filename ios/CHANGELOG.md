@@ -5,7 +5,13 @@
 
 Version   | Changes
 ---------- | ----------
-3.1.5	| Additional symbols from 3rd party libraries changed. 
+3.1.7	| Added 'application not responding' (ANR) monitoring
+		| Fix a problem where some recording settings were ignored for offline sessions
+		| Limits on number and size of events that can be added
+3.1.6	| iOS10 minimum deployment target
+		| Added accessor method to get list of gesture recognizers that UXCam adds to the main app window
+		| Support for upcoming dashboard features
+3.1.5	| Additional symbols from 3rd party libraries changed to avoid clashes. 
 3.1.4	| Added API to create a list of screen names to not add to the timeline in automatic screen tagging mode
 3.1.3	| Added marker of keyboard location to the schematic recording
 		| Added an 'ultra low' video quality setting

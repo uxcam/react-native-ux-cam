@@ -3,7 +3,7 @@
 //
 //  Copyright (c) 2013-2019 UXCam Ltd. All rights reserved.
 //
-//  UXCam SDK VERSION: 3.1.6
+//  UXCam SDK VERSION: 3.1.7
 //
 
 #import <Foundation/Foundation.h>
@@ -359,7 +359,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Remove the a list of names from the list of screens to be ignored in automatic screen name tagging mode
  
- @param nameToRemove A list of names to remove from the ignore list
+ @param namesToRemove A list of names to remove from the ignore list
  */
 + (void) removeScreenNamesToIgnore:(NSArray<NSString*>*)namesToRemove;
 
