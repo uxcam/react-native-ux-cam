@@ -16,6 +16,6 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.dependency 'React'
-  s.dependency 'UXCam' , '~> 3.1.7'
+  s.dependency 'UXCam' , '~> 3.1.8'
 end
 
