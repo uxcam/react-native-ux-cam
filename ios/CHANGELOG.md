@@ -5,6 +5,7 @@
 
 Version   | Changes
 ---------- | ----------
+3.1.9-beta | Improved react-native schematic rendering
 3.1.8	| Extra precautions when generating JSON to handle bad values 
 3.1.7	| Added 'application not responding' (ANR) monitoring
 		| Fix a problem where some recording settings were ignored for offline sessions

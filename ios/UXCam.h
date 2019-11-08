@@ -3,7 +3,7 @@
 //
 //  Copyright (c) 2013-2019 UXCam Ltd. All rights reserved.
 //
-//  UXCam SDK VERSION: 3.1.8
+//  UXCam SDK VERSION: 3.1.9
 //
 
 #import <Foundation/Foundation.h>
@@ -458,7 +458,6 @@ NS_ASSUME_NONNULL_BEGIN
  *   @note For internal use only
  */
 + (void) pluginType:(NSString*)type version:(NSString*)versionNumber;
-
 
 #pragma mark - Deprecated methods
 /// Deprecated - old workaround for iOS 11.2+ screen recordings that is no longer needed with schematic recordings
