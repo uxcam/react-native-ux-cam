@@ -459,6 +459,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (void) pluginType:(NSString*)type version:(NSString*)versionNumber;
 
+/// Used by non-native view hybrid wrappers to pass in occlusion rects
++ (void) occludeRectsOnNextFrame:(NSString*)rectList;
+
 #pragma mark - Deprecated methods
 /// Deprecated - old workaround for iOS 11.2+ screen recordings that is no longer needed with schematic recordings
 + (void) stopRecordingScrollingOnStutterOS:(BOOL)stopScrollRecording __attribute__((deprecated("from SDK 3.1.0 - no longer needed with schematic recordings")));

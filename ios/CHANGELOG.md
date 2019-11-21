@@ -5,7 +5,11 @@
 
 Version   | Changes
 ---------- | ----------
-3.1.9-beta | Improved react-native schematic rendering
+3.1.9	 | Improved react-native schematic rendering
+		| Improved handling of very short sessions and rapid restart of session
+		| Restore screen name when a UIAlertController is dismissed
+		| Improved uploading of large batches of sessions
+		| Right to left text alignment handling
 3.1.8	| Extra precautions when generating JSON to handle bad values 
 3.1.7	| Added 'application not responding' (ANR) monitoring
 		| Fix a problem where some recording settings were ignored for offline sessions
