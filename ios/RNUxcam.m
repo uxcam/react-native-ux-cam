@@ -2,6 +2,7 @@
 #import "UXCam.h"
 
 #import <React/RCTUIManager.h>
+#import <React/RCTUIManagerUtils.h>
 
 static NSString* const RNUxcam_VerifyEvent_Name = @"UXCam_Verification_Event";
 
@@ -94,6 +95,22 @@ RCT_EXPORT_METHOD(startWithKey:(NSString *)userAPIKey)
 		
 		[self sendEventWithName:RNUxcam_VerifyEvent_Name body:eventBody];
 	}
+}
+
+/// Interpret the 'tag' passed in (result of findNodeFromHandle) which used to be just an NSNumber view tag, but now comes in as a full dictionary. Change in some random RN version?
+- (NSNumber*)tagNumberFromTag:(id)tag
+{
+	NSNumber* reactTag = nil;
+	if ([tag isKindOfClass:NSDictionary.class])
+	{
+		reactTag = tag[@"_nativeTag"];
+	}
+	else if ([tag isKindOfClass:NSNumber.class])
+	{
+		reactTag = tag;
+	}
+	
+	return reactTag;
 }
 
 #pragma mark General UXCam SDK method mappings
@@ -241,31 +258,31 @@ RCT_EXPORT_METHOD(optIntoSchematicRecordings)
 }
 
 RCT_EXPORT_METHOD(optInOverallStatus:(RCTPromiseResolveBlock)resolve
-				  			rejecter:(RCTPromiseRejectBlock)reject)
+				  rejecter:(RCTPromiseRejectBlock)reject)
 {
 	resolve(@(UXCam.optInOverallStatus));
 }
 
 RCT_EXPORT_METHOD(optInSchematicRecordingStatus:(RCTPromiseResolveBlock)resolve
-				  					   rejecter:(RCTPromiseRejectBlock)reject)
+				  rejecter:(RCTPromiseRejectBlock)reject)
 {
 	resolve(@(UXCam.optInSchematicRecordingStatus));
 }
 
 RCT_EXPORT_METHOD(isRecording:(RCTPromiseResolveBlock)resolve
-				  	 rejecter:(RCTPromiseRejectBlock)reject)
+				  rejecter:(RCTPromiseRejectBlock)reject)
 {
 	resolve(@(UXCam.isRecording));
 }
 
 RCT_EXPORT_METHOD(getMultiSessionRecord:(RCTPromiseResolveBlock)resolve
-							   rejecter:(RCTPromiseRejectBlock)reject)
+				  rejecter:(RCTPromiseRejectBlock)reject)
 {
 	resolve(@(UXCam.getMultiSessionRecord));
 }
 
 RCT_EXPORT_METHOD(pendingSessionCount:(RCTPromiseResolveBlock)resolve
-							 rejecter:(RCTPromiseRejectBlock)reject)
+				  rejecter:(RCTPromiseRejectBlock)reject)
 {
 	resolve(@(UXCam.pendingUploads));
 }
@@ -280,31 +297,93 @@ RCT_EXPORT_METHOD(resumeShortBreakForAnotherApp)
 	// A do nothing method on iOS - used in Android
 }
 
-RCT_EXPORT_METHOD(occludeSensitiveView: (nonnull NSNumber *) tag)
+RCT_EXPORT_METHOD(occludeSensitiveView: (id) tag)
 {
-	dispatch_async(dispatch_get_main_queue(), ^
-				   {
-					   UIView* view = [self.bridge.uiManager viewForReactTag:tag];
-					   [UXCam occludeSensitiveView:view];
-				   });
+	NSNumber* reactTag = [self tagNumberFromTag:tag];
+	if (reactTag)
+	{
+		// Very convoluted way to get the occlusion to not run until the UIManager has completed any pending operations - without this the current view being setup in something like
+		// <Text ref={(view) => RNUxcam.occludeSensitiveView(view)}>Occluded text</Text>
+		// wont be found in the registry and so wont be occluded
+		dispatch_async(RCTGetUIManagerQueue(), ^
+					   {
+						   [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry)
+							{
+								UIView* view = viewRegistry[reactTag];
+								if (view)
+								{
+									[UXCam occludeSensitiveView:view];
+								}
+								else
+								{
+									NSLog(@"RNUXCam:occludeSensitiveView - unable to find view for reactTag %@", reactTag);
+								}
+							}];
+					   });
+	}
+	else
+	{
+		NSLog(@"RNUXCam:occludeSensitiveView - unable to find reactTag from %@", tag);
+	}
 }
 
-RCT_EXPORT_METHOD(unOccludeSensitiveView: (nonnull NSNumber *) tag)
+RCT_EXPORT_METHOD(unOccludeSensitiveView: (id) tag)
 {
-	dispatch_async(dispatch_get_main_queue(), ^
-				   {
-					   UIView* view = [self.bridge.uiManager viewForReactTag:tag];
-					   [UXCam unOccludeSensitiveView:view];
-				   });
+	NSNumber* reactTag = [self tagNumberFromTag:tag];
+	if (reactTag)
+	{
+		// Very convoluted way to get the occlusion to not run until the UIManager has completed any pending operations - without this the current view
+		// might not be found in the registry and so wont be unoccluded. Probably less of a problem with unOcclusion, but left to mirror the other methods
+		dispatch_async(RCTGetUIManagerQueue(), ^
+					   {
+						   [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry)
+							{
+								UIView* view = viewRegistry[reactTag];
+								if (view)
+								{
+									[UXCam unOccludeSensitiveView:view];
+								}
+								else
+								{
+									NSLog(@"RNUXCam:unOccludeSensitiveView - unable to find view for reactTag %@", reactTag);
+								}
+							}];
+					   });
+	}
+	else
+	{
+		NSLog(@"RNUXCam:unOccludeSensitiveView - unable to find reactTag from %@", tag);
+	}
 }
 
-RCT_EXPORT_METHOD(occludeSensitiveViewWithoutGesture: (nonnull NSNumber *) tag)
+RCT_EXPORT_METHOD(occludeSensitiveViewWithoutGesture: (id) tag)
 {
-	dispatch_async(dispatch_get_main_queue(), ^
-				   {
-					   UIView* view = [self.bridge.uiManager viewForReactTag:tag];
-					   [UXCam occludeSensitiveViewWithoutGesture:view];
-				   });
+	NSNumber* reactTag = [self tagNumberFromTag:tag];
+	if (reactTag)
+	{
+		// Very convoluted way to get the occlusion to not run until the UIManager has completed any pending operations - without this the current view being setup in something like
+		// <Text ref={(view) => RNUxcam.occludeSensitiveViewWithoutGesture(view)}>Occluded text</Text>
+		// wont be found in the registry and so wont be occluded
+		dispatch_async(RCTGetUIManagerQueue(), ^
+					   {
+						   [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry)
+							{
+								UIView* view = viewRegistry[reactTag];
+								if (view)
+								{
+									[UXCam occludeSensitiveViewWithoutGesture:view];
+								}
+								else
+								{
+									NSLog(@"RNUXCam:occludeSensitiveViewWithoutGesture - unable to find view for reactTag %@", reactTag);
+								}
+							}];
+					   });
+	}
+	else
+	{
+		NSLog(@"RNUXCam:occludeSensitiveViewWithoutGesture - unable to find reactTag from %@", tag);
+	}
 }
 
 #pragma mark Screen name methods
