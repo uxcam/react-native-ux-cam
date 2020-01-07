@@ -13,7 +13,7 @@ class UXCam {
      *  This will start the UXCam system, get the settings configurations from our server and start capturing the data according to the configuration.
      *
      *  @brief Start the UXCam session
-     *  @parameter userAPIKey   The key to identify your UXCam account - find it in the UXCam dashboard for your account at https://dashboard.uxcam.com/user/settings
+     *  @parameter userAPIKey   The key to identify your UXCam app - find it in the UXCam dashboard for your account 
      */
     static startWithKey(apiKey) {
 		UXCamBridge.startWithKey(apiKey);
@@ -80,7 +80,7 @@ class UXCam {
      
         Call this when you want to hide the contents of all UITextFields from the screen capture. Default is NO.
      
-        @parameter occludeAll Set YES to hide all UITextField views on the screen in the recording, NO to stop occluding them from the screen recording.
+        @parameter occludeAll Set `true` to hide all UITextField views on the screen in the recording, `false` to stop occluding them from the screen recording.
      */
     static occludeAllTextView() {
         UXCamBridge.occludeAllTextFields(true);
@@ -91,7 +91,7 @@ class UXCam {
      
         Call this when you want to hide the contents of all UITextFields from the screen capture. Default is NO.
      
-        @parameter occludeAll Set YES to hide all UITextField views on the screen in the recording, NO to stop occluding them from the screen recording.
+        @parameter occludeAll Set `true` to hide all UITextField views on the screen in the recording, `false` to stop occluding them from the screen recording.
      */
     static occludeAllTextFields(occludeAll) {
         UXCamBridge.occludeAllTextFields(occludeAll);
@@ -113,7 +113,7 @@ class UXCam {
      @parameter propertyName Name of the property to attach to the user
      @parameter value A value to associate with this property
      
-     @note Only NSNumber and NSString value types are supported to a maximum size per entry of 1KiB
+     @note Only number and string value types are supported to a maximum size per entry of 1KiB
      */
     static setUserProperty(propertyName, value) {
         UXCamBridge.setUserProperty(propertyName, value);
@@ -160,13 +160,13 @@ class UXCam {
    * }
    * });
    */
-  static addVerificationListener(error, success) {
-  }
+	static addVerificationListener(error, success) {
+  	}
 
     /**
      *  Returns the current recording status
      *
-     *  @return YES if the session is being recorded
+     *  @return true if the session is being recorded
      */
     static isRecording() {
         return UXCamBridge.isRecording();
@@ -198,8 +198,10 @@ class UXCam {
      *  This will opt this device out of schematic recordings for future settings
      *  - any current session will be stopped and restarted with the last settings passed to `startWithKey`
      */
-    static optOutOfSchematicRecordings(){
-        if (platformIOS) {
+    static optOutOfSchematicRecordings()
+    {
+        if (platformIOS) 
+        {
             UXCamBridge.optOutOfSchematicRecordings();
         }
     }
@@ -208,36 +210,43 @@ class UXCam {
      *  This will opt this device into session recordings
      *  - any current session will be stopped and a new session will be started with the last settings passed to `startWithKey`
      */
-    static optInOverall(){
+    static optInOverall()
+    {
         UXCamBridge.optInOverall();
     }
 
     /**
      *  This will opt this device back into session recordings
      */
-    static optIntoSchematicRecordings(){
-        if (platformIOS) {
+    static optIntoSchematicRecordings()
+    {
+        if (platformIOS) 
+        {
             UXCamBridge.optIntoSchematicRecordings();
         }
     }
 
     /**
      *  Returns the opt-in status of this device
-     *  @return YES if the device is opted in to session recordings, NO otherwise. The default is YES.
+     *  @return true if the device is opted in to session recordings, false otherwise. The default is false.
      */
-    static optInOverallStatus(){
+    static optInOverallStatus()
+    {
         return UXCamBridge.optInOverallStatus();
     }
 
     /** Returns the opt-in status of this device for schematic recordings
-     *  @returns YES if the device is opted in to schematic recordings, NO otherwise. The default is NO.
+     *  @returns true if the device is opted in to schematic recordings, NO otherwise. The default is false.
      *  @note Use in conjunction with optInOverallStatus to control the overall recording status for the device
      */
-    static optInSchematicRecordingStatus(){
-        if (platformIOS) {
+    static optInSchematicRecordingStatus()
+    {
+        if (platformIOS) 
+        {
             return UXCamBridge.optInSchematicRecordingStatus();
         }
-        else {
+        else 
+        {
         // Just return the general status for Android which doesn't currently split status between session data and video
         	return UXCamBridge.optInOverallStatus();
         }
@@ -254,7 +263,6 @@ class UXCam {
 
     /**
      *  @Deprecated use optInOverall() instead
-     *  This will opt this device back into session recordings - you will need to call `startWithKey:` after opting the device back in
      */
     static optIn() {
         UXCamBridge.optInOverall();
@@ -262,14 +270,12 @@ class UXCam {
 
     /**
      *  @Deprecated use optInOverallStatus() instead
-     *  Returns the opt-in status of this device
-     *  @return YES if the device is opted in to session recordings, NO otherwise
     */
     static optStatus() {
         return UXCamBridge.optInOverallStatus()
     }
 
-    static optIntoVideoRecording(){
+    static optIntoVideoRecording() {
       if (platformAndroid) {
         UXCamBridge.optIntoVideoRecording();
       }else if(platformIOS){
@@ -277,7 +283,7 @@ class UXCam {
       }
     }
 
-    static optOutOfVideoRecording(){
+    static optOutOfVideoRecording() {
       if (platformAndroid) {
         UXCamBridge.optOutOfVideoRecording();
       }else if(platformIOS){
