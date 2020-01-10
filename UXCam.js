@@ -317,14 +317,22 @@ class UXCam {
      *  @param continueSession Set to TRUE to continue the current session after a short trip out to another app. Default is FALSE - stop the session as soon as the app enters the background.
      */
     static allowShortBreakForAnotherApp(continueSession) {
-        UXCamBridge.allowShortBreakForAnotherApp(continueSession);
+        if (platformAndroid) {
+            if (typeof continueSession === 'boolean') {
+                UXCamBridge.allowShortBreakForAnotherApp(continueSession);
+            } else if (typeof continueSession === 'number') {
+                UXCamBridge.allowShortBreakForAnotherAppInMillis(continueSession);
+            }
+        } else if (platformIOS) {
+            UXCamBridge.allowShortBreakForAnotherApp(true);
+        }
     }
 
     /**
      *  @brief Resume after short break. Only used in android, does nothing on iOS
      */
     static resumeShortBreakForAnotherApp() {
-        UXCamBridge.resumeShortBreakForAnotherApp();
+        UXCamBridge.allowShortBreakForAnotherApp(false);
     }
 
     /**

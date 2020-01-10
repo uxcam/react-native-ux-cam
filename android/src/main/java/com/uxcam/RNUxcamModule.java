@@ -263,18 +263,13 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void allowShortBreakForAnotherApp() {
-        UXCam.allowShortBreakForAnotherApp();
+    public void allowShortBreakForAnotherApp(boolean startShortBreak) {
+        UXCam.allowShortBreakForAnotherApp(startShortBreak);
     }
 
     @ReactMethod
-    public void allowShortBreakForAnotherApp(int millis) {
+    public void allowShortBreakForAnotherAppInMillis(int millis) {
         UXCam.allowShortBreakForAnotherApp(millis);
-    }
-
-    @ReactMethod
-    public void resumeShortBreakForAnotherApp() {
-        UXCam.resumeShortBreakForAnotherApp();
     }
 
     @ReactMethod
