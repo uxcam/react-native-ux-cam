@@ -1,9 +1,9 @@
 //
 //  UXCam.h
 //
-//  Copyright (c) 2013-2019 UXCam Ltd. All rights reserved.
+//  Copyright (c) 2013-2020 UXCam Ltd. All rights reserved.
 //
-//  UXCam SDK VERSION: 3.1.9
+//  UXCam SDK VERSION: 3.1.11
 //
 
 #import <Foundation/Foundation.h>
@@ -459,8 +459,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (void) pluginType:(NSString*)type version:(NSString*)versionNumber;
 
-/// Used by non-native view hybrid wrappers to pass in occlusion rects
-+ (void) occludeRectsOnNextFrame:(NSString*)rectList;
+/// Used by non-native view hybrid wrappers to pass in occlusion rects - An array where each item is an array of 4 NSNumber items - each define a rect: x, y, width, height
++ (void) occludeRectsOnNextFrame:(NSArray<NSArray<NSNumber*>*>*)rectList;
 
 #pragma mark - Deprecated methods
 /// Deprecated - old workaround for iOS 11.2+ screen recordings that is no longer needed with schematic recordings
