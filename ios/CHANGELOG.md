@@ -5,7 +5,12 @@
 
 Version   | Changes
 ---------- | ----------
+3.1.13	| Fixed a problem with occlusion rects on certain devices
+		| Removed some debug events that were being added to some timelines
+3.1.12	| Reduced Podspec minimum iOS version back to 9.0, but UXCam will not record sessions on iOS 9 device, iOS 10 required for session recording
+		| Refinement of mobile upload strategy
 3.1.11	| Fix a problem with empty text strings in the schematic rendering
+		| Contents of UITextField and UITextView now captured on schematic recordings to match native recording
 3.1.10	| Fix alignment of text in schematic keyboard view
 		| Improve schematic rendering for clipToBounds views and attributed text
 		| Fix a problem with rendering system fonts in schematic views on iOS13

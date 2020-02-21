@@ -10,13 +10,13 @@ Pod::Spec.new do |s|
   s.homepage     = "https://github.com/negativetwelve/react-native-ux-cam"
   s.license      = "MIT"
   s.author       = { "author" => "author@domain.cn" }
-  s.platform     = :ios, "10.0"
+  s.platform     = :ios, "9.0"
   s.source       = { :git => "https://github.com/negativetwelve/react-native-ux-cam.git", :tag => "#{s.version}" }
   s.source_files = "ios/**/*.{h,m}"
   s.requires_arc = true
   s.static_framework = true
 
   s.dependency 'React'
-  s.dependency 'UXCam' , '~> 3.1.11'
+  s.dependency 'UXCam' , '~> 3.1.13'
 end
 
