@@ -10,7 +10,7 @@ For react-native version 0.60 if using iOS you then need to:
 
 `cd ios`
 
-Edit the `Podfile` first line to be `platform :ios, '10.0'` rather than `platform :ios, '9.0'` then run the following to install the CocoaPods:
+The latest versions have added back support building with iOS 9 - but UXCam will not record sessions on iOS9 - so editing the Podfile is no longer necessary.
 
 `pod update && cd ..`
 
