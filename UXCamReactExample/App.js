@@ -24,8 +24,8 @@ type Props = {};
 export default class App extends Component<Props> {
 
   componentDidMount(){
-    RNUxcam.startWithKey('YOUR UXCAM API KEY GOES HERE');
     RNUxcam.optIntoSchematicRecordings();
+    RNUxcam.startWithKey('YOUR UXCAM API KEY GOES HERE');
   }
 
   render() {

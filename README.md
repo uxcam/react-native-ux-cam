@@ -22,6 +22,7 @@ RNUxcam.startWithKey('YOUR API KEY');
 ```
 
 # For testing example app
+For more detailed example using react-navigation, see [UXCam-demo-chat-app](https://github.com/samin20/UXCam-demo-app)
 ## Setup
 `yarn install`
 
