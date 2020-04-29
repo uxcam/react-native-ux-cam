@@ -5,6 +5,17 @@
 
 Version   | Changes
 ---------- | ----------
+3.2.1	| Extra traps to avoid running and creating a crash on iOS 9
+		| Removed methods deprecated in v3.0
+		| Further improvements to cancelled session reporting
+3.2.0	| Refactored network code to a more modern library to give better control over uploads
+		| Improved handling of cancelled sessions
+		| Improved rendering of long text strings in schematic captures
+		|
+		| NB: Xcode 11 is required to use the UXCam framework from 3.2.0 onwards
+		|
+3.1.15	| Fixing more issues with some hybrid platforms
+3.1.14	| Fixing a problem with newer Flutter SDKs
 3.1.13	| Fixed a problem with occlusion rects on certain devices
 		| Removed some debug events that were being added to some timelines
 3.1.12	| Reduced Podspec minimum iOS version back to 9.0, but UXCam will not record sessions on iOS 9 device, iOS 10 required for session recording

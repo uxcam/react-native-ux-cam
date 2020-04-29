@@ -3,7 +3,7 @@
 //
 //  Copyright (c) 2013-2020 UXCam Ltd. All rights reserved.
 //
-//  UXCam SDK VERSION: 3.1.13
+//  UXCam SDK VERSION: 3.2.1
 //
 
 #import <Foundation/Foundation.h>
@@ -463,80 +463,10 @@ NS_ASSUME_NONNULL_BEGIN
 + (void) occludeRectsOnNextFrame:(NSArray<NSArray<NSNumber*>*>*)rectList;
 
 #pragma mark - Deprecated methods
+
 /// Deprecated - old workaround for iOS 11.2+ screen recordings that is no longer needed with schematic recordings
 + (void) stopRecordingScrollingOnStutterOS:(BOOL)stopScrollRecording __attribute__((deprecated("from SDK 3.1.0 - no longer needed with schematic recordings")));
 
-/// Deprecated - will fall through to the new method `uploadingPendingSessions`
-+ (void) UploadingPendingSessions:(void (^)(void))block __attribute__((deprecated("from SDK 3.0 - use - uploadingPendingSessions"))) NS_SWIFT_UNAVAILABLE("Deprecated method not available in Swift");
-
-/// Deprecated - will fall through to the new method `captureLogOutput`
-+ (void) CaptureLogOutput __attribute__((deprecated("from SDK 3.0 - use - captureLogOutput"))) NS_SWIFT_UNAVAILABLE("Deprecated method not available in Swift");
-
-/// Deprecated - will fall through to the new method `disableCrashHandling`
-+ (void)DisableCrashHandling:(BOOL)disable __attribute__((deprecated("from SDK 3.0 - use - disableCrashHandling"))) NS_SWIFT_UNAVAILABLE("Deprecated method not available in Swift");
-
-/// Deprecated - will fall through to the new method `pendingUploads`
-+ (NSUInteger) PendingUploads __attribute__((deprecated("from SDK 3.0 - use - pendingUploads"))) NS_SWIFT_UNAVAILABLE("Deprecated method not available in Swift");
-
-/// Deprecated - will fall through to the new method `setMultiSessionRecord`
-+ (void) SetMultiSessionRecord:(BOOL)recordMultipleSessions __attribute__((deprecated("from SDK 3.0 - use - setMultiSessionRecord"))) NS_SWIFT_UNAVAILABLE("Deprecated method not available in Swift");
-
-/// Deprecated - will fall through to the new method `getMultiSessionRecord`
-+ (BOOL) GetMultiSessionRecord __attribute__((deprecated("from SDK 3.0 - use - getMultiSessionRecord"))) NS_SWIFT_UNAVAILABLE("Deprecated method not available in Swift");
-
-/// Deprecated - will fall through to the new method `resumeScreenRecording`
-+ (void) ResumeScreenRecording __attribute__((deprecated("from SDK 3.0 - use - resumeScreenRecording"))) NS_SWIFT_UNAVAILABLE("Deprecated method not available in Swift");
-
-/// Deprecated - will fall through to the new method `pauseScreenRecording`
-+ (void) PauseScreenRecording __attribute__((deprecated("from SDK 3.0 - use - pauseScreenRecording"))) NS_SWIFT_UNAVAILABLE("Deprecated method not available in Swift");
-
-/// Deprecated - will fall through to the new method `setAutomaticScreenNameTagging`
-+ (void) SetAutomaticScreenNameTagging:(BOOL)enable __attribute__((deprecated("from SDK 3.0 - use - setAutomaticScreenNameTagging"))) NS_SWIFT_UNAVAILABLE("Deprecated method not available in Swift");
-
-/// Deprecated - will fall through to the new method `stopRecordingScrollingOnStutterOS`
-+ (void) StopRecordingScrollingOnStutterOS:(BOOL)stopScrollRecording __attribute__((deprecated("use - stopRecordingScrollingOnStutterOS")))  NS_SWIFT_UNAVAILABLE("Deprecated method not available in Swift");
-
-/// Deprecated - this will not do anything, and the method will be removed in future
-+ (void) markSessionAsFavorite __attribute__((deprecated("from SDK 3.0 - This method will be removed from next major release")));
-
-/// Deprecated - will fall through to the new method `stopSessionAndUploadData`
-+ (void) stopApplicationAndUploadData __attribute__((deprecated("from SDK 3.0.0 - use stopSessionAndUploadData from now functionality same, name is better")));
-
-/// Deprecated - will fall through to the new method `stopSessionAndUploadData`
-+ (void) stopApplicationAndUploadData:(nullable void (^)(void))block __attribute__((deprecated("from SDK 3.0.0 - use stopSessionAndUploadData: from now functionality same, name is better")));
-
-/// Deprecated - will fall through to the new method 'startNewSession'
-+ (void) restartSession __attribute__((deprecated("from SDK 3.0.0 - use startNewSession from now: functionality same, name is better")));
-
-/// Deprecated - use PauseScreenRecording and ResumeScreenRecording instead
-+ (void) PauseScreenRecording:(NSTimeInterval)pauseDuration __attribute__((deprecated("from SDK 3.0.0 - use PauseScreenRecording & ResumeScreenRecording from now")));
-
-/// Deprecated - use logEvent: instead
-+ (void) addTag:(NSString*)tag __attribute__((deprecated("from SDK 3.0.0 - use logEvent: now")));
-
-/// Deprecated - use logEvent:withProperties: instead
-+ (void) addTag:(NSString*)tag withProperties:(nullable NSDictionary<NSString*, id>*)properties __attribute__((deprecated("from SDK 3.0.0 - use logEvent:withProperties: now")));
-
-/// Deprecated - use startWithKey:buildIdentifier: instead
-+ (void) startWithKey:(NSString*)userAPIKey appVariantIdentifier:(nullable NSString*)appVariant __attribute__((deprecated("from SDK 3.0.0 - use startWithKey:buildIdentifier: now")));
-
-/// Deprecated - use startWithKey:buildIdentifier:completionBlock: instead
-+ (void) startWithKey:(NSString*)userAPIKey appVariantIdentifier:(NSString* _Nullable)appVariant completionBlock:(nullable void (^)(BOOL started))sessionStartedBlock __attribute__((deprecated("from SDK 3.0.0 - use startWithKey:buildIdentifier:completionBlock: now")));
-
-/// Deprecated - use startWithKey:buildIdentifier:multipleSessions:completionBlock: instead
-+ (void) startWithKey:(NSString*)userAPIKey appVariantIdentifier:(nullable NSString*)appVariant	multipleSessions:(BOOL)multiSession completionBlock:(nullable void (^)(BOOL started))sessionStartedBlock __attribute__((deprecated("from SDK 3.0.0 - use startWithKey:buildIdentifier:multipleSessions:completionBlock: now")));
-
-/// Deprecated - use setUserIdentity: instead
-+ (void) tagUsersName:(NSString*)userName __attribute__((deprecated("from SDK 3.0.0 - use setUserIdentity: now")));
-
-/// Deprecated - use optOutOverall instead
-+ (void) optOut __attribute__((deprecated("from SDK 3.1.0 - use optOutOverall now")));
-
-/// Deprecated - use optInOverall: instead
-+ (void) optIn __attribute__((deprecated("from SDK 3.1.0 - use optInOverall: now")));
-
-/// Deprecated - use optInOverallStatus instead
-+ (BOOL) optInStatus __attribute__((deprecated("from SDK 3.1.0 - use optInOverallStatus now")));;
 @end
 
 NS_ASSUME_NONNULL_END
