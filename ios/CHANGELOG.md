@@ -5,6 +5,7 @@
 
 Version   | Changes
 ---------- | ----------
+3.2.2	| Fix a problem with auto-occluded screens when using manual tagging 
 3.2.1	| Extra traps to avoid running and creating a crash on iOS 9
 		| Removed methods deprecated in v3.0
 		| Further improvements to cancelled session reporting
