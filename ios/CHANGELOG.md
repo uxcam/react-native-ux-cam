@@ -5,6 +5,7 @@
 
 Version   | Changes
 ---------- | ----------
+3.2.4   | Fix for touch delay issue
 3.2.3	| Fix an issue where starting a new session when one is already running could cause a failure to record the new session
 3.2.2	| Fix a problem with auto-occluded screens when using manual tagging 
 3.2.1	| Extra traps to avoid running and creating a crash on iOS 9
