@@ -10,6 +10,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
@@ -176,8 +177,14 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
             ReadableMapKeySetIterator iterator = properties.keySetIterator();
             while (iterator.hasNextKey()) {
                 String key = iterator.nextKey();
-                String value = properties.getString(key);
-                map.put(key, value);
+                ReadableType type = properties.getType(key);
+                if (type == ReadableType.Boolean) {
+                    map.put(key, properties.getBoolean(key));
+                } else if (type == ReadableType.Number) {
+                    map.put(key, properties.getDouble(key));
+                } else {
+                    map.put(key, properties.getString(key));
+                }
             }
             UXCam.logEvent(event, map);
         } else {
