@@ -43,7 +43,7 @@ class UXCam {
      *
      *  @return url path for current session or nil if no verified session is active
      */
-    static urlForCurrentSession() {
+    static async urlForCurrentSession() {
 		return UXCamBridge.urlForCurrentSession();
     }
 
@@ -54,7 +54,7 @@ class UXCam {
      *
      *  @return url path for user session or nil if no verified session is active
      */
-    static urlForCurrentUser() {
+    static async urlForCurrentUser() {
         return UXCamBridge.urlForCurrentUser();
     }
 
