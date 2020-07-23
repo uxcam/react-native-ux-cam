@@ -292,6 +292,11 @@ RCT_EXPORT_METHOD(deletePendingUploads)
 	[UXCam deletePendingUploads];
 }
 
+RCT_EXPORT_METHOD(uploadPendingSession)
+{
+    [UXCam uploadingPendingSessions:nil];
+}
+
 RCT_EXPORT_METHOD(resumeShortBreakForAnotherApp)
 {
 	// A do nothing method on iOS - used in Android

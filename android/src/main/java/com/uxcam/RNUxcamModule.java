@@ -300,6 +300,9 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void uploadPendingSession() {}
+
+    @ReactMethod
     public void occludeSensitiveView(final int id) {
         UIManagerModule uiManager = getReactApplicationContext().getNativeModule(UIManagerModule.class);
         uiManager.addUIBlock(new UIBlock() {
