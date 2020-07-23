@@ -368,6 +368,15 @@ class UXCam {
     static pendingSessionCount() {
         return UXCamBridge.pendingSessionCount();
     }
+
+    /**
+     *  @brief IOS only. Uploads sessions that were pending to be uploaded
+     *
+     *  Sessions can be in the Pending state if UXCam was unable to upload them at the end of the last session. Normally they will be sent at the end of the next session.
+     */
+    static uploadPendingSession() {
+        return UXCamBridge.uploadPendingSession();
+    }
     
     /**
      * Hide a view that contains sensitive information or that you do not want recording on the screen video.
