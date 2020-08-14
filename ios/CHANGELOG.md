@@ -5,9 +5,13 @@
 
 Version   | Changes
 ---------- | ----------
+3.2.5	| Refactor of offline session verify to reduce retries attempts when offline
+		| Improved handling of cancelled and not started sessions
+		| Report to dashboard when exhausted offline video allowance
+		| Fixed some rare occurences of negative time in a screen when transitioning from one session to another
 3.2.4	| Double tap gesture handling changed to reduce delays in single tap processing
 		| Removed all support/references to UI Web View for Cordova in light of Apple full deprecation of UI Web View
-		| Framework requires XCode 11.4 or higher to use fully
+		| NB: Framework requires XCode 11.4 or higher to use fully
 3.2.3	| Fix an issue where starting a new session when one is already running could cause a failure to record the new session
 3.2.2	| Fix a problem with auto-occluded screens when using manual tagging 
 3.2.1	| Extra traps to avoid running and creating a crash on iOS 9
