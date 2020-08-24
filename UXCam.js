@@ -324,7 +324,11 @@ class UXCam {
                 UXCamBridge.allowShortBreakForAnotherAppInMillis(continueSession);
             }
         } else if (platformIOS) {
-            UXCamBridge.allowShortBreakForAnotherApp(true);
+            if (typeof continueSession === 'boolean'){
+                UXCamBridge.allowShortBreakForAnotherApp(continueSession);
+            }else{
+                UXCamBridge.allowShortBreakForAnotherApp(true);
+            }
         }
     }
 
