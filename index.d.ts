@@ -129,7 +129,7 @@ export default class UXCam {
     static optOutOverall: () => void;
 
     /**
-     *  This will opt this device out of schematic recordings for future settings
+     *  This will opt this device out of schematic recordings for future sessions
      *  - any current session will be stopped and restarted with the last settings passed to `startWithKey`
      */
     static optOutOfSchematicRecordings: () => void;
@@ -176,17 +176,21 @@ export default class UXCam {
 
     /**
     *  @brief Android only.
+    *  This will opt this device into video recording for future sessions.
     */
     static optIntoVideoRecording: () => void;
 
     /**
     *  @brief Android only.
+    *  This will opt this device out of video recording for future sessions.
     */
     static optOutOfVideoRecording: () => void;
 
     /**
-    *  @brief Android only.
-    */
+     * @brief Android only.
+     *  Returns the opt-in video status of this device
+     *  @return `true` if the device is opted in for video recordings, `false` otherwise.
+     */
     static optInVideoRecordingStatus: () => boolean;
 
     /**
