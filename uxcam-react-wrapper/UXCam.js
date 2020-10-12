@@ -62,10 +62,10 @@ class UXCam {
         Hide / un-hide the whole screen from the recording
      
         Call this when you want to hide the whole screen from being recorded - useful in situations where you don't have access to the exact view to occlude
-        Once turned on with a TRUE parameter it will continue to hide the screen until called with FALSE
+        Once turned on with a `true` parameter it will continue to hide the screen until called with `false`
      
-        @parameter hideScreen Set TRUE to hide the screen from the recording, FALSE to start recording the screen contents again
-        @parameter hideGesture Set TRUE to hide the gestures in the screen from the recording, FALSE to start recording the gestures in the screen again
+        @parameter hideScreen Set `true` to hide the screen from the recording, `false` to start recording the screen contents again
+        @parameter hideGesture Set `true` to hide the gestures in the screen from the recording, `false` to start recording the gestures in the screen again
     */
     static occludeSensitiveScreen(hideScreen, hideGesture) {
         if(typeof hideGesture !== "undefined"){
@@ -78,7 +78,7 @@ class UXCam {
     /**
         Hide / un-hide all UITextField views on the screen
      
-        Call this when you want to hide the contents of all UITextFields from the screen capture. Default is NO.
+        Call this when you want to hide the contents of all UITextFields from the screen capture. Default is `false`.
      
         @parameter occludeAll Set `true` to hide all UITextField views on the screen in the recording, `false` to stop occluding them from the screen recording.
      */
@@ -89,7 +89,7 @@ class UXCam {
     /**
         Hide / un-hide all UITextField views on the screen
      
-        Call this when you want to hide the contents of all UITextFields from the screen capture. Default is NO.
+        Call this when you want to hide the contents of all UITextFields from the screen capture. Default is `false`.
      
         @parameter occludeAll Set `true` to hide all UITextField views on the screen in the recording, `false` to stop occluding them from the screen recording.
      */
@@ -135,7 +135,7 @@ class UXCam {
         Insert a general event, with associated properties, into the timeline - stores the event with the timestamp when it was added.
      
         @parameter eventName Name of the event to attach to the session recording at the current time
-        @parameter properties An NSDictionary of properties to associate with this event
+        @parameter properties An Object of properties to associate with this event
      
         @note Only number and string property types are supported to a maximum count of 100 and maximum size per entry of 1KiB
      */
@@ -147,26 +147,10 @@ class UXCam {
         }
     }
 
-
-  /**
-   * @deprecated use NativeEventEmitter to listen for 'UXCam_Verification_Event' event.
-   * Example:
-   * const eventEmitter = new NativeEventEmitter(RNUxcam);
-   * eventEmitter.addListener('UXCam_Verification_Event', event => {
-   *  if(event.success){
-   *    //do something
-   * }else{
-   *    //do something
-   * }
-   * });
-   */
-	static addVerificationListener(error, success) {
-  	}
-
     /**
      *  Returns the current recording status
      *
-     *  @return true if the session is being recorded
+     *  @return `true` if the session is being recorded
      */
     static isRecording() {
         return UXCamBridge.isRecording();
@@ -228,7 +212,7 @@ class UXCam {
 
     /**
      *  Returns the opt-in status of this device
-     *  @return true if the device is opted in to session recordings, false otherwise. The default is false.
+     *  @return `true` if the device is opted in to session recordings, `false` otherwise. The default is `false`.
      */
     static optInOverallStatus()
     {
@@ -236,7 +220,7 @@ class UXCam {
     }
 
     /** Returns the opt-in status of this device for schematic recordings
-     *  @returns true if the device is opted in to schematic recordings, NO otherwise. The default is false.
+     *  @returns `true` if the device is opted in to schematic recordings, `false` otherwise. The default is `false`.
      *  @note Use in conjunction with optInOverallStatus to control the overall recording status for the device
      */
     static optInSchematicRecordingStatus()
@@ -275,6 +259,9 @@ class UXCam {
         return UXCamBridge.optInOverallStatus()
     }
 
+    /**
+    *  @brief Android only.
+    */
     static optIntoVideoRecording() {
       if (platformAndroid) {
         UXCamBridge.optIntoVideoRecording();
@@ -283,6 +270,9 @@ class UXCam {
       }
     }
 
+    /**
+    *  @brief Android only.
+    */
     static optOutOfVideoRecording() {
       if (platformAndroid) {
         UXCamBridge.optOutOfVideoRecording();
@@ -291,6 +281,9 @@ class UXCam {
       }
     }
 
+    /**
+    *  @brief Android only.
+    */
     static optInVideoRecordingStatus(){
       if (platformAndroid) {
         return UXCamBridge.optInVideoRecordingStatus();
@@ -310,11 +303,11 @@ class UXCam {
     }
 
     /**
-     *  By default UXCam will end a session immediately when your app goes into the background. But if you are switching over to another app for authorisation, or some other short action, and want the session to continue when the user comes back to your app then call this method with a value of TRUE before switching away to the other app.
+     *  By default UXCam will end a session immediately when your app goes into the background. But if you are switching over to another app for authorisation, or some other short action, and want the session to continue when the user comes back to your app then call this method with a value of `true` before switching away to the other app.
      *  UXCam will pause the current session as your app goes into the background and then continue the session when your app resumes. If your app doesn't resume within a couple of minutes the original session will be closed as normal and a new session will start when your app eventually is resumed.
      *
      *  @brief Prevent a short trip to another app causing a break in a session
-     *  @param continueSession Set to TRUE to continue the current session after a short trip out to another app. Default is FALSE - stop the session as soon as the app enters the background.
+     *  @param continueSession Set to `true` to continue the current session after a short trip out to another app. Default is `false` - stop the session as soon as the app enters the background.
      */
     static allowShortBreakForAnotherApp(continueSession) {
         if (platformAndroid) {
@@ -349,8 +342,8 @@ class UXCam {
     /**
      *  Set whether to record multiple sessions or not
      *
-     *  @parameter multiSessionRecord YES to record a new session automatically when the device comes out of the background. If NO then a single session is recorded, when stopped (either programmatically with `stopApplicationAndUploadData` or by the app going to the background) then no more sessions are recorded until `startWithKey` is called again).
-     *  @note The default setting is to record a new session each time a device comes out of the background. This flag can be set to NO to stop that. You can also set this with the appropriate startWithKey: variant. (This will be reset each time startWithKey is called)
+     *  @parameter multiSessionRecord `true` to record a new session automatically when the device comes out of the background. If `false` then a single session is recorded, when stopped (either programmatically with `stopApplicationAndUploadData` or by the app going to the background) then no more sessions are recorded until `startWithKey` is called again).
+     *  @note The default setting is to record a new session each time a device comes out of the background. This flag can be set to `false` to stop that. You can also set this with the appropriate startWithKey: variant. (This will be reset each time startWithKey is called)
     */
     static setMultiSessionRecord(multiSessionRecord) {
         UXCamBridge.setMultiSessionRecord(multiSessionRecord);
@@ -427,7 +420,7 @@ class UXCam {
         
         @note By default UXCam will tag new screen names automatically. You can override this using the `tagScreenName` method or use this method to disable the automatic tagging.
     
-        @parameters autoScreenTagging Set to TRUE to enable automatic screen name tagging (the default) or FALSE to disable it
+        @parameters autoScreenTagging Set to `true` to enable automatic screen name tagging (the default) or `false` to disable it
     */
     static setAutomaticScreenNameTagging(autoScreenTagging) {
         UXCamBridge.setAutomaticScreenNameTagging(autoScreenTagging);
