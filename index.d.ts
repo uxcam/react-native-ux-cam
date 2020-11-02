@@ -206,8 +206,9 @@ export default class UXCam {
      *
      *  @brief Prevent a short trip to another app causing a break in a session
      *  @param continueSession Set to `true` to continue the current session after a short trip out to another app. Default is `false` - stop the session as soon as the app enters the background.
+     *  @param continueSession For android, you can also add time to wait in `milliseconds` before finishing the session.
      */
-    static allowShortBreakForAnotherApp: (continueSession: boolean) => void;
+    static allowShortBreakForAnotherApp: (continueSession: boolean | number) => void;
 
     /**
      *  @brief Resume after short break. Only used in android, does nothing on iOS
