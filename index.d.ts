@@ -331,4 +331,18 @@ export default class UXCam {
 
     // Get the list of screen names that are being ignored in automatic screen name tagging mode
     static screenNamesBeingIgnored: () => string[];
+
+    /**
+        Set the token to be used to send push notifications to the app
+        @param token Push notification token
+    */
+    static setPushNotificationToken: (token: string) => void;
+
+    /** 
+        Send a report of a problem your app encountered to be displayed in the dashboard
+        @param eventName Name of the problem event
+        @param properties Properties object associated with the event
+        @note Only number and string property types are supported to a maximum count of 100 and maximum size per entry of 1KiB
+    */
+    static reportBugEvent: (eventName: string, properties?: any) => void;
 }

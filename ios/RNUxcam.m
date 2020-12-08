@@ -433,4 +433,19 @@ RCT_EXPORT_METHOD(screenNamesBeingIgnored:(RCTPromiseResolveBlock)resolve
 	resolve(UXCam.screenNamesBeingIgnored);
 }
 
+RCT_EXPORT_METHOD(setPushNotificationToken:(NSString*)pushToken)
+{
+    [UXCam setPushNotificationToken:pushToken];
+}
+
+RCT_EXPORT_METHOD(reportBugEvent:(nullable NSString*)name)
+{
+    [UXCam reportBugEvent:name properties:nil];
+}
+
+RCT_EXPORT_METHOD(reportBugEvent:(NSString*)name properties:(nullable NSDictionary<NSString*, id>*)properties)
+{
+    [UXCam reportBugEvent:name properties:properties];
+}
+
 @end
