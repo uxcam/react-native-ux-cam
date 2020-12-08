@@ -25,7 +25,7 @@ import java.util.List;
 
 public class RNUxcamModule extends ReactContextBaseJavaModule {
     private static final String UXCAM_PLUGIN_TYPE = "react-native";
-    private static final String UXCAM_REACT_PLUGIN_VERSION = "5.2.0";
+    private static final String UXCAM_REACT_PLUGIN_VERSION = "5.2.1";
 
     private static final String UXCAM_VERIFICATION_EVENT_KEY = "UXCam_Verification_Event";
     private static final String PARAM_SUCCESS_KEY = "success";
@@ -298,6 +298,9 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
     public void pendingSessionCount(Promise promise) {
         promise.resolve(UXCam.pendingSessionCount());
     }
+
+    @ReactMethod
+    public void uploadPendingSession() {}
 
     @ReactMethod
     public void occludeSensitiveView(final int id) {

@@ -1,40 +1,24 @@
-'use strict';
-var { Platform, NativeModules, findNodeHandle, InteractionManager } = require('react-native');
-var UXCamBridge = NativeModules.RNUxcam;
-
-// Capture the platform we are running on
-const platform = Platform.OS;
-const platformIOS = platform === "ios" ? true : false;
-const platformAndroid = platform === "android" ? true : false;
-
-class UXCam {
+export default class UXCam {
     /**
-     *  Call this method from applicationDidFinishLaunching to start UXCam recording your application's session.
      *  This will start the UXCam system, get the settings configurations from our server and start capturing the data according to the configuration.
      *
      *  @brief Start the UXCam session
      *  @parameter userAPIKey   The key to identify your UXCam app - find it in the UXCam dashboard for your account 
      */
-    static startWithKey(apiKey) {
-		UXCamBridge.startWithKey(apiKey);
-    }
+    static startWithKey: (apiKey: string) => void;
 
     /**
      * Starts a new session after the {@link #stopSessionAndUploadData()} method has been called.
      * This happens automatically when the app returns from background.
      */
-    static startNewSession() {
-		UXCamBridge.startNewSession();
-    }
-    
+    static startNewSession: () => void;
+
     /**
      * Stop current uxcam session and send captured data to server.<br>
      * Use this to start sending the data on UXCam server without the app going into the background.<br>
      * This starts an asynchronous process and returns immediately.
      */
-    static stopSessionAndUploadData() {
-        UXCamBridge.stopSessionAndUploadData();
-    }
+    static stopSessionAndUploadData: () => void;
 
     /**
      *  Returns a URL path that shows the current session when it compeletes
@@ -43,9 +27,7 @@ class UXCam {
      *
      *  @return url path for current session or nil if no verified session is active
      */
-    static async urlForCurrentSession() {
-		return UXCamBridge.urlForCurrentSession();
-    }
+    static urlForCurrentSession: () => Promise<string | undefined | null>;
 
     /**
      *  Returns a URL path for showing all the current users sessions
@@ -54,9 +36,7 @@ class UXCam {
      *
      *  @return url path for user session or nil if no verified session is active
      */
-    static async urlForCurrentUser() {
-        return UXCamBridge.urlForCurrentUser();
-    }
+    static urlForCurrentUser: () => Promise<string | undefined | null>;
 
     /**
         Hide / un-hide the whole screen from the recording
@@ -67,13 +47,7 @@ class UXCam {
         @parameter hideScreen Set `true` to hide the screen from the recording, `false` to start recording the screen contents again
         @parameter hideGesture Set `true` to hide the gestures in the screen from the recording, `false` to start recording the gestures in the screen again
     */
-    static occludeSensitiveScreen(hideScreen, hideGesture) {
-        if(typeof hideGesture !== "undefined"){
-            UXCamBridge.occludeSensitiveScreen(hideScreen, hideGesture);
-        }else{
-            UXCamBridge.occludeSensitiveScreen(hideScreen, true);
-        }
-    }
+    static occludeSensitiveScreen: (hideScreen: boolean, hideGesture?: boolean) => void;
 
     /**
         Hide / un-hide all UITextField views on the screen
@@ -82,9 +56,7 @@ class UXCam {
      
         @parameter occludeAll Set `true` to hide all UITextField views on the screen in the recording, `false` to stop occluding them from the screen recording.
      */
-    static occludeAllTextView() {
-        UXCamBridge.occludeAllTextFields(true);
-    }
+    static occludeAllTextView: () => void;
 
     /**
         Hide / un-hide all UITextField views on the screen
@@ -93,9 +65,7 @@ class UXCam {
      
         @parameter occludeAll Set `true` to hide all UITextField views on the screen in the recording, `false` to stop occluding them from the screen recording.
      */
-    static occludeAllTextFields(occludeAll) {
-        UXCamBridge.occludeAllTextFields(occludeAll);
-    }
+    static occludeAllTextFields: (occludeAll: boolean) => void;
 
     /**
      UXCam uses a unique number to tag a device.
@@ -103,9 +73,7 @@ class UXCam {
      
      @parameters userIdentity String to apply to this user (device) in this recording session
      */
-    static setUserIdentity(userIdentity) {
-        UXCamBridge.setUserIdentity(userIdentity);
-    }
+    static setUserIdentity: (userIdentity: string) => void;
 
     /**
      Add a key/value property for this user
@@ -115,9 +83,7 @@ class UXCam {
      
      @note Only number and string value types are supported to a maximum size per entry of 1KiB
      */
-    static setUserProperty(propertyName, value) {
-        UXCamBridge.setUserProperty(propertyName, value);
-    }
+    static setUserProperty: (propertyName: string, value: string | number) => void;
 
     /**
      Add a single key/value property to this session
@@ -127,9 +93,7 @@ class UXCam {
      
      @note Only number and string value types are supported to a maximum size per entry of 1KiB
      */
-    static setSessionProperty(propertyName, value) {
-        UXCamBridge.setSessionProperty(propertyName, value);
-    }
+    static setSessionProperty: (propertyName: string, value: string | number) => void;
 
     /**
         Insert a general event, with associated properties, into the timeline - stores the event with the timestamp when it was added.
@@ -139,172 +103,102 @@ class UXCam {
      
         @note Only number and string property types are supported to a maximum count of 100 and maximum size per entry of 1KiB
      */
-    static logEvent(eventName, properties) {
-        if(typeof properties !== "undefined" || properties !== null){
-            UXCamBridge.logEvent(eventName, properties);
-        }else{
-            UXCamBridge.logEvent(eventName);
-        }
-    }
+    static logEvent: (eventName: string, properties?: any) => void;
 
     /**
      *  Returns the current recording status
      *
      *  @return `true` if the session is being recorded
      */
-    static isRecording() {
-        return UXCamBridge.isRecording();
-    }
+    static isRecording: () => boolean;
 
     /**
      * Pause the screen recording
      */
-    static pauseScreenRecording() {
-        UXCamBridge.pauseScreenRecording();
-    }
+    static pauseScreenRecording: () => void;
 
     /**
      *  Resumes a paused session - will cancel any remaining pause time and resume screen recording
      */
-    static resumeScreenRecording() {
-        UXCamBridge.resumeScreenRecording();
-    }
+    static resumeScreenRecording: () => void;
 
     /**
      *  This will cancel any current session recording and opt this device out of future session recordings until `optInOverall` is called
      *  @note The default is to opt-in to session recordings, but not to screen recordings, and the defaults will be reset if the user un-installs and re-installs the app
      */
-    static optOutOverall(){
-        UXCamBridge.optOutOverall();
-    }
+    static optOutOverall: () => void;
 
     /**
      *  This will opt this device out of schematic recordings for future sessions
      *  - any current session will be stopped and restarted with the last settings passed to `startWithKey`
      */
-    static optOutOfSchematicRecordings()
-    {
-        if (platformIOS) 
-        {
-            UXCamBridge.optOutOfSchematicRecordings();
-        }
-    }
+    static optOutOfSchematicRecordings: () => void;
 
     /**
      *  This will opt this device into session recordings
      *  - any current session will be stopped and a new session will be started with the last settings passed to `startWithKey`
      */
-    static optInOverall()
-    {
-        UXCamBridge.optInOverall();
-    }
+    static optInOverall: () => void;
 
     /**
      *  This will opt this device back into session recordings
      */
-    static optIntoSchematicRecordings()
-    {
-        if (platformIOS) 
-        {
-            UXCamBridge.optIntoSchematicRecordings();
-        }
-    }
+    static optIntoSchematicRecordings: () => void;
 
     /**
      *  Returns the opt-in status of this device
      *  @return `true` if the device is opted in to session recordings, `false` otherwise. The default is `false`.
      */
-    static optInOverallStatus()
-    {
-        return UXCamBridge.optInOverallStatus();
-    }
+    static optInOverallStatus: () => boolean;
 
     /** Returns the opt-in status of this device for schematic recordings
      *  @returns `true` if the device is opted in to schematic recordings, `false` otherwise. The default is `false`.
      *  @note Use in conjunction with optInOverallStatus to control the overall recording status for the device
      */
-    static optInSchematicRecordingStatus()
-    {
-        if (platformIOS) 
-        {
-            return UXCamBridge.optInSchematicRecordingStatus();
-        }
-        else 
-        {
-        // Just return the general status for Android which doesn't currently split status between session data and video
-        	return UXCamBridge.optInOverallStatus();
-        }
-    }
+    static optInSchematicRecordingStatus: () => boolean;
 
     /**
      *  @Deprecated use optOutOverall() instead
      *  This will cancel any current session recording and opt this device out of future session recordings until `optIn` is called
      *  @note The default is to opt-in to recordings, and the default will be reset if the user un-installs and re-installs the app
     */
-    static optOut() {
-        UXCamBridge.optOutOverall();
-    }
+    static optOut: () => void;
 
     /**
      *  @Deprecated use optInOverall() instead
      */
-    static optIn() {
-        UXCamBridge.optInOverall();
-    }
+    static optIn: () => void;
 
     /**
      *  @Deprecated use optInOverallStatus() instead
     */
-    static optStatus() {
-        return UXCamBridge.optInOverallStatus()
-    }
+    static optStatus: () => boolean;
 
     /**
     *  @brief Android only.
     *  This will opt this device into video recording for future sessions.
     */
-    static optIntoVideoRecording() {
-      if (platformAndroid) {
-        UXCamBridge.optIntoVideoRecording();
-      }else if(platformIOS){
-        UXCamBridge.optIntoSchematicRecordings();
-      }
-    }
+    static optIntoVideoRecording: () => void;
 
     /**
     *  @brief Android only.
     *  This will opt this device out of video recording for future sessions.
     */
-    static optOutOfVideoRecording() {
-      if (platformAndroid) {
-        UXCamBridge.optOutOfVideoRecording();
-      }else if(platformIOS){
-        UXCamBridge.optOutOfSchematicRecordings();
-      }
-    }
+    static optOutOfVideoRecording: () => void;
 
     /**
      * @brief Android only.
      *  Returns the opt-in video status of this device
      *  @return `true` if the device is opted in for video recordings, `false` otherwise.
      */
-    static optInVideoRecordingStatus(){
-      if (platformAndroid) {
-        return UXCamBridge.optInVideoRecordingStatus();
-      }else if(platformIOS){
-        return UXCamBridge.optInSchematicRecordingStatus();
-      }
-      return false;
-    }
+    static optInVideoRecordingStatus: () => boolean;
 
     /**
      *  Cancels the recording of the current session and discards the data
      *
      * @note A new session will start as normal when the app nexts come out of the background (depending on the state of the MultiSessionRecord flag), or if you call `startNewSession`
     */
-    static cancelCurrentSession() {
-        UXCamBridge.cancelCurrentSession();
-    }
+    static cancelCurrentSession: () => void;
 
     /**
      *  By default UXCam will end a session immediately when your app goes into the background. But if you are switching over to another app for authorisation, or some other short action, and want the session to continue when the user comes back to your app then call this method with a value of `true` before switching away to the other app.
@@ -314,35 +208,17 @@ class UXCam {
      *  @param continueSession Set to `true` to continue the current session after a short trip out to another app. Default is `false` - stop the session as soon as the app enters the background.
      *  @param continueSession For android, you can also add time to wait in `milliseconds` before finishing the session.
      */
-    static allowShortBreakForAnotherApp(continueSession) {
-        if (platformAndroid) {
-            if (typeof continueSession === 'boolean') {
-                UXCamBridge.allowShortBreakForAnotherApp(continueSession);
-            } else if (typeof continueSession === 'number') {
-                UXCamBridge.allowShortBreakForAnotherAppInMillis(continueSession);
-            }
-        } else if (platformIOS) {
-            if (typeof continueSession === 'boolean'){
-                UXCamBridge.allowShortBreakForAnotherApp(continueSession);
-            }else{
-                UXCamBridge.allowShortBreakForAnotherApp(true);
-            }
-        }
-    }
+    static allowShortBreakForAnotherApp: (continueSession: boolean | number) => void;
 
     /**
      *  @brief Resume after short break. Only used in android, does nothing on iOS
      */
-    static resumeShortBreakForAnotherApp() {
-        UXCamBridge.allowShortBreakForAnotherApp(false);
-    }
+    static resumeShortBreakForAnotherApp: () => void;
 
     /**
      *  Get whether UXCam is set to automatically record a new session when the app resumes from the background
     */
-    static getMultiSessionRecord() {
-        return UXCamBridge.getMultiSessionRecord();
-    }
+    static getMultiSessionRecord: () => boolean;
 
     /**
      *  Set whether to record multiple sessions or not
@@ -350,44 +226,34 @@ class UXCam {
      *  @parameter multiSessionRecord `true` to record a new session automatically when the device comes out of the background. If `false` then a single session is recorded, when stopped (either programmatically with `stopApplicationAndUploadData` or by the app going to the background) then no more sessions are recorded until `startWithKey` is called again).
      *  @note The default setting is to record a new session each time a device comes out of the background. This flag can be set to `false` to stop that. You can also set this with the appropriate startWithKey: variant. (This will be reset each time startWithKey is called)
     */
-    static setMultiSessionRecord(multiSessionRecord) {
-        UXCamBridge.setMultiSessionRecord(multiSessionRecord);
-    }
+    static setMultiSessionRecord: (multiSessionRecord: boolean) => void;
 
     /**
      *  @brief Deletes any sessions that are awaiting upload
      *  @note Advanced use only. This is not needed for most developers. This can't be called until UXCam startWithKey: has completed
      */
-    static deletePendingUploads() {
-        UXCamBridge.deletePendingUploads();
-    }
+    static deletePendingUploads: () => void;
 
     /**
      *  @brief Returns how many sessions are waiting to be uploaded
      *
      *  Sessions can be in the Pending state if UXCam was unable to upload them at the end of the last session. Normally they will be sent at the end of the next session.
      */
-    static pendingSessionCount() {
-        return UXCamBridge.pendingSessionCount();
-    }
+    static pendingSessionCount: () => number;
 
     /**
-     *  @brief IOS only. Uploads sessions that were pending to be uploaded
-     *
-     *  Sessions can be in the Pending state if UXCam was unable to upload them at the end of the last session. Normally they will be sent at the end of the next session.
-     */
-    static uploadPendingSession() {
-        return UXCamBridge.uploadPendingSession();
-    }
-    
+    *  @brief IOS only. Uploads sessions that were pending to be uploaded
+    *
+    *  Sessions can be in the Pending state if UXCam was unable to upload them at the end of the last session. Normally they will be sent at the end of the next session.
+    */
+    static uploadPendingSession: () => void;
+
     /**
      * Hide a view that contains sensitive information or that you do not want recording on the screen video.
      *
      * @parameter sensitiveView The view to occlude in the screen recording
      */
-    static occludeSensitiveView(sensitiveView){
-        UXCamBridge.occludeSensitiveView(findNodeHandle(sensitiveView));
-    }
+    static occludeSensitiveView: (sensitiveView: any) => void;
 
     /**
      * Stop hiding a view that was previously hidden
@@ -395,18 +261,14 @@ class UXCam {
      *
      * @parameter view The view to show again in the screen recording
      */
-    static unOccludeSensitiveView(view){
-        UXCamBridge.unOccludeSensitiveView(findNodeHandle(view));
-    }
+    static unOccludeSensitiveView: (view: any) => void;
 
     /**
      * Hide a view that contains sensitive information or that you do not want recording on the screen video.
      *
      * @parameter sensitiveView The view to occlude in the screen recording
      */
-    static occludeSensitiveViewWithoutGesture(sensitiveView){
-        UXCamBridge.occludeSensitiveViewWithoutGesture(findNodeHandle(sensitiveView));
-    }
+    static occludeSensitiveViewWithoutGesture: (sensitiveView: any) => void;
 
     /**
         UXCam normally captures the view controller name automatically but in cases where it this is not sufficient (such as in OpenGL applications)
@@ -416,9 +278,7 @@ class UXCam {
     
         @parameter screenName Name to apply to the current screen in the session video
     */
-    static tagScreenName(screenName) {
-        UXCamBridge.tagScreenName(screenName);
-    }
+    static tagScreenName: (screenName: string) => void;
 
     /**
         Enable / disable the automatic tagging of screen names
@@ -427,9 +287,7 @@ class UXCam {
     
         @parameters autoScreenTagging Set to `true` to enable automatic screen name tagging (the default) or `false` to disable it
     */
-    static setAutomaticScreenNameTagging(autoScreenTagging) {
-        UXCamBridge.setAutomaticScreenNameTagging(autoScreenTagging);
-    }
+    static setAutomaticScreenNameTagging: (autoScreenTagging: boolean) => void;
 
     /**
         Add a name to the list of screens names that wont be added to the timeline in automatic screen name tagging mode
@@ -441,10 +299,8 @@ class UXCam {
     
         @note This is a convenience method for `addScreenNamesToIgnore([nameToIgnore])`
     */
-    static addScreenNameToIgnore(screenName){
-        UXCamBridge.addScreenNameToIgnore(screenName);
-    }
-    
+    static addScreenNameToIgnore: (screenName: string) => void;
+
     /**
         Add a list of names to the list of screens names that wont be added to the timeline in automatic screen name tagging mode
     
@@ -453,9 +309,7 @@ class UXCam {
     
         @param screenNames A list of screen names to add to the ignore list
     */
-    static addScreenNamesToIgnore(screenNames){
-        UXCamBridge.addScreenNamesToIgnore(screenNames);
-    }
+    static addScreenNamesToIgnore: (screenNames: string[]) => void;
 
     /**
         Remove the a name from the list of screens to be ignored in automatic screen name tagging mode
@@ -463,28 +317,18 @@ class UXCam {
         @param screenName The name to remove from the list of ignored screens
         @note This is a convenience method for `removeScreenNamesToIgnore([nameToRemove])`
     */
-    static removeScreenNameToIgnore(screenName){
-        UXCamBridge.removeScreenNameToIgnore(screenName);
-    }
-    
+    static removeScreenNameToIgnore: (screenName: string) => void;
+
     /**
         Remove the a list of names from the list of screens to be ignored in automatic screen name tagging mode
     
         @param screenNames A list of names to remove from the ignore list
     */
-    static removeScreenNamesToIgnore(screenNames){
-        UXCamBridge.removeScreenNamesToIgnore(screenNames);
-    }
-    
+    static removeScreenNamesToIgnore: (screenNames: string[]) => void;
+
     // Remove all entries from the list of screen names to be ignored in automatic screen name tagging mode
-    static removeAllScreenNamesToIgnore(){
-        UXCamBridge.removeAllScreenNamesToIgnore();
-    }
+    static removeAllScreenNamesToIgnore: () => void;
 
     // Get the list of screen names that are being ignored in automatic screen name tagging mode
-    static screenNamesBeingIgnored(){
-        return UXCamBridge.screenNamesBeingIgnored();
-    }
+    static screenNamesBeingIgnored: () => string[];
 }
-
-module.exports = UXCam;

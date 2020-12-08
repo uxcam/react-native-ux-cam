@@ -1,12 +1,13 @@
 {
   "name": "react-native-ux-cam",
-  "version": "5.2.0",
+  "version": "5.2.1",
   "description": "React Native wrapper for uxcam.com.",
   "license": "MIT",
   "author": "admin@uxcam.com for UXCam Inc. after Mark Miyashita <negativetwelve@gmail.com>",
   "homepage": "https://github.com/negativetwelve/react-native-ux-cam",
   "repository": "negativetwelve/react-native-ux-cam",
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

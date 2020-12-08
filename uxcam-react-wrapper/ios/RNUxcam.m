@@ -36,7 +36,7 @@ RCT_EXPORT_MODULE();
 RCT_EXPORT_METHOD(startWithKey:(NSString *)userAPIKey)
 {
 	self.lastVerifyResult = nil;
-	[UXCam pluginType:@"react-native" version:@"5.2.0"];
+	[UXCam pluginType:@"react-native" version:@"5.2.1"];
 	/// TODO: Move this into the main iOS SDK so it sends a notification on verify and we just listen for that.
 	[UXCam startWithKey:userAPIKey
 		buildIdentifier:nil
@@ -290,6 +290,11 @@ RCT_EXPORT_METHOD(pendingSessionCount:(RCTPromiseResolveBlock)resolve
 RCT_EXPORT_METHOD(deletePendingUploads)
 {
 	[UXCam deletePendingUploads];
+}
+
+RCT_EXPORT_METHOD(uploadPendingSession)
+{
+    [UXCam uploadingPendingSessions:nil];
 }
 
 RCT_EXPORT_METHOD(resumeShortBreakForAnotherApp)
