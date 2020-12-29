@@ -38,9 +38,7 @@ RCT_EXPORT_METHOD(startWithKey:(NSString *)userAPIKey)
 	self.lastVerifyResult = nil;
 	[UXCam pluginType:@"react-native" version:@"5.3.0"];
 	/// TODO: Move this into the main iOS SDK so it sends a notification on verify and we just listen for that.
-	[UXCam startWithKey:userAPIKey
-		buildIdentifier:nil
-		completionBlock:^(BOOL started)
+	[UXCam startWithKey:userAPIKey completionBlock:^(BOOL started)
 						 {
 							 self.lastVerifyResult = @(started);
 							 [self verifyEventSender:started];
