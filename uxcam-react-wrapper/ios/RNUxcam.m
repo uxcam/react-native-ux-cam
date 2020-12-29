@@ -1,5 +1,5 @@
 #import "RNUxcam.h"
-#import "UXCam.h"
+#import <UXCam/UXCam.h>
 
 #import <React/RCTUIManager.h>
 #import <React/RCTUIManagerUtils.h>
