@@ -3,12 +3,11 @@
 ## Installation
 `$yarn add file:/path-to-the-uxcam-react-wrapper`
 
-`$react-native link react-native-ux-cam`
-
-
-For react-native version 0.60 if using iOS you then need to:
+For iOS, you will need to update pod as well:
 
 `cd ios && pod update && cd ..`
+
+>Starting from 5.3.0, we no longer support project with react native version <0.60.0. Use manual linking for older version to add [UXCam](https://github.com/uxcam/ios-sdk/raw/main/UXCam.xcframework.zip) to your project.
 
 ## Usage
 ```javascript
