@@ -485,6 +485,28 @@ class UXCam {
     static screenNamesBeingIgnored(){
         return UXCamBridge.screenNamesBeingIgnored();
     }
+
+    /**
+        Set the token to be used to send push notifications to the app
+        @param token Push notification token
+    */
+    static setPushNotificationToken(token){
+        UXCamBridge.setPushNotificationToken(token);
+    }
+
+    /** 
+        Send a report of a problem your app encountered to be displayed in the dashboard
+        @param eventName Name of the problem event
+        @param properties Properties object associated with the event
+        @note Only number and string property types are supported to a maximum count of 100 and maximum size per entry of 1KiB
+    */
+    static reportBugEvent(eventName, properties){
+        if(typeof properties !== "undefined" || properties !== null){
+            UXCamBridge.reportBugEvent(eventName, properties);
+        }else{
+            UXCamBridge.reportBugEvent(eventName);
+        }
+    }
 }
 
 module.exports = UXCam;

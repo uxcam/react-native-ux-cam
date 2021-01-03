@@ -1,5 +1,5 @@
 #import "RNUxcam.h"
-#import "UXCam.h"
+#import <UXCam/UXCam.h>
 
 #import <React/RCTUIManager.h>
 #import <React/RCTUIManagerUtils.h>
@@ -36,11 +36,9 @@ RCT_EXPORT_MODULE();
 RCT_EXPORT_METHOD(startWithKey:(NSString *)userAPIKey)
 {
 	self.lastVerifyResult = nil;
-	[UXCam pluginType:@"react-native" version:@"5.2.2"];
+	[UXCam pluginType:@"react-native" version:@"5.3.0"];
 	/// TODO: Move this into the main iOS SDK so it sends a notification on verify and we just listen for that.
-	[UXCam startWithKey:userAPIKey
-		buildIdentifier:nil
-		completionBlock:^(BOOL started)
+	[UXCam startWithKey:userAPIKey completionBlock:^(BOOL started)
 						 {
 							 self.lastVerifyResult = @(started);
 							 [self verifyEventSender:started];
@@ -431,6 +429,21 @@ RCT_EXPORT_METHOD(screenNamesBeingIgnored:(RCTPromiseResolveBlock)resolve
 				  				rejecter:(RCTPromiseRejectBlock)reject)
 {
 	resolve(UXCam.screenNamesBeingIgnored);
+}
+
+RCT_EXPORT_METHOD(setPushNotificationToken:(NSString*)pushToken)
+{
+    [UXCam setPushNotificationToken:pushToken];
+}
+
+RCT_EXPORT_METHOD(reportBugEvent:(nullable NSString*)name)
+{
+    [UXCam reportBugEvent:name properties:nil];
+}
+
+RCT_EXPORT_METHOD(reportBugEvent:(NSString*)name properties:(nullable NSDictionary<NSString*, id>*)properties)
+{
+    [UXCam reportBugEvent:name properties:properties];
 }
 
 @end

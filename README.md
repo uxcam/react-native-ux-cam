@@ -3,16 +3,13 @@
 ## Installation
 `$yarn add file:/path-to-the-uxcam-react-wrapper`
 
-`$react-native link react-native-ux-cam`
+For iOS, you will need to `pod update`  as well:
 
+`cd ios && pod update && cd ..`
 
-For react-native version 0.60 if using iOS you then need to:
+>Starting from 5.3.0, we no longer support project with react native version <0.60.0. Use manual linking for older version to add [UXCam](https://github.com/uxcam/ios-sdk/raw/main/UXCam.xcframework.zip) to your project.
 
-`cd ios`
-
-The latest versions have added back support building with iOS 9 - but UXCam will not record sessions on iOS9 - so editing the Podfile is no longer necessary.
-
-`pod update && cd ..`
+>iOS 10 is the lowest version supported for recording sessions, which matches the default minimum version for new React Native projects.
 
 ## Usage
 ```javascript
@@ -39,11 +36,10 @@ For more detailed example using react-navigation, see [UXCam-demo-chat-app](http
 `react-native run-android`
 
 ### iOS
-`cd iOS`
-Edit the `Podfile` first line to be `platform :ios, '10.0'` rather than `platform :ios, '9.0'` then run the following to install the CocoaPods:
+To install the Cocoapod: 
+`cd iOS && pod update && cd ..`
 
-`pod update && cd ..`
-
+Then to run the app:
 `react-native run-ios`
 
 # Manual Installation

@@ -25,7 +25,7 @@ import java.util.List;
 
 public class RNUxcamModule extends ReactContextBaseJavaModule {
     private static final String UXCAM_PLUGIN_TYPE = "react-native";
-    private static final String UXCAM_REACT_PLUGIN_VERSION = "5.2.2";
+    private static final String UXCAM_REACT_PLUGIN_VERSION = "5.3.0";
 
     private static final String UXCAM_VERIFICATION_EVENT_KEY = "UXCam_Verification_Event";
     private static final String PARAM_SUCCESS_KEY = "success";
@@ -356,5 +356,40 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
                 }
             }
         });
+    }
+
+    @ReactMethod
+    public void setPushNotificationToken(String token) {
+        UXCam.setPushNotificationToken(token);
+    }
+
+    @ReactMethod
+    public void reportBugEvent(String event) {
+        UXCam.reportBugEvent(event);
+    }
+
+    @ReactMethod
+    public void reportBugEvent(String event, ReadableMap properties) {
+        if (properties != null) {
+
+            HashMap<String, Object> map = new HashMap<String, Object>();
+
+            ReadableMapKeySetIterator iterator = properties.keySetIterator();
+            while (iterator.hasNextKey()) {
+                String key = iterator.nextKey();
+                ReadableType type = properties.getType(key);
+                if (type == ReadableType.Boolean) {
+                    map.put(key, properties.getBoolean(key));
+                } else if (type == ReadableType.Number) {
+                    map.put(key, properties.getDouble(key));
+                } else {
+                    map.put(key, properties.getString(key));
+                }
+            }
+            UXCam.reportBugEvent(event, map);
+        } else {
+            UXCam.reportBugEvent(event);
+        }
+
     }
 }

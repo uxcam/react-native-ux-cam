@@ -12,7 +12,7 @@
   "dependencies": {
     "react": "16.9.0",
     "react-native": "0.61.5",
-    "react-native-ux-cam": "^5.2.0"
+    "react-native-ux-cam": "^5.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.7.4",
