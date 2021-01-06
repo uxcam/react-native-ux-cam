@@ -1,7 +1,13 @@
 # react-native-ux-cam
 
 ## Installation
-`$yarn add file:/path-to-the-uxcam-react-wrapper`
+```bash
+# Yarn
+yarn add react-native-ux-cam
+
+# NPM
+npm i react-native-ux-cam
+```
 
 For iOS, you will need to update pod as well:
 
@@ -51,7 +57,7 @@ Edit the `Podfile` first line to be `platform :ios, '10.0'` rather than `platfor
 yarn add react-native-ux-cam
 
 # NPM
-npm install --save react-native-ux-cam
+npm i react-native-ux-cam
 ```
 
 ### iOS with react-native and Cocoapods
@@ -71,31 +77,16 @@ pod install
 
 ### Android
 
-1. Go to `android/settings.gradle`
-add `include ':react-native-ux-cam'`
+1. Go to `android/settings.gradle` add `include ':react-native-ux-cam'`
 and on the following line add `project(':react-native-ux-cam').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-ux-cam/android')` 
 
 2. Go to `android/app/build.gradle`
-add `compile project(':react-native-ux-cam')` under dependencies
+add `compile project(':react-native-ux-cam')` under dependencies.
 
-3. Go to `android/app/src/main/java/com/terravion/dbug/MainApplication.java`
-add `import com.rnuxcam.rnuxcam.UXCamPackage;`
+3. Go to `android/app/src/main/java/<path-to-main-application>/MainApplication.java` and add `import com.uxcam.RNUxcamPackage;`
 
-4. Add the following to your file `android/app/build.gradle` (or add the maven url to your existing repositories section):
+4. Add `packages.add(new RNUxcamPackage());` inside `getPackages()` before return statement.
 
-```gradle
-allprojects {
-    // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
-    maven { url "$rootDir/../node_modules/react-native/android" }
-    maven { url "http://sdk.uxcam.com/android/" }
-}
-```
-
-5. And add this to your file `android/app/src/main/AndroidManifest.xml`, inside your `<application>` tag:
-
-```xml
-<service android:name="com.uxcam.service.HttpPostService"/>
-```
 ## Usage
 
 ```js
