@@ -386,7 +386,9 @@ class UXCam {
      * @parameter sensitiveView The view to occlude in the screen recording
      */
     static occludeSensitiveView(sensitiveView){
-        UXCamBridge.occludeSensitiveView(findNodeHandle(sensitiveView));
+        if (sensitiveView){
+            UXCamBridge.occludeSensitiveView(findNodeHandle(sensitiveView));
+        }
     }
 
     /**
@@ -396,7 +398,9 @@ class UXCam {
      * @parameter view The view to show again in the screen recording
      */
     static unOccludeSensitiveView(view){
-        UXCamBridge.unOccludeSensitiveView(findNodeHandle(view));
+        if (sensitiveView){
+            UXCamBridge.unOccludeSensitiveView(findNodeHandle(view));
+        }
     }
 
     /**
@@ -405,7 +409,9 @@ class UXCam {
      * @parameter sensitiveView The view to occlude in the screen recording
      */
     static occludeSensitiveViewWithoutGesture(sensitiveView){
-        UXCamBridge.occludeSensitiveViewWithoutGesture(findNodeHandle(sensitiveView));
+        if (sensitiveView){
+            UXCamBridge.occludeSensitiveViewWithoutGesture(findNodeHandle(sensitiveView));
+        }
     }
 
     /**
