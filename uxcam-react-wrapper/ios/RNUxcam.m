@@ -446,4 +446,9 @@ RCT_EXPORT_METHOD(reportBugEvent:(NSString*)name properties:(nullable NSDictiona
     [UXCam reportBugEvent:name properties:properties];
 }
 
+RCT_EXPORT_METHOD(enableAdvancedGestureRecognizers:(BOOL)enable)
+{
+    [UXCam EnableAdvancedGestureRecognizers:enable];
+}
+
 @end

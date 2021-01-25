@@ -513,6 +513,16 @@ class UXCam {
             UXCamBridge.reportBugEvent(eventName);
         }
     }
+
+    /** 
+        IOS only. Enable/Disable advanced gesture recognition like swipe and pinch gestures.
+        @param enable Set `true` to enable or `false` to disable before `startWithKey`. Default is `true`.
+    */
+    static enableAdvancedGestureRecognizers(enable){
+        if (platformIOS){
+            UXCamBridge.enableAdvancedGestureRecognizers(enable);
+        }
+    }
 }
 
 module.exports = UXCam;
