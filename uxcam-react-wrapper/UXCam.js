@@ -398,7 +398,7 @@ class UXCam {
      * @parameter view The view to show again in the screen recording
      */
     static unOccludeSensitiveView(view){
-        if (sensitiveView){
+        if (view){
             UXCamBridge.unOccludeSensitiveView(findNodeHandle(view));
         }
     }
