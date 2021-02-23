@@ -515,8 +515,9 @@ class UXCam {
     }
 
     /** 
-        IOS only. Enable/Disable advanced gesture recognition like swipe and pinch gestures.
+        Enable/Disable advanced gesture recognition like swipe and pinch gestures.
         @param enable Set `true` to enable or `false` to disable before `startWithKey`. Default is `true`.
+        @note Disable this on iOS if you are having problems with swipes or other gestures being interrupted while recording sessions.
     */
     static enableAdvancedGestureRecognizers(enable){
         if (platformIOS){
