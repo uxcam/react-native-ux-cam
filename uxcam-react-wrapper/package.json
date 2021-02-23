@@ -22,6 +22,6 @@
     "ux-cam"
   ],
   "peerDependencies": {
-    "react-native": "*"
+    "react-native": ">=0.60.0"
   }
 }
