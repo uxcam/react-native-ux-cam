@@ -36,7 +36,7 @@ RCT_EXPORT_MODULE();
 RCT_EXPORT_METHOD(startWithKey:(NSString *)userAPIKey)
 {
 	self.lastVerifyResult = nil;
-	[UXCam pluginType:@"react-native" version:@"5.3.1"];
+	[UXCam pluginType:@"react-native" version:@"5.3.2"];
 	/// TODO: Move this into the main iOS SDK so it sends a notification on verify and we just listen for that.
 	[UXCam startWithKey:userAPIKey completionBlock:^(BOOL started)
 						 {
@@ -444,6 +444,11 @@ RCT_EXPORT_METHOD(reportBugEvent:(nullable NSString*)name)
 RCT_EXPORT_METHOD(reportBugEvent:(NSString*)name properties:(nullable NSDictionary<NSString*, id>*)properties)
 {
     [UXCam reportBugEvent:name properties:properties];
+}
+
+RCT_EXPORT_METHOD(enableAdvancedGestureRecognizers:(BOOL)enable)
+{
+    [UXCam EnableAdvancedGestureRecognizers:enable];
 }
 
 @end

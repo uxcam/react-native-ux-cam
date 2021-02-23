@@ -386,7 +386,9 @@ class UXCam {
      * @parameter sensitiveView The view to occlude in the screen recording
      */
     static occludeSensitiveView(sensitiveView){
-        UXCamBridge.occludeSensitiveView(findNodeHandle(sensitiveView));
+        if (sensitiveView){
+            UXCamBridge.occludeSensitiveView(findNodeHandle(sensitiveView));
+        }
     }
 
     /**
@@ -396,7 +398,9 @@ class UXCam {
      * @parameter view The view to show again in the screen recording
      */
     static unOccludeSensitiveView(view){
-        UXCamBridge.unOccludeSensitiveView(findNodeHandle(view));
+        if (view){
+            UXCamBridge.unOccludeSensitiveView(findNodeHandle(view));
+        }
     }
 
     /**
@@ -405,7 +409,9 @@ class UXCam {
      * @parameter sensitiveView The view to occlude in the screen recording
      */
     static occludeSensitiveViewWithoutGesture(sensitiveView){
-        UXCamBridge.occludeSensitiveViewWithoutGesture(findNodeHandle(sensitiveView));
+        if (sensitiveView){
+            UXCamBridge.occludeSensitiveViewWithoutGesture(findNodeHandle(sensitiveView));
+        }
     }
 
     /**
@@ -505,6 +511,17 @@ class UXCam {
             UXCamBridge.reportBugEvent(eventName, properties);
         }else{
             UXCamBridge.reportBugEvent(eventName);
+        }
+    }
+
+    /** 
+        Enable/Disable advanced gesture recognition like swipe and pinch gestures.
+        @param enable Set `true` to enable or `false` to disable before `startWithKey`. Default is `true`.
+        @note Disable this on iOS if you are having problems with swipes or other gestures being interrupted while recording sessions.
+    */
+    static enableAdvancedGestureRecognizers(enable){
+        if (platformIOS){
+            UXCamBridge.enableAdvancedGestureRecognizers(enable);
         }
     }
 }
