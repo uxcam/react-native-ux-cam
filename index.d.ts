@@ -1,3 +1,5 @@
+import { EmitterSubscription } from "react-native";
+
 export default class UXCam {
     /**
      *  This will start the UXCam system, get the settings configurations from our server and start capturing the data according to the configuration.
@@ -104,6 +106,12 @@ export default class UXCam {
         @note Only number and string property types are supported to a maximum count of 100 and maximum size per entry of 1KiB
      */
     static logEvent: (eventName: string, properties?: any) => void;
+
+    /**
+        UXCam verification listener that returns success/failure status. TRUE status means the session was successfully verified and started.
+        @parameter status Function to call that will receive verification status boolean value.
+     */
+    static addVerificationListener: (status: (status: { success: boolean })=>void) => EmitterSubscription;
 
     /**
      *  Returns the current recording status
