@@ -1,5 +1,5 @@
 'use strict';
-var { Platform, NativeModules, findNodeHandle, InteractionManager } = require('react-native');
+var { Platform, NativeModules, findNodeHandle, NativeEventEmitter } = require('react-native');
 var UXCamBridge = NativeModules.RNUxcam;
 
 // Capture the platform we are running on
@@ -145,6 +145,15 @@ class UXCam {
         }else{
             UXCamBridge.logEvent(eventName);
         }
+    }
+
+    /**
+        UXCam verification listener that returns success/failure status. TRUE status means the session was successfully verified and started.
+        @parameter status Function to call that will receive verification status boolean value.
+     */
+    static addVerificationListener(status) {
+        const emitter = new NativeEventEmitter(UXCamBridge);
+        return emitter.addListener('UXCam_Verification_Event', status)
     }
 
     /**
