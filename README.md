@@ -90,13 +90,13 @@ add `compile project(':react-native-ux-cam')` under dependencies.
 
 ```js
 // Import UXCam.
-import UXCam from 'react-native-ux-cam';
+import RNUxcam from 'react-native-ux-cam';
 
 // Add this line to enable iOS screen recordings
-UXCam.optIntoSchematicRecordings(); 
+RNUxcam.optIntoSchematicRecordings(); 
 
 // Initialize using your app key.
-UXCam.startWithKey(key);
+RNUxcam.startWithKey(key);
 ```
 
 ## History
