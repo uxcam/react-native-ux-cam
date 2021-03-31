@@ -5227,10 +5227,10 @@ react-is@^16.8.1, react-is@^16.8.4, react-is@^16.9.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.12.0.tgz#2cc0fe0fba742d97fd527c42a13bec4eeb06241c"
   integrity sha512-rPCkf/mWBtKc97aLL9/txD8DZdemK0vkA3JMLShjlJB3Pj3s+lpf1KaBzMfQrAmhMQB0n1cU/SUGgKKBCe837Q==
 
-react-native-ux-cam@^5.2.0:
-  version "5.2.2"
-  resolved "https://registry.yarnpkg.com/react-native-ux-cam/-/react-native-ux-cam-5.2.2.tgz#c2e941fb10c20aa53d83be4b4d37e761e5183485"
-  integrity sha512-ULmR35/ZBXaB0YEe1AH5BesqqYPCC2nMVb73D8gdum8tB/WLBsMLbEsAkNx5JZlzyep5lOBHtIG8vHGuEuq8RQ==
+react-native-ux-cam@^5.3.1:
+  version "5.3.2"
+  resolved "https://registry.yarnpkg.com/react-native-ux-cam/-/react-native-ux-cam-5.3.2.tgz#d18b637265198d95a445aaa48f4bb2e87291a438"
+  integrity sha512-FESYv/ofH1VNrV3aP5Umxn7mql0lfXi+8r0gzfZl/+o/ZA6TogKRt38zK6HcbV3l60VwIv2ESG7j2hxfeersiw==
 
 react-native@0.61.5:
   version "0.61.5"
@@ -6630,9 +6630,9 @@ xtend@~4.0.1:
   integrity sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==
 
 y18n@^3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/y18n/-/y18n-3.2.1.tgz#6d15fba884c08679c0d77e88e7759e811e07fa41"
-  integrity sha1-bRX7qITAhnnA136I53WegR4H+kE=
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/y18n/-/y18n-3.2.2.tgz#85c901bd6470ce71fc4bb723ad209b70f7f28696"
+  integrity sha512-uGZHXkHnhF0XeeAPgnKfPv1bgKAYyVvmNL1xlKsPYZPaIHxGti2hHqvOCQv71XMsLxu1QjergkqogUnms5D3YQ==
 
 "y18n@^3.2.1 || ^4.0.0", y18n@^4.0.0:
   version "4.0.0"
