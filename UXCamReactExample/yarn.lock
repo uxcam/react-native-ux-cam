@@ -5227,10 +5227,10 @@ react-is@^16.8.1, react-is@^16.8.4, react-is@^16.9.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.12.0.tgz#2cc0fe0fba742d97fd527c42a13bec4eeb06241c"
   integrity sha512-rPCkf/mWBtKc97aLL9/txD8DZdemK0vkA3JMLShjlJB3Pj3s+lpf1KaBzMfQrAmhMQB0n1cU/SUGgKKBCe837Q==
 
-react-native-ux-cam@^5.2.0:
-  version "5.2.2"
-  resolved "https://registry.yarnpkg.com/react-native-ux-cam/-/react-native-ux-cam-5.2.2.tgz#c2e941fb10c20aa53d83be4b4d37e761e5183485"
-  integrity sha512-ULmR35/ZBXaB0YEe1AH5BesqqYPCC2nMVb73D8gdum8tB/WLBsMLbEsAkNx5JZlzyep5lOBHtIG8vHGuEuq8RQ==
+react-native-ux-cam@^5.3.1:
+  version "5.3.2"
+  resolved "https://registry.yarnpkg.com/react-native-ux-cam/-/react-native-ux-cam-5.3.2.tgz#d18b637265198d95a445aaa48f4bb2e87291a438"
+  integrity sha512-FESYv/ofH1VNrV3aP5Umxn7mql0lfXi+8r0gzfZl/+o/ZA6TogKRt38zK6HcbV3l60VwIv2ESG7j2hxfeersiw==
 
 react-native@0.61.5:
   version "0.61.5"
@@ -6270,9 +6270,9 @@ typedarray@^0.0.6:
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
 ua-parser-js@^0.7.18:
-  version "0.7.20"
-  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.20.tgz#7527178b82f6a62a0f243d1f94fd30e3e3c21098"
-  integrity sha512-8OaIKfzL5cpx8eCMAhhvTlft8GYF8b2eQr6JkCyVdrgjcytyOmPCXrqXFcUnhonRpLlh5yxEZVohm6mzaowUOw==
+  version "0.7.28"
+  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.28.tgz#8ba04e653f35ce210239c64661685bf9121dec31"
+  integrity sha512-6Gurc1n//gjp9eQNXjD9O3M/sMwVtN5S8Lv9bvOYBfKfDNiIIhqiyi01vMBO45u4zkDE420w/e0se7Vs+sIg+g==
 
 uglify-es@^3.1.9:
   version "3.3.9"
