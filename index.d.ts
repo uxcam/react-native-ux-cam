@@ -116,11 +116,11 @@ export default class UXCam {
 	/**
  	*  @brief Call this before calling startWithKey to disable UXCam from capturing sessions that crash
  	*
- 	*  @param disable YES to disable crash capture
+ 	*  @param disable `true` to disable crash capture
  	*  @note By default crash handling is enabled. iOS Only - not supported to disable crash handling on Android
  	*/
 	static disableCrashHandling: (disable: boolean) => void;
-	 
+
     /**
      *  Returns the current recording status
      *
