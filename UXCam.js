@@ -156,6 +156,20 @@ class UXCam {
         return emitter.addListener('UXCam_Verification_Event', status)
     }
 
+	/**
+ 	*  @brief Call this before calling startWithKey to disable UXCam from capturing sessions that crash
+ 	*
+ 	*  @param disable YES to disable crash capture
+ 	*  @note By default crash handling is enabled. iOS Only - not supported to disable crash handling on Android
+ 	*/
+	static disableCrashHandling(disable) 
+	{
+		if (platformIOS) 
+    	{
+			UXCamBridge.disableCrashHandling(disable);
+		}
+	}
+
     /**
      *  Returns the current recording status
      *
