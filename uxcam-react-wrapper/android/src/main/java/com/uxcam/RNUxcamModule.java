@@ -392,4 +392,10 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
         }
 
     }
+
+    @ReactMethod
+    public void disableCrashHandling(boolean disable) {
+        UXCam.disableCrashHandling(disable);
+    }
+
 }
