@@ -49,3 +49,5 @@ package-lock.json
 
 # VS Code
 .vscode
+/UXCamReactExample/android/.settings
+/UXCamReactExample/android/.project
