@@ -49,5 +49,7 @@ package-lock.json
 
 # VS Code
 .vscode
-/UXCamReactExample/android/.settings
+/uxcam-react-wrapper/android/.project
+/uxcam-react-wrapper/android/.settings/org.eclipse.buildship.core.prefs
 /UXCamReactExample/android/.project
+/UXCamReactExample/android/.settings

@@ -25,7 +25,7 @@ import java.util.List;
 
 public class RNUxcamModule extends ReactContextBaseJavaModule {
     private static final String UXCAM_PLUGIN_TYPE = "react-native";
-    private static final String UXCAM_REACT_PLUGIN_VERSION = "5.3.2";
+    private static final String UXCAM_REACT_PLUGIN_VERSION = "5.3.3";
 
     private static final String UXCAM_VERIFICATION_EVENT_KEY = "UXCam_Verification_Event";
     private static final String PARAM_SUCCESS_KEY = "success";
@@ -392,4 +392,10 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
         }
 
     }
+
+    @ReactMethod
+    public void disableCrashHandling(boolean disable) {
+        UXCam.disableCrashHandling(disable);
+    }
+
 }
