@@ -27,9 +27,12 @@ RNUxcam.optIntoSchematicRecordings(); // Add this line to enable iOS screen reco
 RNUxcam.startWithKey('YOUR API KEY');
 ```
 
-# For testing example app
+# Example apps
 
-For more detailed example using react-navigation, see [UXCam-demo-chat-app](https://github.com/samin20/UXCam-demo-app)
+A simple Javascript based example app is in the [UXCamReactExample](UXCamReactExample/) folder
+A very simple Typescript example is in the [UXCamReactExample-Typescript](UXCamReactExample-Typescript/) folder.
+
+For more detailed example using react-navigation, see [UXCam-demo-chat-app](https://github.com/uxcam/UXCam-demo-app)
 
 ## Setup
 
