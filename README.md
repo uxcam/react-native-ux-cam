@@ -124,6 +124,7 @@ RNUxcam.startWithKey(key);
 3. Update plugin version on `package.json`, `android/src/main/java/com/uxcam/RNUxcamModule.java` and `ios/RNUxcam.m`
 4. Run `npm publish --dry-run` to validate changes.
 5. Run `npm publish` to publish the plugin.
+6. NB: If publishing a beta version then `npm publish --tag=beta`
 
 ## History
 
