@@ -28,8 +28,7 @@ export default class App extends Component<Props> {
     const configuration = {
       userAPIKey: 'YOUR UXCAM API KEY GOES HERE',
       captureNetworkLogs: true,
-      enableAdvancedGestureRecognizers: true,
-      enableAutomaticScreenNameTagging: false
+      enableAdvancedGestureRecognizers: true
     }
 
     RNUxcam.startWithConfiguration(configuration);
