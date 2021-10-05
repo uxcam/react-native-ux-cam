@@ -5,19 +5,9 @@ export default class UXCam {
      *  This will start the UXCam system, get the settings configurations from our server and start capturing the data according to the configuration.
      *
      *  @brief Start the UXCam session
-     *  @parameter configuration   The configuration to identify your UXCam app - find apiKey in the UXCam dashboard for your account 
+     *  @parameter userAPIKey   The key to identify your UXCam app - find it in the UXCam dashboard for your account 
      */
-    static startWithConfiguration: (configuration: UXCamConfiguration) => void;
-
-    /**
-     * Returns configuration object for current session
-     */
-    static configurationForUXCam: () => Promise<UXCamConfiguration | undefined | null>;
-   
-    /**
-     * Update current configuration with different values
-     */
-    static updateConfiguration: (configuration: UXCamConfiguration) => void;
+    static startWithKey: (apiKey: string) => void;
 
     /**
      * Starts a new session after the {@link #stopSessionAndUploadData()} method has been called.
@@ -378,13 +368,4 @@ export default class UXCam {
         @note Disable this on iOS if you are having problems with swipes or other gestures being interrupted while recording sessions.
     */
     static enableAdvancedGestureRecognizers: (enable: boolean) => void;
-}
-
-export interface UXCamConfiguration {
-    userAPIKey: string;
-    enableMultiSessionRecord?: boolean;
-    disableCrashHandling?: boolean;
-    enableAutomaticScreenNameTagging?: boolean;
-    enableAdvancedGestureRecognizers?: boolean;
-    captureNetworkLogs?: boolean;
 }
