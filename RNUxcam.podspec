@@ -17,6 +17,6 @@ Pod::Spec.new do |s|
   s.static_framework = true
 
   s.dependency 'React-Core'
-  s.dependency 'UXCam' , '~> 3.3.8'
+  s.dependency 'UXCam' , '~> 3.3.9'
 end
 
