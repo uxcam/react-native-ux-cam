@@ -58,7 +58,7 @@ export default class UXCam {
      
         @parameter occludeAll Set `true` to hide all UITextField views on the screen in the recording, `false` to stop occluding them from the screen recording.
      */
-    static occludeAllTextView: () => void;
+    static occludeAllTextView: (occludeAll: boolean) => void;
 
     /**
         Hide / un-hide all UITextField views on the screen
@@ -117,7 +117,7 @@ export default class UXCam {
  	*  @brief Call this before calling startWithKey to disable UXCam from capturing sessions that crash
  	*
  	*  @param disable `true` to disable crash capture
- 	*  @note By default crash handling is enabled. iOS Only - not supported to disable crash handling on Android
+ 	*  @note By default crash handling is enabled.
  	*/
 	static disableCrashHandling: (disable: boolean) => void;
 
