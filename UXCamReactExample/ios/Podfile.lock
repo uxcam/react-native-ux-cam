@@ -270,7 +270,7 @@ PODS:
   - RNUxcam (5.3.4-beta.2):
     - React-Core
     - UXCam (~> 3.3.6)
-  - UXCam (3.3.6)
+  - UXCam (3.3.9)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -303,7 +303,7 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - RNUxcam (from `../../uxcam-react-wrapper`)
+  - RNUxcam (from `../node_modules/react-native-ux-cam`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -367,7 +367,7 @@ EXTERNAL SOURCES:
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
   RNUxcam:
-    :path: "../../uxcam-react-wrapper"
+    :path: "../node_modules/react-native-ux-cam"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -375,7 +375,7 @@ SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: e686045572151edef46010a6f819ade377dfeb4b
-  FBReactNativeSpec: de76dadee602285285336eb07f9c4b25e63d382d
+  FBReactNativeSpec: ea86f1939f0c19c3223b1ee1cd41d8a5c4fe0211
   glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
   RCTRequired: 6d3e854f0e7260a648badd0d44fc364bc9da9728
@@ -401,9 +401,9 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: a9904c6d0218fb9f8b19d6dd88607225927668f9
   ReactCommon: 149906e01aa51142707a10665185db879898e966
   RNUxcam: 6bb9ff68ebcdd360e6082f12c8f4872ffd7fdd58
-  UXCam: 0160e973e6ea68486916220e710b7d63fbb179d8
+  UXCam: fb294bf954e708fc308a645ae65bb967cac0760e
   Yoga: 575c581c63e0d35c9a83f4b46d01d63abc1100ac
 
-PODFILE CHECKSUM: 8a6f16411933409a2d298122f04c92b94ab24e84
+PODFILE CHECKSUM: 6d1c979c4be0dab358307402c421e5bd39ac50a8
 
-COCOAPODS: 1.10.2
+COCOAPODS: 1.11.2

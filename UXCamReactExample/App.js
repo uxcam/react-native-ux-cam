@@ -23,9 +23,15 @@ var hideScreen = true
 type Props = {};
 export default class App extends Component<Props> {
 
-  componentDidMount(){
+  componentDidMount() {
     RNUxcam.optIntoSchematicRecordings();
-    RNUxcam.startWithKey('YOUR UXCAM API KEY GOES HERE');
+    const configuration = {
+      userAppKey: 'YOUR UXCAM API KEY GOES HERE'
+    }
+
+    RNUxcam.startWithConfiguration(configuration);
+    RNUxcam.addVerificationListener((result) => console.log(`UXCam: verificationResult: ${JSON.stringify(result)}`));
+
   }
 
   render() {

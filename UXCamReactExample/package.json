@@ -15,6 +15,7 @@
     "react-native-ux-cam": "file:../uxcam-react-wrapper"
   },
   "devDependencies": {
+    "metro-react-native-babel-preset": "^0.66.2",
     "react-native-clean-project": "^3.6.4"
   },
   "jest": {
