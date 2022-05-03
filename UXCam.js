@@ -8,6 +8,19 @@ const platformIOS = platform === "ios" ? true : false;
 const platformAndroid = platform === "android" ? true : false;
 
 class UXCam {
+
+    static startWithConfiguration(configuration) {
+        UXCamBridge.startWithConfiguration(configuration);
+    }
+
+    static async configurationForUXCam() {
+        return UXCamBridge.configurationForUXCam();
+    }
+
+    static updateConfiguration(configuration) {
+        UXCamBridge.updateConfiguration(configuration);
+    }
+
     /**
      *  Call this method from applicationDidFinishLaunching to start UXCam recording your application's session.
      *  This will start the UXCam system, get the settings configurations from our server and start capturing the data according to the configuration.
