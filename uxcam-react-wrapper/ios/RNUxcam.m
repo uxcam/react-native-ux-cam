@@ -13,6 +13,9 @@ static NSString* const RNUxcam_CrashHandling = @"enableCrashHandling";
 static NSString* const RNUxcam_ScreenTag = @"enableAutomaticScreenNameTagging";
 static NSString* const RNUxcam_AdvancedGestures = @"enableAdvancedGestureRecognition";
 static NSString* const RNUxcam_EnableNetworkLogs = @"enableNetworkLogging";
+static NSString* const RNUxcam_Occlusion = @"occlusion";
+static NSString* const RNUxcam_OccludeScreens = @"screens";
+static NSString* const RNUxcam_ExcludeScreens = @"excludeMentionedScreens";
 
 @interface RNUxcam ()
 @property (atomic, strong) NSNumber* lastVerifyResult;
@@ -128,6 +131,21 @@ RCT_EXPORT_METHOD(updateConfiguration:(NSDictionary *)config)
     if (enableNetworkLogging && [self isBoolNumber:enableNetworkLogging])
     {
         configuration.enableNetworkLogging = [enableNetworkLogging boolValue];
+    }
+    
+    NSArray *occlusionList = config[RNUxcam_Occlusion];
+    if (occlusionList && ![occlusionList isKindOfClass:NSNull.class]) {
+        UXCamOcclusion *occlusion = [[UXCamOcclusion alloc] init];
+        for (NSDictionary *occlusionJson in occlusionList) {
+            id <UXCamOcclusionSetting> setting = [UXCamOcclusion getSettingFromJson:occlusionJson];
+            if (setting)
+            {
+                NSArray *screens = occlusionJson[RNUxcam_OccludeScreens];
+                BOOL excludeMentionedScreens = [occlusionJson[RNUxcam_ExcludeScreens] boolValue];
+                [occlusion applySettings:@[setting] screens:screens excludeMentionedScreens: excludeMentionedScreens];
+            }
+        }
+        configuration.occlusion = occlusion;
     }
 }
 

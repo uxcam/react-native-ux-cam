@@ -29,8 +29,11 @@ import {
 
 
 const App = () => {
-  RNUxcam.optIntoSchematicRecordings();
-RNUxcam.startWithKey('UXCAM_APP_KEY');
+RNUxcam.optIntoSchematicRecordings();
+const configuration = {
+  userAppKey: 'et268wovwwhqy9y'
+};
+RNUxcam.startWithConfiguration(configuration);
   return (
     <Fragment>
       <StatusBar barStyle="dark-content" />

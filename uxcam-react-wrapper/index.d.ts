@@ -10,6 +10,14 @@ export default class UXCam {
     static startWithConfiguration: (configuration: UXCamConfiguration) => void;
 
     /**
+     *  @deprecated Use {@link #startWithConfiguration()} instead to start new session
+     * 
+     *  @brief Start the UXCam session
+     *  @parameter userAppKey   The key to identify your UXCam app - find it in the UXCam dashboard for your account 
+     */
+     static startWithKey: (appKey: string) => void;
+
+    /**
      * Returns configuration object for current session
      */
     static configurationForUXCam: () => Promise<UXCamConfiguration | undefined | null>;
@@ -381,10 +389,10 @@ export default class UXCam {
 }
 
 export interface UXCamConfiguration {
-    userAPIKey: string;
+    userAppKey: string;
     enableMultiSessionRecord?: boolean;
-    disableCrashHandling?: boolean;
+    enableCrashHandling?: boolean;
     enableAutomaticScreenNameTagging?: boolean;
-    enableAdvancedGestureRecognizers?: boolean;
-    captureNetworkLogs?: boolean;
+    enableAdvancedGestureRecognition?: boolean;
+    enableNetworkLogging?: boolean;
 }

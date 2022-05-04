@@ -12,14 +12,14 @@
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		1E20BF48250EE9F61C5DA795 /* Pods_ReactTypeScriptSample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D78D949BC6450B2865DBACC /* Pods_ReactTypeScriptSample.framework */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* ReactTypeScriptSampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* ReactTypeScriptSampleTests.m */; };
 		5DE7EBD0CCCB61A05C8E785D /* libPods-ReactTypeScriptSample-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51F9902534611FA1BBF95B41 /* libPods-ReactTypeScriptSample-tvOSTests.a */; };
-		81AE283A1E83A84BE115DE97 /* Pods_ReactTypeScriptSample_ReactTypeScriptSampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37812037FBB6AD6A209C960D /* Pods_ReactTypeScriptSample_ReactTypeScriptSampleTests.framework */; };
+		A3EEE15E01C559D76A0A0222 /* libPods-ReactTypeScriptSample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F62EFF061A1AEC2CA584CBF /* libPods-ReactTypeScriptSample.a */; };
 		B1C02C6ABCFE9FDAEDCDA661 /* libPods-ReactTypeScriptSample-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 55D902AAC93515A94BA48319 /* libPods-ReactTypeScriptSample-tvOS.a */; };
+		F7FEA20CDFE558A38A1723E0 /* libPods-ReactTypeScriptSample-ReactTypeScriptSampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0ABEE8E56766972495C1A09B /* libPods-ReactTypeScriptSample-ReactTypeScriptSampleTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +45,7 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* ReactTypeScriptSampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReactTypeScriptSampleTests.m; sourceTree = "<group>"; };
 		03A0E4E223EA201674BBBF9C /* Pods-ReactTypeScriptSample-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactTypeScriptSample-tvOS.release.xcconfig"; path = "Target Support Files/Pods-ReactTypeScriptSample-tvOS/Pods-ReactTypeScriptSample-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		0ABEE8E56766972495C1A09B /* libPods-ReactTypeScriptSample-ReactTypeScriptSampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ReactTypeScriptSample-ReactTypeScriptSampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0C8A3ABAD518E0E148C4696F /* Pods-ReactTypeScriptSample-ReactTypeScriptSampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactTypeScriptSample-ReactTypeScriptSampleTests.release.xcconfig"; path = "Target Support Files/Pods-ReactTypeScriptSample-ReactTypeScriptSampleTests/Pods-ReactTypeScriptSample-ReactTypeScriptSampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* ReactTypeScriptSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReactTypeScriptSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ReactTypeScriptSample/AppDelegate.h; sourceTree = "<group>"; };
@@ -55,11 +56,10 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ReactTypeScriptSample/main.m; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* ReactTypeScriptSample-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ReactTypeScriptSample-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* ReactTypeScriptSample-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ReactTypeScriptSample-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		37812037FBB6AD6A209C960D /* Pods_ReactTypeScriptSample_ReactTypeScriptSampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ReactTypeScriptSample_ReactTypeScriptSampleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		39B33A9D53AC62B15725F0B9 /* Pods-ReactTypeScriptSample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactTypeScriptSample.release.xcconfig"; path = "Target Support Files/Pods-ReactTypeScriptSample/Pods-ReactTypeScriptSample.release.xcconfig"; sourceTree = "<group>"; };
-		3D78D949BC6450B2865DBACC /* Pods_ReactTypeScriptSample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ReactTypeScriptSample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		51F9902534611FA1BBF95B41 /* libPods-ReactTypeScriptSample-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ReactTypeScriptSample-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		55D902AAC93515A94BA48319 /* libPods-ReactTypeScriptSample-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ReactTypeScriptSample-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F62EFF061A1AEC2CA584CBF /* libPods-ReactTypeScriptSample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ReactTypeScriptSample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A64C3DB883E3D987F61FF166 /* Pods-ReactTypeScriptSample-ReactTypeScriptSampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactTypeScriptSample-ReactTypeScriptSampleTests.debug.xcconfig"; path = "Target Support Files/Pods-ReactTypeScriptSample-ReactTypeScriptSampleTests/Pods-ReactTypeScriptSample-ReactTypeScriptSampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C1FAAF4C2A4EC65218C616A9 /* Pods-ReactTypeScriptSampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactTypeScriptSampleTests.debug.xcconfig"; path = "Target Support Files/Pods-ReactTypeScriptSampleTests/Pods-ReactTypeScriptSampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E1AE5AD9055A28A5643B666F /* Pods-ReactTypeScriptSample-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactTypeScriptSample-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-ReactTypeScriptSample-tvOS/Pods-ReactTypeScriptSample-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -76,7 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				81AE283A1E83A84BE115DE97 /* Pods_ReactTypeScriptSample_ReactTypeScriptSampleTests.framework in Frameworks */,
+				F7FEA20CDFE558A38A1723E0 /* libPods-ReactTypeScriptSample-ReactTypeScriptSampleTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,7 +84,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1E20BF48250EE9F61C5DA795 /* Pods_ReactTypeScriptSample.framework in Frameworks */,
+				A3EEE15E01C559D76A0A0222 /* libPods-ReactTypeScriptSample.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -145,8 +145,8 @@
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				55D902AAC93515A94BA48319 /* libPods-ReactTypeScriptSample-tvOS.a */,
 				51F9902534611FA1BBF95B41 /* libPods-ReactTypeScriptSample-tvOSTests.a */,
-				3D78D949BC6450B2865DBACC /* Pods_ReactTypeScriptSample.framework */,
-				37812037FBB6AD6A209C960D /* Pods_ReactTypeScriptSample_ReactTypeScriptSampleTests.framework */,
+				7F62EFF061A1AEC2CA584CBF /* libPods-ReactTypeScriptSample.a */,
+				0ABEE8E56766972495C1A09B /* libPods-ReactTypeScriptSample-ReactTypeScriptSampleTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -212,7 +212,7 @@
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				747DC638858D6C57BD064119 /* [CP] Embed Pods Frameworks */,
+				1AA2E4BC2C52646B966BEC32 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -234,7 +234,7 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				0C89B8CBD38D55177969D1D9 /* [CP] Embed Pods Frameworks */,
+				A06BAFEF871D7350006DD4F6 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -379,64 +379,22 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
-		0C89B8CBD38D55177969D1D9 /* [CP] Embed Pods Frameworks */ = {
+		1AA2E4BC2C52646B966BEC32 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ReactTypeScriptSample/Pods-ReactTypeScriptSample-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/DoubleConversion/DoubleConversion.framework",
-				"${BUILT_PRODUCTS_DIR}/FBReactNativeSpec/FBReactNativeSpec.framework",
-				"${BUILT_PRODUCTS_DIR}/RCT-Folly/folly.framework",
-				"${BUILT_PRODUCTS_DIR}/RCTTypeSafety/RCTTypeSafety.framework",
-				"${BUILT_PRODUCTS_DIR}/React-Core/React.framework",
-				"${BUILT_PRODUCTS_DIR}/React-CoreModules/CoreModules.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTAnimation/RCTAnimation.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTBlob/RCTBlob.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTImage/RCTImage.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTLinking/RCTLinking.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTNetwork/RCTNetwork.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTSettings/RCTSettings.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTText/RCTText.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTVibration/RCTVibration.framework",
-				"${BUILT_PRODUCTS_DIR}/React-cxxreact/cxxreact.framework",
-				"${BUILT_PRODUCTS_DIR}/React-jsi/jsi.framework",
-				"${BUILT_PRODUCTS_DIR}/React-jsiexecutor/jsireact.framework",
-				"${BUILT_PRODUCTS_DIR}/React-jsinspector/jsinspector.framework",
-				"${BUILT_PRODUCTS_DIR}/React-perflogger/reactperflogger.framework",
-				"${BUILT_PRODUCTS_DIR}/ReactCommon/ReactCommon.framework",
-				"${BUILT_PRODUCTS_DIR}/Yoga/yoga.framework",
-				"${BUILT_PRODUCTS_DIR}/glog/glog.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-ReactTypeScriptSample-ReactTypeScriptSampleTests/Pods-ReactTypeScriptSample-ReactTypeScriptSampleTests-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
 			);
-			name = "[CP] Embed Pods Frameworks";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DoubleConversion.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBReactNativeSpec.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/folly.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTTypeSafety.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/React.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CoreModules.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTAnimation.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTBlob.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTImage.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTLinking.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTNetwork.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTSettings.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTText.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTVibration.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/cxxreact.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/jsi.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/jsireact.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/jsinspector.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/reactperflogger.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactCommon.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/yoga.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/glog.framework",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ReactTypeScriptSample/Pods-ReactTypeScriptSample-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ReactTypeScriptSample-ReactTypeScriptSampleTests/Pods-ReactTypeScriptSample-ReactTypeScriptSampleTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		26547355CB8060FF540E6282 /* [CP] Check Pods Manifest.lock */ = {
@@ -497,64 +455,22 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		747DC638858D6C57BD064119 /* [CP] Embed Pods Frameworks */ = {
+		A06BAFEF871D7350006DD4F6 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ReactTypeScriptSample-ReactTypeScriptSampleTests/Pods-ReactTypeScriptSample-ReactTypeScriptSampleTests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/DoubleConversion/DoubleConversion.framework",
-				"${BUILT_PRODUCTS_DIR}/FBReactNativeSpec/FBReactNativeSpec.framework",
-				"${BUILT_PRODUCTS_DIR}/RCT-Folly/folly.framework",
-				"${BUILT_PRODUCTS_DIR}/RCTTypeSafety/RCTTypeSafety.framework",
-				"${BUILT_PRODUCTS_DIR}/React-Core/React.framework",
-				"${BUILT_PRODUCTS_DIR}/React-CoreModules/CoreModules.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTAnimation/RCTAnimation.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTBlob/RCTBlob.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTImage/RCTImage.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTLinking/RCTLinking.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTNetwork/RCTNetwork.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTSettings/RCTSettings.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTText/RCTText.framework",
-				"${BUILT_PRODUCTS_DIR}/React-RCTVibration/RCTVibration.framework",
-				"${BUILT_PRODUCTS_DIR}/React-cxxreact/cxxreact.framework",
-				"${BUILT_PRODUCTS_DIR}/React-jsi/jsi.framework",
-				"${BUILT_PRODUCTS_DIR}/React-jsiexecutor/jsireact.framework",
-				"${BUILT_PRODUCTS_DIR}/React-jsinspector/jsinspector.framework",
-				"${BUILT_PRODUCTS_DIR}/React-perflogger/reactperflogger.framework",
-				"${BUILT_PRODUCTS_DIR}/ReactCommon/ReactCommon.framework",
-				"${BUILT_PRODUCTS_DIR}/Yoga/yoga.framework",
-				"${BUILT_PRODUCTS_DIR}/glog/glog.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-ReactTypeScriptSample/Pods-ReactTypeScriptSample-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
 			);
-			name = "[CP] Embed Pods Frameworks";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DoubleConversion.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBReactNativeSpec.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/folly.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTTypeSafety.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/React.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CoreModules.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTAnimation.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTBlob.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTImage.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTLinking.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTNetwork.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTSettings.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTText.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RCTVibration.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/cxxreact.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/jsi.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/jsireact.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/jsinspector.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/reactperflogger.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactCommon.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/yoga.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/glog.framework",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ReactTypeScriptSample-ReactTypeScriptSampleTests/Pods-ReactTypeScriptSample-ReactTypeScriptSampleTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ReactTypeScriptSample/Pods-ReactTypeScriptSample-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		EA6D1FB8B758978A17EF4288 /* [CP] Check Pods Manifest.lock */ = {
