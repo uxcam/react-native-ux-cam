@@ -1,16 +1,17 @@
 import { EmitterSubscription } from "react-native";
+import UXCamOcclusion, { UXBlur } from "./UXCamOcclusion";
 
 export default class UXCam {
     /**
      *  This will start the UXCam system, get the settings configurations from our server and start capturing the data according to the configuration.
      *
      *  @brief Start the UXCam session
-     *  @parameter configuration   The configuration to identify your UXCam app - find apiKey in the UXCam dashboard for your account 
+     *  @parameter configuration   The configuration to identify your UXCam app - find appKey in the UXCam dashboard for your account 
      */
     static startWithConfiguration: (configuration: UXCamConfiguration) => void;
 
     /**
-     *  @deprecated Use {@link #startWithConfiguration()} instead to start new session
+     *  @deprecated Use {@link #startWithConfiguration(configuration)} instead to start new session
      * 
      *  @brief Start the UXCam session
      *  @parameter userAppKey   The key to identify your UXCam app - find it in the UXCam dashboard for your account 
@@ -395,4 +396,5 @@ export interface UXCamConfiguration {
     enableAutomaticScreenNameTagging?: boolean;
     enableAdvancedGestureRecognition?: boolean;
     enableNetworkLogging?: boolean;
+    occlusions?: UXCamOcclusion[];
 }
