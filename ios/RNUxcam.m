@@ -1,5 +1,5 @@
 #import "RNUxcam.h"
-#import <UXCam/UXCam.h>
+@import UXCam;
 
 #import <React/RCTUIManager.h>
 #import <React/RCTUIManagerUtils.h>
@@ -13,9 +13,16 @@ static NSString* const RNUxcam_CrashHandling = @"enableCrashHandling";
 static NSString* const RNUxcam_ScreenTag = @"enableAutomaticScreenNameTagging";
 static NSString* const RNUxcam_AdvancedGestures = @"enableAdvancedGestureRecognition";
 static NSString* const RNUxcam_EnableNetworkLogs = @"enableNetworkLogging";
-static NSString* const RNUxcam_Occlusion = @"occlusion";
+
+static NSString* const RNUxcam_Occlusion = @"occlusions";
 static NSString* const RNUxcam_OccludeScreens = @"screens";
 static NSString* const RNUxcam_ExcludeScreens = @"excludeMentionedScreens";
+static NSString* const RNUxcam_OcclusionType = @"type";
+static NSString* const RNUxcam_BlurName = @"name";
+static NSString* const RNUxcam_BlurRadius = @"blurRadius";
+static NSString* const RNUxcam_HideGestures = @"hideGestures";
+static NSString* const RNUxcam_OverlayColor = @"color";
+
 
 @interface RNUxcam ()
 @property (atomic, strong) NSNumber* lastVerifyResult;
@@ -137,7 +144,7 @@ RCT_EXPORT_METHOD(updateConfiguration:(NSDictionary *)config)
     if (occlusionList && ![occlusionList isKindOfClass:NSNull.class]) {
         UXCamOcclusion *occlusion = [[UXCamOcclusion alloc] init];
         for (NSDictionary *occlusionJson in occlusionList) {
-            id <UXCamOcclusionSetting> setting = [UXCamOcclusion getSettingFromJson:occlusionJson];
+            id <UXCamOcclusionSetting> setting = [self getOcclusionSettingFromJson:occlusionJson];
             if (setting)
             {
                 NSArray *screens = occlusionJson[RNUxcam_OccludeScreens];
@@ -146,6 +153,57 @@ RCT_EXPORT_METHOD(updateConfiguration:(NSDictionary *)config)
             }
         }
         configuration.occlusion = occlusion;
+    }
+}
+
+- (id<UXCamOcclusionSetting>)getOcclusionSettingFromJson:(NSDictionary *)json
+{
+    NSNumber *type = json[RNUxcam_OcclusionType];
+    UXOcclusionType occlusionType = type.integerValue ?: UXOcclusionTypeBlur;
+    
+    switch (occlusionType) {
+        case UXOcclusionTypeBlur:
+        {
+            NSString *name = json[RNUxcam_BlurName];
+            UXBlurType blurType = [UXCamOcclusion getBlurTypeFromName:name];
+            NSNumber *radiusValue = json[RNUxcam_BlurRadius];
+            int radius = radiusValue.intValue ?: 10;
+            UXCamBlurSetting *blur = [[UXCamBlurSetting alloc] initWithBlurType:blurType radius:radius];
+            NSNumber *hideGestures = json[RNUxcam_HideGestures];
+            if (hideGestures) {
+                blur.hideGestures = hideGestures.boolValue;
+            }
+            
+            return blur;
+        }
+        case UXOcclusionTypeOverlay:
+        {
+            UXCamOverlaySetting *overlay = [[UXCamOverlaySetting alloc] init];
+            NSNumber *colorCode = json[RNUxcam_OverlayColor];
+            if (colorCode)
+            {
+                int colorValue = colorCode.intValue;
+                float redValue = (colorValue >> 16 & 0xff) / 0xff;
+                float greenValue = (colorValue >> 8 & 0xff) / 0xff;
+                float blueValue = (colorValue & 0xff) / 0xff;
+                
+                UIColor *color = [UIColor colorWithRed:redValue green:greenValue blue:blueValue alpha: 1];
+                overlay.color = color;
+            }
+            
+            NSNumber *hideGestures = json[RNUxcam_HideGestures];
+            if (hideGestures) {
+                overlay.hideGestures = hideGestures.boolValue;
+            }
+            return overlay;
+        }
+        case UXOcclusionTypeOccludeAllTextFields:
+        {
+            UXCamOccludeAllTextFields *occlude = [[UXCamOccludeAllTextFields alloc] init];
+            return occlude;
+        }
+        default:
+            return nil;
     }
 }
 
