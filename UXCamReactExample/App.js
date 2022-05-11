@@ -9,6 +9,7 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View,Button} from 'react-native';
 import RNUxcam from 'react-native-ux-cam';
+import { UXCamOcclusionType } from 'react-native-ux-cam/UXCamOcclusion';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -25,8 +26,13 @@ export default class App extends Component<Props> {
 
   componentDidMount() {
     RNUxcam.optIntoSchematicRecordings();
+    const overlay = {
+      type: UXCamOcclusionType.Overlay,
+      color: 0x000000
+    }
     const configuration = {
-      userAppKey: 'YOUR UXCAM API KEY GOES HERE'
+      userAppKey: 'YOUR UXCAM API KEY GOES HERE',
+      occlusions: [overlay]
     }
 
     RNUxcam.startWithConfiguration(configuration);
