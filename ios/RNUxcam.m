@@ -207,6 +207,32 @@ RCT_EXPORT_METHOD(updateConfiguration:(NSDictionary *)config)
     }
 }
 
+RCT_EXPORT_METHOD(applyOcclusion:(NSDictionary *)occlusion)
+{
+    if (occlusion && ![occlusion isKindOfClass:NSNull.class]) {
+        id <UXCamOcclusionSetting> setting = [self getOcclusionSettingFromJson:occlusion];
+        if (setting)
+        {
+            [UXCam applyOcclusion:setting];
+        }
+    }
+}
+
+RCT_EXPORT_METHOD(removeOcclusion:(NSDictionary *)occlusion)
+{
+    if (occlusion && ![occlusion isKindOfClass:NSNull.class]) {
+        id <UXCamOcclusionSetting> setting = [self getOcclusionSettingFromJson:occlusion];
+        if (setting)
+        {
+            [UXCam removeOcclusionOfType:setting.type];
+        }
+        else
+        {
+            [UXCam removeOcclusion];
+        }
+    }
+}
+
 RCT_EXPORT_METHOD(startWithKey:(NSString *)userAppKey)
 {
     NSDictionary *config = @{RNUxcam_AppKey: userAppKey};

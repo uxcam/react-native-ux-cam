@@ -26,6 +26,14 @@ class UXCam {
         UXCamBridge.updateConfiguration(configuration);
     }
 
+    static applyOcclusion(occlusion) {
+        UXCamBridge.applyOcclusion(occlusion);
+    }
+
+    static removeOcclusion(occlusion) {
+        UXCamBridge.removeOcclusion(occlusion);
+    }
+
      /**
      *  @deprecated Use {@link #startWithConfiguration(configuration)} instead to start new session
      * 
