@@ -1,5 +1,5 @@
 import { EmitterSubscription } from "react-native";
-import UXCamOcclusion, { UXBlur } from "./UXCamOcclusion";
+import UXCamOcclusion from "./UXCamOcclusion";
 
 export default class UXCam {
     /**
@@ -28,6 +28,16 @@ export default class UXCam {
      */
     static updateConfiguration: (configuration: UXCamConfiguration) => void;
 
+    /**
+     * Apply manual occlusion to screens in the app. 
+     * This will be applied to all the screens until it is not removed manually again using {@link #removeOcclusion(occlusion)} method
+     */
+    static applyOcclusion: (occlusion: UXCamOcclusion) => void;
+
+    /**
+     * Remove manual occlusion from the app that was applied using {@link #applyOcclusion(occlusion)} method
+     */
+    static removeOcclusion: (occlusion: UXCamOcclusion) => void;
     /**
      * Starts a new session after the {@link #stopSessionAndUploadData()} method has been called.
      * This happens automatically when the app returns from background.
