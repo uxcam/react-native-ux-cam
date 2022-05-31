@@ -26,13 +26,14 @@ export default class App extends Component<Props> {
 
   componentDidMount() {
     RNUxcam.optIntoSchematicRecordings();
-    const overlay = {
-      type: UXCamOcclusionType.Overlay,
-      color: 0x000000
+    const blur = {
+      type: UXCamOcclusionType.Blur,
+      blurRadius: 10
     }
     const configuration = {
-      userAppKey: 'YOUR UXCAM API KEY GOES HERE',
-      occlusions: [overlay]
+      userAppKey: 'UXCAM API KEY',
+      occlusions: [blur],
+      enableImprovedScreenCapture: true
     }
 
     RNUxcam.startWithConfiguration(configuration);
