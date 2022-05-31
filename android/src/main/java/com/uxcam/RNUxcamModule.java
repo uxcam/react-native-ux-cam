@@ -22,6 +22,16 @@ import com.facebook.react.uimanager.UIManagerModule;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import android.util.Log;
+
+import com.uxcam.UXCam;
+import com.uxcam.datamodel.UXCamBlur;
+import com.uxcam.datamodel.UXCamOverlay;
+import com.uxcam.datamodel.UXCamOcclusion;
+import com.uxcam.datamodel.UXCamOccludeAllTextFields;
+import com.uxcam.datamodel.UXConfig;
 
 public class RNUxcamModule extends ReactContextBaseJavaModule {
     private static final String UXCAM_PLUGIN_TYPE = "react-native";
@@ -30,6 +40,20 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
     private static final String UXCAM_VERIFICATION_EVENT_KEY = "UXCam_Verification_Event";
     private static final String PARAM_SUCCESS_KEY = "success";
     private static final String PARAM_ERROR_MESSAGE_KEY = "error";
+
+    public static final String USER_APP_KEY = "userAppKey";
+    public static final String ENABLE_MUTLI_SESSION_RECORD = "enableMultiSessionRecord";
+    public static final String ENABLE_CRASH_HANDLING = "enableCrashHandling";
+    public static final String ENABLE_AUTOMATIC_SCREEN_NAME_TAGGING = "enableAutomaticScreenNameTagging";
+    public static final String ENABLE_IMPROVED_SCREEN_CAPTURE = "enableImprovedScreenCapture";
+    public static final String OCCLUSION = "occlusions";
+    public static final String SCREENS = "screens";
+    public static final String NAME = "name";
+    public static final String TYPE = "type";
+    public static final String EXCLUDE_MENTIONED_SCREENS = "excludeMentionedScreens";
+    public static final String CONFIG = "config";
+    public static final String BLUR_RADIUS = "radius";
+    public static final String HIDE_GESTURES = "hideGestures";
 
     private final ReactApplicationContext reactContext;
 
@@ -70,6 +94,131 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
     public void startWithKey(String key) {
         UXCam.pluginType(UXCAM_PLUGIN_TYPE, UXCAM_REACT_PLUGIN_VERSION);
         UXCam.startApplicationWithKeyForCordova(getCurrentActivity(), key);
+    }
+
+    @ReactMethod
+    public void startWithConfiguration(ReadableMap configuration) {
+        try {
+            HashMap<String, Object> configMap = configuration.toHashMap();
+            String appKey = (String) configMap.get(USER_APP_KEY);
+            Log.d("config", "app key " + appKey);
+            Boolean enableMultiSessionRecord = (Boolean) configMap.get(ENABLE_MUTLI_SESSION_RECORD);
+            Boolean enableCrashHandling = (Boolean) configMap.get(ENABLE_CRASH_HANDLING);
+            Boolean enableAutomaticScreenNameTagging = (Boolean) configMap.get(ENABLE_AUTOMATIC_SCREEN_NAME_TAGGING);
+            Boolean enableImprovedScreenCapture = (Boolean) configMap.get(ENABLE_IMPROVED_SCREEN_CAPTURE);
+
+            // // occlusion
+            List<UXCamOcclusion> occlusionList = null;
+            if (configMap.get(OCCLUSION) != null) {
+                Log.d("config", "occlusion is not null");
+                List<Map<String, Object>> occlusionObjects = (List<Map<String, Object>>) configMap.get(OCCLUSION);
+                occlusionList = convertToOcclusionList(occlusionObjects);
+            } else {
+                Log.d("config", "occlusion is null");
+            }
+
+            UXConfig.Builder uxConfigBuilder = new UXConfig.Builder(appKey);
+            if (enableMultiSessionRecord != null)
+                uxConfigBuilder.enableMultiSessionRecord(enableMultiSessionRecord);
+            if (enableCrashHandling != null)
+                uxConfigBuilder.enableCrashHandling(enableCrashHandling);
+            if (enableAutomaticScreenNameTagging != null)
+                uxConfigBuilder.enableAutomaticScreenNameTagging(enableAutomaticScreenNameTagging);
+            if (enableImprovedScreenCapture != null) {
+                Log.d("config", "improved screen capture enabled " + enableImprovedScreenCapture);
+                uxConfigBuilder.enableImprovedScreenCapture(enableImprovedScreenCapture);
+            }
+            if (occlusionList != null)
+                uxConfigBuilder.occlusions(occlusionList);
+
+            UXConfig config = uxConfigBuilder.build();
+            UXCam.pluginType(UXCAM_PLUGIN_TYPE, UXCAM_REACT_PLUGIN_VERSION);
+            UXCam.startWithConfigurationCrossPlatform(getCurrentActivity(), config);
+        } catch (Exception e) {
+            Log.d("config", "Error starting with configuration");
+            e.printStackTrace();
+        }
+    }
+
+    private List<UXCamOcclusion> convertToOcclusionList(List<Map<String, Object>> occlusionObjects) {
+        List<UXCamOcclusion> occlusionList = new ArrayList<UXCamOcclusion>();
+        for (Map<String, Object> occlusionMap :
+                occlusionObjects) {
+            UXCamOcclusion occlusion = getOcclusion(occlusionMap);
+            if (occlusion != null)
+                occlusionList.add(getOcclusion(occlusionMap));
+        }
+        return occlusionList;
+    }
+
+    private UXCamOcclusion getOcclusion(Map<String, Object> occlusionMap) {
+        double typeIndex = (double) occlusionMap.get(TYPE);
+        switch ((int)typeIndex) {
+            case 2:
+                return (UXCamOcclusion) getOverlay(occlusionMap);
+            case 3:
+                return (UXCamOcclusion) getBlur(occlusionMap);
+            default:
+                return null;
+        }
+    }
+
+    private UXCamOverlay getOverlay(Map<String, Object> overlayMap) {
+        // get data
+        List<String> screens = (List<String>) overlayMap.get(SCREENS);
+        Boolean excludeMentionedScreens = (Boolean) overlayMap.get(EXCLUDE_MENTIONED_SCREENS);
+        Map<String, Object> configMap = (Map<String, Object>) overlayMap.get(CONFIG);
+        Boolean hideGestures = null;
+        if (configMap != null) {
+            hideGestures = (Boolean) configMap.get(HIDE_GESTURES);
+        }
+
+        // set data
+        UXCamOverlay.Builder overlayBuilder = new UXCamOverlay.Builder();
+        if (screens != null && !screens.isEmpty())
+            overlayBuilder.screens(screens);
+        if (excludeMentionedScreens != null)
+            overlayBuilder.excludeMentionedScreens(excludeMentionedScreens);
+        if (hideGestures != null)
+            overlayBuilder.withoutGesture(hideGestures);
+        return overlayBuilder.build();
+    }
+
+    private UXCamBlur getBlur(Map<String, Object> blurMap) {
+        // get data
+        List<String> screens = (List<String>) blurMap.get(SCREENS);
+        Boolean excludeMentionedScreens = (Boolean) blurMap.get(EXCLUDE_MENTIONED_SCREENS);
+        Map<String, Object> configMap = (Map<String, Object>) blurMap.get(CONFIG);
+        Integer blurRadius = null;
+        Boolean hideGestures = null;
+        if (configMap != null) {
+            blurRadius = (Integer) configMap.get(BLUR_RADIUS);
+            hideGestures = (Boolean) configMap.get(HIDE_GESTURES);
+        }
+
+        // set data
+        UXCamBlur.Builder blurBuilder = new UXCamBlur.Builder();
+        if (screens != null && !screens.isEmpty())
+            blurBuilder.screens(screens);
+        if (excludeMentionedScreens != null)
+            blurBuilder.excludeMentionedScreens(excludeMentionedScreens);
+        if (blurRadius != null)
+            blurBuilder.blurRadius(blurRadius);
+        if (hideGestures != null)
+            blurBuilder.withoutGesture(hideGestures);
+        return blurBuilder.build();
+    }
+
+    @ReactMethod
+    public void applyOcclusion(ReadableMap occlusionMap) {
+        UXCamOcclusion occlusion = getOcclusion(occlusionMap.toHashMap());
+        UXCam.applyOcclusion(occlusion);
+    }
+
+    @ReactMethod
+    public void removeOcclusion(ReadableMap occlusionMap) {
+        UXCamOcclusion occlusion = getOcclusion(occlusionMap.toHashMap());
+        UXCam.removeOcclusion(occlusion);
     }
 
     @ReactMethod
