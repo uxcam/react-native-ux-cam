@@ -52,7 +52,7 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
     public static final String TYPE = "type";
     public static final String EXCLUDE_MENTIONED_SCREENS = "excludeMentionedScreens";
     public static final String CONFIG = "config";
-    public static final String BLUR_RADIUS = "radius";
+    public static final String BLUR_RADIUS = "blurRadius";
     public static final String HIDE_GESTURES = "hideGestures";
 
     private final ReactApplicationContext reactContext;
@@ -180,7 +180,7 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
         // get data
         List<String> screens = (List<String>) blurMap.get(SCREENS);
         Boolean excludeMentionedScreens = (Boolean) blurMap.get(EXCLUDE_MENTIONED_SCREENS);
-        Integer blurRadius = (Integer) blurMap.get(BLUR_RADIUS);
+        Double blurRadius = (Double) blurMap.get(BLUR_RADIUS);
         Boolean hideGestures = (Boolean) blurMap.get(HIDE_GESTURES);
 
         // set data
@@ -190,7 +190,7 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
         if (excludeMentionedScreens != null)
             blurBuilder.excludeMentionedScreens(excludeMentionedScreens);
         if (blurRadius != null)
-            blurBuilder.blurRadius(blurRadius);
+            blurBuilder.blurRadius(blurRadius.intValue());
         if (hideGestures != null)
             blurBuilder.withoutGesture(hideGestures);
         return blurBuilder.build();
