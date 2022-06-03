@@ -101,7 +101,6 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
         try {
             HashMap<String, Object> configMap = configuration.toHashMap();
             String appKey = (String) configMap.get(USER_APP_KEY);
-            Log.d("config", "app key " + appKey);
             Boolean enableMultiSessionRecord = (Boolean) configMap.get(ENABLE_MUTLI_SESSION_RECORD);
             Boolean enableCrashHandling = (Boolean) configMap.get(ENABLE_CRASH_HANDLING);
             Boolean enableAutomaticScreenNameTagging = (Boolean) configMap.get(ENABLE_AUTOMATIC_SCREEN_NAME_TAGGING);
@@ -110,11 +109,8 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
             // // occlusion
             List<UXCamOcclusion> occlusionList = null;
             if (configMap.get(OCCLUSION) != null) {
-                Log.d("config", "occlusion is not null");
                 List<Map<String, Object>> occlusionObjects = (List<Map<String, Object>>) configMap.get(OCCLUSION);
                 occlusionList = convertToOcclusionList(occlusionObjects);
-            } else {
-                Log.d("config", "occlusion is null");
             }
 
             UXConfig.Builder uxConfigBuilder = new UXConfig.Builder(appKey);
@@ -167,11 +163,7 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
         // get data
         List<String> screens = (List<String>) overlayMap.get(SCREENS);
         Boolean excludeMentionedScreens = (Boolean) overlayMap.get(EXCLUDE_MENTIONED_SCREENS);
-        Map<String, Object> configMap = (Map<String, Object>) overlayMap.get(CONFIG);
-        Boolean hideGestures = null;
-        if (configMap != null) {
-            hideGestures = (Boolean) configMap.get(HIDE_GESTURES);
-        }
+        Boolean hideGestures = (Boolean) overlayMap.get(HIDE_GESTURES);
 
         // set data
         UXCamOverlay.Builder overlayBuilder = new UXCamOverlay.Builder();
@@ -188,13 +180,8 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
         // get data
         List<String> screens = (List<String>) blurMap.get(SCREENS);
         Boolean excludeMentionedScreens = (Boolean) blurMap.get(EXCLUDE_MENTIONED_SCREENS);
-        Map<String, Object> configMap = (Map<String, Object>) blurMap.get(CONFIG);
-        Integer blurRadius = null;
-        Boolean hideGestures = null;
-        if (configMap != null) {
-            blurRadius = (Integer) configMap.get(BLUR_RADIUS);
-            hideGestures = (Boolean) configMap.get(HIDE_GESTURES);
-        }
+        Integer blurRadius = (Integer) blurMap.get(BLUR_RADIUS);
+        Boolean hideGestures = (Boolean) blurMap.get(HIDE_GESTURES);
 
         // set data
         UXCamBlur.Builder blurBuilder = new UXCamBlur.Builder();
