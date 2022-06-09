@@ -22,8 +22,12 @@ For iOS, you will need to `pod update`  as well:
 
 ```javascript
 import RNUxcam from 'react-native-ux-cam';
+import { Platform } from 'react-native';
 
 RNUxcam.optIntoSchematicRecordings(); // Add this line to enable iOS screen recordings
+if (Platform.OS === 'ios') {
+  RNUxcam.enableAdvancedGestureRecognizers(false);
+}
 RNUxcam.startWithKey('YOUR API KEY');
 ```
 
@@ -112,6 +116,11 @@ import RNUxcam from 'react-native-ux-cam';
 
 // Add this line to enable iOS screen recordings
 RNUxcam.optIntoSchematicRecordings();
+
+// pan responder drags will be interrupted on iOS without this
+if (Platform.OS === 'ios') {
+  RNUxcam.enableAdvancedGestureRecognizers(false);
+}
 
 // Initialize using your app key.
 RNUxcam.startWithKey(key);
