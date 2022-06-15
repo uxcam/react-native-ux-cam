@@ -150,6 +150,8 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
     private UXCamOcclusion getOcclusion(Map<String, Object> occlusionMap) {
         double typeIndex = (double) occlusionMap.get(TYPE);
         switch ((int)typeIndex) {
+            case 1:
+                return (UXCamOcclusion) getOccludeAllTextFields();
             case 2:
                 return (UXCamOcclusion) getOverlay(occlusionMap);
             case 3:
@@ -157,6 +159,10 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
             default:
                 return null;
         }
+    }
+
+    private UXCamOccludeAllTextFields getOccludeAllTextFields() {
+        return new UXCamOccludeAllTextFields();
     }
 
     private UXCamOverlay getOverlay(Map<String, Object> overlayMap) {
