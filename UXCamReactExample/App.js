@@ -30,9 +30,12 @@ export default class App extends Component<Props> {
       type: UXCamOcclusionType.Blur,
       blurRadius: 10,
     };
+    const occludeTextFields = {
+      type: UXCamOcclusionType.OccludeAllTextFields
+    }
     const configuration = {
-      userAppKey: 'UXCAM APP KEY',
-      occlusions: [blur],
+      userAppKey: 'flfqcjxcg4q0f85',
+      occlusions: [blur, occludeTextFields],
       enableImprovedScreenCapture: true,
     };
 
