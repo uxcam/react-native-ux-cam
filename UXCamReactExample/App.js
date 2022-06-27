@@ -132,7 +132,7 @@ export default class App extends Component<Props> {
       type: UXCamOcclusionType.OccludeAllTextFields,
     };
     const configuration = {
-      userAppKey: 'flfqcjxcg4q0f85',
+      userAppKey: 'USER APP KEY',
       enableImprovedScreenCapture: true,
       // occlusions: [blur, OccludeAllTextFields]
     };
