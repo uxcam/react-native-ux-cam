@@ -123,19 +123,22 @@ const Stack = createNativeStackNavigator();
 export default class App extends Component<Props> {
   componentDidMount() {
     RNUxcam.optIntoSchematicRecordings();
-    const blur = {
-      type: UXCamOcclusionType.Blur,
-      blurRadius: 10,
-      hideGestures: false,
-    };
-    const occludeTextFields = {
-      type: UXCamOcclusionType.OccludeAllTextFields,
-    };
+    const overlay = {
+      type: UXCamOcclusionType.Overlay,
+      color: 0x000000
+    }
     const configuration = {
-      userAppKey: 'USER APP KEY',
-      enableImprovedScreenCapture: true,
-      // occlusions: [blur, OccludeAllTextFields]
-    };
+      userAppKey: 'YOUR UXCAM API KEY GOES HERE',
+      enableImprovedScreenCapture: true, // for improved screen capture on Android
+      /*
+        disable advanced gestures if you're having issues with
+        swipe gestures and touches during app interaction
+      */
+      // enableAdvancedGestureRecognition: false,
+      occlusions: [overlay]
+    }
+
+    
     RNUxcam.startWithConfiguration(configuration);
     RNUxcam.addVerificationListener((result) =>
       console.log(`UXCam: verificationResult: ${JSON.stringify(result)}`),

@@ -37,6 +37,11 @@ const blur = new UXBlur();
 
 const configuration = {
   userAppKey: 'YOUR UXCAM API KEY GOES HERE',
+  /*
+    disable advanced gestures if you're having issues with
+    swipe gestures and touches during app interaction
+  */
+  // enableAdvancedGestureRecognition: false,
   occlusions: [blur]
 };
 RNUxcam.startWithConfiguration(configuration);
