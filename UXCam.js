@@ -362,18 +362,12 @@ class UXCam {
      *  @param continueSession For android, you can also add time to wait in `milliseconds` before finishing the session.
      */
     static allowShortBreakForAnotherApp(continueSession) {
-        if (platformAndroid) {
-            if (typeof continueSession === 'boolean') {
-                UXCamBridge.allowShortBreakForAnotherApp(continueSession);
-            } else if (typeof continueSession === 'number') {
-                UXCamBridge.allowShortBreakForAnotherAppInMillis(continueSession);
-            }
-        } else if (platformIOS) {
-            if (typeof continueSession === 'boolean'){
-                UXCamBridge.allowShortBreakForAnotherApp(continueSession);
-            }else{
-                UXCamBridge.allowShortBreakForAnotherApp(true);
-            }
+        if (typeof continueSession === 'boolean') {
+            UXCamBridge.allowShortBreakForAnotherApp(continueSession);
+        } else if (typeof continueSession === 'number') {
+            UXCamBridge.allowShortBreakForAnotherAppInMillis(continueSession);
+        } else {
+            UXCamBridge.allowShortBreakForAnotherApp(true);
         }
     }
 
