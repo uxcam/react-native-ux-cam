@@ -24,7 +24,15 @@ For iOS, you will need to `pod update`  as well:
 import RNUxcam from 'react-native-ux-cam';
 
 RNUxcam.optIntoSchematicRecordings(); // Add this line to enable iOS screen recordings
-RNUxcam.startWithKey('YOUR API KEY');
+const configuration = {
+    userAppKey: 'YOUR API KEY',
+    /*
+        disable advanced gestures if you're having issues with
+        swipe gestures and touches during app interaction
+    */
+    // enableAdvancedGestureRecognition: false
+}
+RNUxcam.startWithConfiguration(configuration);
 ```
 
 # Example apps
@@ -45,8 +53,11 @@ For more detailed example using react-navigation, see [UXCam-demo-chat-app](http
 `yarn add file:/path-to-uxcam-plugin`
 
 ## Add the key from UXCam to App.js file
-
-`RNUxcam.startWithKey('YOUR UXCAM API KEY GOES HERE');`
+`const configuration = {
+    userAppKey: 'YOUR API KEY',
+}
+RNUxcam.startWithConfiguration(configuration);
+`
 
 ## Running
 
@@ -114,7 +125,16 @@ import RNUxcam from 'react-native-ux-cam';
 RNUxcam.optIntoSchematicRecordings();
 
 // Initialize using your app key.
-RNUxcam.startWithKey(key);
+
+const configuration = {
+    userAppKey: 'YOUR API KEY',
+    /*
+        disable advanced gestures if you're having issues with
+        swipe gestures and touches during app interaction
+    */
+    // enableAdvancedGestureRecognition: false
+}
+RNUxcam.startWithConfiguration(configuration);
 ```
 
 ## Release
