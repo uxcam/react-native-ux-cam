@@ -135,7 +135,7 @@ export default class App extends Component<Props> {
         swipe gestures and touches during app interaction
       */
       // enableAdvancedGestureRecognition: false,
-      occlusions: [overlay]
+      //occlusions: [overlay]
     }
 
     

@@ -337,6 +337,12 @@ RCT_EXPORT_METHOD(allowShortBreakForAnotherApp:(BOOL)continueSession)
 	[UXCam allowShortBreakForAnotherApp:continueSession];
 }
 
+RCT_EXPORT_METHOD(allowShortBreakForAnotherAppInMillis:(double)duration)
+{
+    [UXCam allowShortBreakForAnotherApp:true];
+    [UXCam setAllowShortBreakMaxDuration:duration];
+}
+
 RCT_EXPORT_METHOD(startNewSession)
 {
 	[UXCam startNewSession];
