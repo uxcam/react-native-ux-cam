@@ -5,6 +5,8 @@
 
 Version | Changes
 ------- | ----------
+5.4.0	| Update iOS SDK to 3.4.1 and Android to 3.4.1
+		| Add support for configuration and occlusion apis
 5.3.4	| Examples updated the latest react-native versions
 		| Added Typescript example into this repo
 		| iOS SDK 3.3.9, Android SDK 3.3.7
