@@ -8,15 +8,40 @@ const platformIOS = platform === "ios" ? true : false;
 const platformAndroid = platform === "android" ? true : false;
 
 class UXCam {
-    /**
-     *  Call this method from applicationDidFinishLaunching to start UXCam recording your application's session.
+     /**
      *  This will start the UXCam system, get the settings configurations from our server and start capturing the data according to the configuration.
      *
      *  @brief Start the UXCam session
-     *  @parameter userAPIKey   The key to identify your UXCam app - find it in the UXCam dashboard for your account 
+     *  @parameter configuration   The configuration to identify your UXCam app - find appKey in the UXCam dashboard for your account 
      */
-    static startWithKey(apiKey) {
-		UXCamBridge.startWithKey(apiKey);
+    static startWithConfiguration(configuration) {
+        UXCamBridge.startWithConfiguration(configuration);
+    }
+
+    static async configurationForUXCam() {
+        return UXCamBridge.configurationForUXCam();
+    }
+
+    static updateConfiguration(configuration) {
+        UXCamBridge.updateConfiguration(configuration);
+    }
+
+    static applyOcclusion(occlusion) {
+        UXCamBridge.applyOcclusion(occlusion);
+    }
+
+    static removeOcclusion(occlusion) {
+        UXCamBridge.removeOcclusion(occlusion);
+    }
+
+     /**
+     *  @deprecated Use {@link #startWithConfiguration(configuration)} instead to start new session
+     * 
+     *  @brief Start the UXCam session
+     *  @parameter userAppKey   The key to identify your UXCam app - find it in the UXCam dashboard for your account 
+     */
+    static startWithKey(appKey) {
+		UXCamBridge.startWithKey(appKey);
     }
 
     /**
@@ -76,6 +101,7 @@ class UXCam {
     }
 
     /**
+     *  @deprecated Use {@link #occludeAllTextFields(occludeAll)} instead to start new session
         Hide / un-hide all UITextField views on the screen
      
         Call this when you want to hide the contents of all UITextFields from the screen capture. Default is `false`.

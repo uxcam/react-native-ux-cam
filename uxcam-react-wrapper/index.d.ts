@@ -1,14 +1,43 @@
 import { EmitterSubscription } from "react-native";
+import UXCamOcclusion from "./UXCamOcclusion";
 
 export default class UXCam {
     /**
      *  This will start the UXCam system, get the settings configurations from our server and start capturing the data according to the configuration.
      *
      *  @brief Start the UXCam session
-     *  @parameter userAPIKey   The key to identify your UXCam app - find it in the UXCam dashboard for your account 
+     *  @parameter configuration   The configuration to identify your UXCam app - find appKey in the UXCam dashboard for your account 
      */
-    static startWithKey: (apiKey: string) => void;
+    static startWithConfiguration: (configuration: UXCamConfiguration) => void;
 
+    /**
+     *  @deprecated Use {@link #startWithConfiguration(configuration)} instead to start new session
+     * 
+     *  @brief Start the UXCam session
+     *  @parameter userAppKey   The key to identify your UXCam app - find it in the UXCam dashboard for your account 
+     */
+     static startWithKey: (appKey: string) => void;
+
+    /**
+     * Returns configuration object for current session
+     */
+    static configurationForUXCam: () => Promise<UXCamConfiguration | undefined | null>;
+   
+    /**
+     * Update current configuration with different values
+     */
+    static updateConfiguration: (configuration: UXCamConfiguration) => void;
+
+    /**
+     * Apply manual occlusion to screens in the app. 
+     * This will be applied to all the screens until it is not removed manually again using {@link #removeOcclusion(occlusion)} method
+     */
+    static applyOcclusion: (occlusion: UXCamOcclusion) => void;
+
+    /**
+     * Remove manual occlusion from the app that was applied using {@link #applyOcclusion(occlusion)} method
+     */
+    static removeOcclusion: (occlusion: UXCamOcclusion) => void;
     /**
      * Starts a new session after the {@link #stopSessionAndUploadData()} method has been called.
      * This happens automatically when the app returns from background.
@@ -58,7 +87,7 @@ export default class UXCam {
      
         @parameter occludeAll Set `true` to hide all UITextField views on the screen in the recording, `false` to stop occluding them from the screen recording.
      */
-    static occludeAllTextView: (occludeAll: boolean) => void;
+    static occludeAllTextView: () => void;
 
     /**
         Hide / un-hide all UITextField views on the screen
@@ -368,4 +397,14 @@ export default class UXCam {
         @note Disable this on iOS if you are having problems with swipes or other gestures being interrupted while recording sessions.
     */
     static enableAdvancedGestureRecognizers: (enable: boolean) => void;
+}
+
+export interface UXCamConfiguration {
+    userAppKey: string;
+    enableMultiSessionRecord?: boolean;
+    enableCrashHandling?: boolean;
+    enableAutomaticScreenNameTagging?: boolean;
+    enableAdvancedGestureRecognition?: boolean;
+    enableNetworkLogging?: boolean;
+    occlusions?: UXCamOcclusion[];
 }

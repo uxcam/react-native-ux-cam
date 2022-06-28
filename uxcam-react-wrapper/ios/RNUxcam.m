@@ -1,10 +1,28 @@
 #import "RNUxcam.h"
-#import <UXCam/UXCam.h>
+@import UXCam;
 
 #import <React/RCTUIManager.h>
 #import <React/RCTUIManagerUtils.h>
 
 static NSString* const RNUxcam_VerifyEvent_Name = @"UXCam_Verification_Event";
+
+// Configuration Keys
+static NSString* const RNUxcam_AppKey = @"userAppKey";
+static NSString* const RNUxcam_MultiSession = @"enableMultiSessionRecord";
+static NSString* const RNUxcam_CrashHandling = @"enableCrashHandling";
+static NSString* const RNUxcam_ScreenTag = @"enableAutomaticScreenNameTagging";
+static NSString* const RNUxcam_AdvancedGestures = @"enableAdvancedGestureRecognition";
+static NSString* const RNUxcam_EnableNetworkLogs = @"enableNetworkLogging";
+
+static NSString* const RNUxcam_Occlusion = @"occlusions";
+static NSString* const RNUxcam_OccludeScreens = @"screens";
+static NSString* const RNUxcam_ExcludeScreens = @"excludeMentionedScreens";
+static NSString* const RNUxcam_OcclusionType = @"type";
+static NSString* const RNUxcam_BlurName = @"name";
+static NSString* const RNUxcam_BlurRadius = @"blurRadius";
+static NSString* const RNUxcam_HideGestures = @"hideGestures";
+static NSString* const RNUxcam_OverlayColor = @"color";
+
 
 @interface RNUxcam ()
 @property (atomic, strong) NSNumber* lastVerifyResult;
@@ -29,53 +47,238 @@ RCT_EXPORT_MODULE();
 /// TODO: Investigate if we can remove this and run on a general background Q
 - (dispatch_queue_t)methodQueue
 {
-	return dispatch_get_main_queue();
+    return dispatch_get_main_queue();
 }
 
-#pragma mark The main entry point - start the UXCam system with the provided key
-RCT_EXPORT_METHOD(startWithKey:(NSString *)userAPIKey)
+#pragma mark The main entry point - start the UXCam system with the provided configuration
+RCT_EXPORT_METHOD(startWithConfiguration:(NSDictionary *)config)
 {
-	self.lastVerifyResult = nil;
-	[UXCam pluginType:@"react-native" version:@"5.3.4"];
-	/// TODO: Move this into the main iOS SDK so it sends a notification on verify and we just listen for that.
-	[UXCam startWithKey:userAPIKey completionBlock:^(BOOL started)
-						 {
-							 self.lastVerifyResult = @(started);
-							 [self verifyEventSender:started];
-						 }
-	 ];
+    self.lastVerifyResult = nil;
+    [UXCam pluginType:@"react-native" version:@"5.4.0"];
+    
+    NSString *userAppKey = config[RNUxcam_AppKey];
+    if (!userAppKey || ![userAppKey isKindOfClass:NSString.class])
+    {
+        NSLog(@"UXCam: Please provide valid app key");
+        [self verifyEventSender:NO];
+        return;
+    }
+    UXCamConfiguration *configuration = [[UXCamConfiguration alloc] initWithAppKey:userAppKey];
+    [self updateConfiguration:configuration fromDict:config];
+    
+    [UXCam startWithConfiguration:configuration completionBlock:^(BOOL started)
+     {
+        self.lastVerifyResult = @(started);
+    }
+     ];
+}
+
+RCT_EXPORT_METHOD(configurationForUXCam:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    UXCamConfiguration *configuration = UXCam.configuration;
+    
+    if (configuration)
+    {
+        NSDictionary *configDict = @{
+            RNUxcam_AppKey: configuration.userAppKey,
+            RNUxcam_MultiSession: @(configuration.enableMultiSessionRecord),
+            RNUxcam_CrashHandling: @(configuration.enableCrashHandling),
+            RNUxcam_ScreenTag: @(configuration.enableAutomaticScreenNameTagging),
+            RNUxcam_AdvancedGestures: @(configuration.enableAdvancedGestureRecognition),
+            RNUxcam_EnableNetworkLogs: @(configuration.enableNetworkLogging)
+        };
+        resolve(configDict);
+    }
+    else
+    {
+        NSString *code = @"no_configuration";
+        NSString *message = @"Please start UXCam with startWithConfiguration first to get configuration";
+        NSError *error = [NSError errorWithDomain:@"RNUXCam" code:1 userInfo:nil];
+        
+        reject(code, message, error);
+    }
+}
+
+RCT_EXPORT_METHOD(updateConfiguration:(NSDictionary *)config)
+{
+    UXCamConfiguration *configuration = UXCam.configuration;
+    if (!configuration)
+    {
+        NSLog(@"Please start UXCam with startWithConfiguration first before updating configuration");
+        return;
+        
+    }
+    [self updateConfiguration:configuration fromDict:config];
+}
+
+- (void)updateConfiguration:(UXCamConfiguration *)configuration fromDict:(NSDictionary *)config
+{
+    NSNumber *enableMultiSessionRecord = config[RNUxcam_MultiSession];
+    if (enableMultiSessionRecord && [self isBoolNumber:enableMultiSessionRecord])
+    {
+        configuration.enableMultiSessionRecord = [enableMultiSessionRecord boolValue];
+    }
+    NSNumber *enableCrashHandling = config[RNUxcam_CrashHandling];
+    if (enableCrashHandling && [self isBoolNumber:enableCrashHandling])
+    {
+        configuration.enableCrashHandling = [enableCrashHandling boolValue];
+    }
+    NSNumber *enableAutomaticScreenNameTagging = config[RNUxcam_ScreenTag];
+    if (enableAutomaticScreenNameTagging && [self isBoolNumber:enableAutomaticScreenNameTagging])
+    {
+        configuration.enableAutomaticScreenNameTagging = [enableAutomaticScreenNameTagging boolValue];
+    }
+    NSNumber *enableAdvancedGestureRecognition = config[RNUxcam_AdvancedGestures];
+    if (enableAdvancedGestureRecognition && [self isBoolNumber:enableAdvancedGestureRecognition])
+    {
+        configuration.enableAdvancedGestureRecognition = [enableAdvancedGestureRecognition boolValue];
+    }
+    NSNumber *enableNetworkLogging = config[RNUxcam_EnableNetworkLogs];
+    if (enableNetworkLogging && [self isBoolNumber:enableNetworkLogging])
+    {
+        configuration.enableNetworkLogging = [enableNetworkLogging boolValue];
+    }
+    
+    NSArray *occlusionList = config[RNUxcam_Occlusion];
+    if (occlusionList && ![occlusionList isKindOfClass:NSNull.class]) {
+        UXCamOcclusion *occlusion = [[UXCamOcclusion alloc] init];
+        for (NSDictionary *occlusionJson in occlusionList) {
+            id <UXCamOcclusionSetting> setting = [self getOcclusionSettingFromJson:occlusionJson];
+            if (setting)
+            {
+                NSArray *screens = occlusionJson[RNUxcam_OccludeScreens];
+                BOOL excludeMentionedScreens = [occlusionJson[RNUxcam_ExcludeScreens] boolValue];
+                [occlusion applySettings:@[setting] screens:screens excludeMentionedScreens: excludeMentionedScreens];
+            }
+        }
+        configuration.occlusion = occlusion;
+    }
+}
+
+- (id<UXCamOcclusionSetting>)getOcclusionSettingFromJson:(NSDictionary *)json
+{
+    NSNumber *type = json[RNUxcam_OcclusionType];
+    UXOcclusionType occlusionType = type.integerValue ?: UXOcclusionTypeBlur;
+    
+    switch (occlusionType) {
+        case UXOcclusionTypeBlur:
+        {
+            NSString *name = json[RNUxcam_BlurName];
+            UXBlurType blurType = [UXCamOcclusion getBlurTypeFromName:name];
+            NSNumber *radiusValue = json[RNUxcam_BlurRadius];
+            int radius = radiusValue.intValue ?: 10;
+            UXCamBlurSetting *blur = [[UXCamBlurSetting alloc] initWithBlurType:blurType radius:radius];
+            NSNumber *hideGestures = json[RNUxcam_HideGestures];
+            if (hideGestures) {
+                blur.hideGestures = hideGestures.boolValue;
+            }
+            
+            return blur;
+        }
+        case UXOcclusionTypeOverlay:
+        {
+            UXCamOverlaySetting *overlay = [[UXCamOverlaySetting alloc] init];
+            NSNumber *colorCode = json[RNUxcam_OverlayColor];
+            if (colorCode)
+            {
+                int colorValue = colorCode.intValue;
+                float redValue = (colorValue >> 16 & 0xff) / 0xff;
+                float greenValue = (colorValue >> 8 & 0xff) / 0xff;
+                float blueValue = (colorValue & 0xff) / 0xff;
+                
+                UIColor *color = [UIColor colorWithRed:redValue green:greenValue blue:blueValue alpha: 1];
+                overlay.color = color;
+            }
+            
+            NSNumber *hideGestures = json[RNUxcam_HideGestures];
+            if (hideGestures) {
+                overlay.hideGestures = hideGestures.boolValue;
+            }
+            return overlay;
+        }
+        case UXOcclusionTypeOccludeAllTextFields:
+        {
+            UXCamOccludeAllTextFields *occlude = [[UXCamOccludeAllTextFields alloc] init];
+            return occlude;
+        }
+        default:
+            return nil;
+    }
+}
+
+RCT_EXPORT_METHOD(applyOcclusion:(NSDictionary *)occlusion)
+{
+    if (occlusion && ![occlusion isKindOfClass:NSNull.class]) {
+        id <UXCamOcclusionSetting> setting = [self getOcclusionSettingFromJson:occlusion];
+        if (setting)
+        {
+            [UXCam applyOcclusion:setting];
+        }
+    }
+}
+
+RCT_EXPORT_METHOD(removeOcclusion:(NSDictionary *)occlusion)
+{
+    if (occlusion && ![occlusion isKindOfClass:NSNull.class]) {
+        id <UXCamOcclusionSetting> setting = [self getOcclusionSettingFromJson:occlusion];
+        if (setting)
+        {
+            [UXCam removeOcclusionOfType:setting.type];
+        }
+        else
+        {
+            [UXCam removeOcclusion];
+        }
+    }
+}
+
+RCT_EXPORT_METHOD(startWithKey:(NSString *)userAppKey)
+{
+    NSDictionary *config = @{RNUxcam_AppKey: userAppKey};
+    [self startWithConfiguration:config];
 }
 
 #pragma mark Event related methods
 - (NSArray<NSString *> *)supportedEvents
 {
-	return @[RNUxcam_VerifyEvent_Name];
+    return @[RNUxcam_VerifyEvent_Name];
 }
 
 /// Will be called when this module's first listener is added.
 -(void)startObserving
 {
-	// Set up any upstream listeners or background tasks as necessary
-	if (self.numEventListeners == 0)
-	{
-		/// Action for first listener added - eg register for notifications
-	}
-	
-	self.numEventListeners++;
+    // Set up any upstream listeners or background tasks as necessary
+    if (self.numEventListeners == 0)
+    {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addObserverForVerificationNotification:) name:RNUxcam_VerifyEvent_Name object:nil];
+    }
+    
+    self.numEventListeners++;
 }
 
 /// Will be called when this module's last listener is removed, or on dealloc.
 -(void)stopObserving
 {
-	self.numEventListeners--;
-	if (self.numEventListeners == 0)
-	{
-		/// Remove upstream listeners, stop unnecessary background tasks
-	}
-	else if (self.numEventListeners < 0)
-	{
-		NSLog(@"RNUxcam: Removed more event listeners than were added.");
-	}
+    self.numEventListeners--;
+    if (self.numEventListeners == 0)
+    {
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:RNUxcam_VerifyEvent_Name object:nil];
+    }
+    else if (self.numEventListeners < 0)
+    {
+        NSLog(@"RNUxcam: Removed more event listeners than were added.");
+    }
+}
+
+- (void)addObserverForVerificationNotification:(NSNotification *)notification
+{
+    if (![notification.name isEqualToString:RNUxcam_VerifyEvent_Name])
+    {
+        return;
+    }
+    BOOL started = [notification.userInfo[@"started"] boolValue];
+    [self verifyEventSender:started];
 }
 
 - (void)verifyEventSender:(BOOL)verifyResult
@@ -111,6 +314,13 @@ RCT_EXPORT_METHOD(startWithKey:(NSString *)userAPIKey)
 	return reactTag;
 }
 
+- (BOOL)isBoolNumber:(NSNumber *)num
+{
+    CFTypeID boolID = CFBooleanGetTypeID(); // the type ID of CFBoolean
+    CFTypeID numID = CFGetTypeID((__bridge CFTypeRef)(num)); // the type ID of num
+    return numID == boolID;
+}
+
 #pragma mark General UXCam SDK method mappings
 RCT_EXPORT_METHOD(stopSessionAndUploadData)
 {
@@ -139,7 +349,7 @@ RCT_EXPORT_METHOD(cancelCurrentSession)
 
 RCT_EXPORT_METHOD(setMultiSessionRecord:(BOOL)recordMultipleSessions)
 {
-	[UXCam setMultiSessionRecord:recordMultipleSessions];
+    UXCam.configuration.enableMultiSessionRecord = recordMultipleSessions;
 }
 
 RCT_EXPORT_METHOD(pauseScreenRecording)
@@ -154,7 +364,7 @@ RCT_EXPORT_METHOD(resumeScreenRecording)
 
 RCT_EXPORT_METHOD(disableCrashHandling:(BOOL)disable)
 {
-	[UXCam disableCrashHandling:disable];
+    UXCam.configuration.enableCrashHandling = !disable;
 }
 
 RCT_EXPORT_METHOD(occludeSensitiveScreen:(BOOL)hideScreen)
@@ -276,7 +486,7 @@ RCT_EXPORT_METHOD(isRecording:(RCTPromiseResolveBlock)resolve
 RCT_EXPORT_METHOD(getMultiSessionRecord:(RCTPromiseResolveBlock)resolve
 				  rejecter:(RCTPromiseRejectBlock)reject)
 {
-	resolve(@(UXCam.getMultiSessionRecord));
+    resolve(@(UXCam.configuration.enableMultiSessionRecord));
 }
 
 RCT_EXPORT_METHOD(pendingSessionCount:(RCTPromiseResolveBlock)resolve
@@ -392,43 +602,43 @@ RCT_EXPORT_METHOD(occludeSensitiveViewWithoutGesture: (id) tag)
 #pragma mark Screen name methods
 RCT_EXPORT_METHOD(setAutomaticScreenNameTagging:(BOOL)enable)
 {
-	[UXCam setAutomaticScreenNameTagging:enable];
+    UXCam.configuration.enableAutomaticScreenNameTagging = enable;
 }
 
 RCT_EXPORT_METHOD(tagScreenName:(NSString*)screenName)
 {
-	[UXCam tagScreenName:screenName];
+    [UXCam tagScreenName:screenName];
 }
 
 RCT_EXPORT_METHOD(addScreenNameToIgnore:(NSString*)screenName)
 {
-	[UXCam addScreenNameToIgnore:screenName];
+    [UXCam addScreenNameToIgnore:screenName];
 }
 
 RCT_EXPORT_METHOD(addScreenNamesToIgnore:(NSArray<NSString*>*)screenNames)
 {
-	[UXCam addScreenNamesToIgnore:screenNames];
+    [UXCam addScreenNamesToIgnore:screenNames];
 }
 
 RCT_EXPORT_METHOD(removeScreenNameToIgnore:(NSString*)screenName)
 {
-	[UXCam removeScreenNameToIgnore:screenName];
+    [UXCam removeScreenNameToIgnore:screenName];
 }
 
 RCT_EXPORT_METHOD(removeScreenNamesToIgnore:(NSArray<NSString*>*)screenNames)
 {
-	[UXCam removeScreenNamesToIgnore:screenNames];
+    [UXCam removeScreenNamesToIgnore:screenNames];
 }
 
 RCT_EXPORT_METHOD(removeAllScreenNamesToIgnore)
 {
-	[UXCam removeAllScreenNamesToIgnore];
+    [UXCam removeAllScreenNamesToIgnore];
 }
 
 RCT_EXPORT_METHOD(screenNamesBeingIgnored:(RCTPromiseResolveBlock)resolve
-				  				rejecter:(RCTPromiseRejectBlock)reject)
+                  rejecter:(RCTPromiseRejectBlock)reject)
 {
-	resolve(UXCam.screenNamesBeingIgnored);
+    resolve(UXCam.screenNamesBeingIgnored);
 }
 
 RCT_EXPORT_METHOD(setPushNotificationToken:(NSString*)pushToken)
@@ -448,7 +658,7 @@ RCT_EXPORT_METHOD(reportBugEvent:(NSString*)name properties:(nullable NSDictiona
 
 RCT_EXPORT_METHOD(enableAdvancedGestureRecognizers:(BOOL)enable)
 {
-    [UXCam EnableAdvancedGestureRecognizers:enable];
+    UXCam.configuration.enableAdvancedGestureRecognition = enable;
 }
 
 @end

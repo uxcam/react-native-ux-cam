@@ -15,6 +15,7 @@ import {
   View,
   Text,
   StatusBar,
+  TextInput,
 } from 'react-native';
 
 import {
@@ -24,13 +25,26 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import { UXBlur } from 'react-native-ux-cam/UXCamOcclusion';
 
 
 
 
 const App = () => {
-  RNUxcam.optIntoSchematicRecordings();
-RNUxcam.startWithKey('UXCAM_APP_KEY');
+RNUxcam.optIntoSchematicRecordings();
+
+const blur = new UXBlur();
+
+const configuration = {
+  userAppKey: 'YOUR UXCAM API KEY GOES HERE',
+  /*
+    disable advanced gestures if you're having issues with
+    swipe gestures and touches during app interaction
+  */
+  // enableAdvancedGestureRecognition: false,
+  occlusions: [blur]
+};
+RNUxcam.startWithConfiguration(configuration);
   return (
     <Fragment>
       <StatusBar barStyle="dark-content" />
@@ -53,6 +67,9 @@ RNUxcam.startWithKey('UXCAM_APP_KEY');
               </Text>
             </View>
             <View style={styles.sectionContainer}>
+            <TextInput
+              style={{height: 40}}
+              placeholder="Type here to translate!" />
               <Text ref={(label) => { RNUxcam.occludeSensitiveView(label); }} style={styles.sectionTitle}>This should not be visible.</Text>
               <Text style={styles.sectionDescription}>
                 <ReloadInstructions />
