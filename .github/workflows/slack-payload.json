@@ -1,0 +1,34 @@
+{
+    "text": ":rocket: UXCam React Native Plugin Released :rocket:",
+	"blocks": [
+        {
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "<!here> UXCam React Native Plugin __PACKAGE_VERSION__ has been released.\n:rocket: UXCam React Native Plugin  __PACKAGE_VERSION__ :rocket:\n:date:  __RELEASE_DATE__"
+			}
+		},
+		{
+			"type": "section",
+			"fields": [
+				{
+					"type": "mrkdwn",
+					"text": "*CHANGELOG(Internal):*\n__CHANGELOG__"
+				}
+			]
+		},
+		{
+			"type": "section",
+			"fields": [
+				{
+					"type": "mrkdwn",
+					"text": "*SDK*\nReact Native Plugin"
+				},
+				{
+					"type": "mrkdwn",
+					"text": "*Version*\n__PACKAGE_VERSION__"
+				}
+			]
+		}
+	]
+}
