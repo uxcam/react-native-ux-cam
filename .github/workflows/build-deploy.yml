@@ -1,4 +1,4 @@
-name: Publish React Native package
+name: Publish React Native Package
 on:
   workflow_dispatch:
     inputs:
@@ -45,13 +45,14 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Publish package
-        if: github.event.inputs.publish == true
+        if: ${{ inputs.publish }}
         run: |
             cd uxcam-react-wrapper/
             npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Add new tag to github
+        if: ${{ inputs.publish }}
         run: |
             version="v${{ steps.get-version.outputs.version }}"
             git tag -a $version -m "Release: $version"
@@ -59,9 +60,20 @@ jobs:
       - name: Generate Changelogs
         id: changelogs
         run: |
-            current_tag=$(git describe --tags --abbrev=0)
+            if ${{ inputs.publish }}; then
+              current_tag=$(git describe --tags --abbrev=0)
+            else 
+              current_tag=HEAD
+            fi
+
             previous_tag=$(git describe --tags --abbrev=0 ${current_tag}^)  
             logs=$(git log ${current_tag}...${previous_tag} --pretty=format:"%s" -i --grep="^feat.*:" --grep="^fix.*:" --no-merges)
+
+            #santize commit logs 
+            logs=$(awk -F ":" '{ print $2 }' <<< $logs | sed -e 's/^ *//g' | sed -e 's/^./\u&/g')
+
+            #prepend line number 
+            logs=$(awk '{print NR, "-", $0}' <<< $logs)
 
             # Remove new line in multiline change logs as sed doesn't support it
             logs=$((sed -e '$ ! s/$/\\n/g' | tr -d '\n')  <<< $logs)
