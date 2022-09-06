@@ -162,9 +162,8 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
     }
 
     private UXCamOccludeAllTextFields getOccludeAllTextFields() {
-        return new UXCamOccludeAllTextFields();
+        return new UXCamOccludeAllTextFields.Builder().build();
     }
-
     private UXCamOverlay getOverlay(Map<String, Object> overlayMap) {
         // get data
         List<String> screens = (List<String>) overlayMap.get(SCREENS);
