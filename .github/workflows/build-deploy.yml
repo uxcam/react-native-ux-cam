@@ -83,7 +83,8 @@ jobs:
             touch changelog.txt
             echo "$logs" > changelog.txt
       - name: Generate Slack notification payload
-        id: slack-payload 
+        id: slack-payload
+        if: ${{ inputs.publish }}
         run: |
             DATE=$(date +'%d/%m/%Y')
             ESCAPED_DATE=$(echo "$DATE" | sed -e 's/[\/&]/\\&/g')
@@ -97,6 +98,7 @@ jobs:
             cat $payload_path
       - name: Send notification to Slack
         id: slack
+        if: ${{ inputs.publish }}
         uses: slackapi/slack-github-action@v1.18.0
         with:
            payload-file-path: './.github/workflows/slack-payload.json'

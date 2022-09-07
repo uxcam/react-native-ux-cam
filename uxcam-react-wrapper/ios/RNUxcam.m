@@ -54,7 +54,7 @@ RCT_EXPORT_MODULE();
 RCT_EXPORT_METHOD(startWithConfiguration:(NSDictionary *)config)
 {
     self.lastVerifyResult = nil;
-    [UXCam pluginType:@"react-native" version:@"5.4.1"];
+    [UXCam pluginType:@"react-native" version:@"5.4.2"];
     
     NSString *userAppKey = config[RNUxcam_AppKey];
     if (!userAppKey || ![userAppKey isKindOfClass:NSString.class])
