@@ -5,6 +5,7 @@
 
 Version | Changes
 ------- | ----------
+5.4.2	| Updated iOS SDK to 3.4.3 and Android to 3.4.4
 5.4.1	| Updated iOS SDK to 3.4.2 and Android to 3.4.3
 5.4.0	| Updated iOS SDK to 3.4.1 and Android to 3.4.1
 		| Add support for configuration and occlusion apis

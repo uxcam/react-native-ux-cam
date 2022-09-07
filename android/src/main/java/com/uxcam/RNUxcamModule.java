@@ -35,7 +35,7 @@ import com.uxcam.datamodel.UXConfig;
 
 public class RNUxcamModule extends ReactContextBaseJavaModule {
     private static final String UXCAM_PLUGIN_TYPE = "react-native";
-    private static final String UXCAM_REACT_PLUGIN_VERSION = "5.4.1";
+    private static final String UXCAM_REACT_PLUGIN_VERSION = "5.4.2";
 
     private static final String UXCAM_VERIFICATION_EVENT_KEY = "UXCam_Verification_Event";
     private static final String PARAM_SUCCESS_KEY = "success";
