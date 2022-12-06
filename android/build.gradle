@@ -37,13 +37,10 @@ rootProject.allprojects {
         maven {
             url 'https://sdk.uxcam.com/android/'
         }
-//        mavenLocal()
-//        flatDir {dirs 'libs'}
     }
 }
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
-    // implementation files('libs/uxcam.jar')
     implementation 'com.uxcam:uxcam:3.5.1' 
 }
