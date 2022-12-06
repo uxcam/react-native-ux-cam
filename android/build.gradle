@@ -2,7 +2,6 @@
 buildscript {
     repositories {
         jcenter()
-    
     }
 
     dependencies {
@@ -29,9 +28,7 @@ android {
 
 repositories {
     mavenCentral()
-    
 }
-
 
 rootProject.allprojects {
     repositories {
