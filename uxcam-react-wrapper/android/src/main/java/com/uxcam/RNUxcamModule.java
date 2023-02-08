@@ -27,15 +27,15 @@ import java.util.Map;
 import android.util.Log;
 
 import com.uxcam.UXCam;
-import com.uxcam.datamodel.UXCamBlur;
-import com.uxcam.datamodel.UXCamOverlay;
-import com.uxcam.datamodel.UXCamOcclusion;
-import com.uxcam.datamodel.UXCamOccludeAllTextFields;
+import com.uxcam.screenshot.model.UXCamBlur;
+import com.uxcam.screenshot.model.UXCamOverlay;
+import com.uxcam.screenshot.model.UXCamOcclusion;
+import com.uxcam.screenshot.model.UXCamOccludeAllTextFields;
 import com.uxcam.datamodel.UXConfig;
 
 public class RNUxcamModule extends ReactContextBaseJavaModule {
     private static final String UXCAM_PLUGIN_TYPE = "react-native";
-    private static final String UXCAM_REACT_PLUGIN_VERSION = "5.4.4";
+    private static final String UXCAM_REACT_PLUGIN_VERSION = "5.4.5";
 
     private static final String UXCAM_VERIFICATION_EVENT_KEY = "UXCam_Verification_Event";
     private static final String PARAM_SUCCESS_KEY = "success";
