@@ -14,6 +14,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {VideoScreen} from './screens/VideoScreen.js';
 import {HomeScreen} from './screens/HomeScreen.js';
+import {ViewOcclusionScreen} from './screens/ViewOcclusionScreen.js';
 
 type Props = {};
 
@@ -48,9 +49,35 @@ export default class App extends Component<Props> {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen
+            name="View Occlusion Screen"
+            component={ViewOcclusionScreen}
+          />
           <Stack.Screen name="Video Screen" component={VideoScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     );
   }
 }
+
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+  },
+  welcome: {
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 10,
+  },
+  label: {
+    fontSize: 18,
+    textAlign: 'center',
+    margin: 10,
+  },
+  button: {
+    margin: 5,
+  },
+});
