@@ -5,6 +5,7 @@
 
 Version | Changes
 ------- | ----------
+5.4.6 | Updated iOS SDK to 3.6.2 and Android to 3.6.4
 5.4.5 | Updated iOS SDK to 3.5.3 and Android to 3.6.0
 5.4.4 | Updated Android SDK to 3.5.2, resolved react-native build issue in v0.7+
 5.4.3	| Updated iOS SDK to 3.4.5 and Android to 3.5.1
