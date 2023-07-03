@@ -3,13 +3,16 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "react-native start",
+    "start": "npx react-native start --reset-cache",
     "test": "jest",
-    "lint": "eslint ."
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "lint": "eslint .",
+    "clean-a": "cd android && ./gradlew clean && cd .."
   },
   "dependencies": {
-    "react": "^17.0.1",
-    "react-native": "^0.64.2",
+    "react": "18.1.0",
+    "react-native": "0.70.10",
     "react-native-ux-cam": "file:../uxcam-react-wrapper"
   },
   "jest": {
