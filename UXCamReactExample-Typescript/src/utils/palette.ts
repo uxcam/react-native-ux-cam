@@ -2,6 +2,7 @@ export const palette = {
   white: '#FFFFFF',
   alto: '#dcdcdc',
   black: '#000000',
+  background: '#e6e6e6',
   gray: 'gray',
   darkGray: 'darkgray',
   error: '#a90808',
@@ -17,4 +18,5 @@ export const palette = {
   pastelGreen: '#98DAAA',
   pastelYellow: '#e9fa02',
   pastelPurple: '#CDBEEB',
+  seaSerpent: '#5AC4BD',
 };

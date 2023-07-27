@@ -4,6 +4,7 @@ import {View, StyleSheet, TextInput} from 'react-native';
 import {palette} from '../../../utils/palette';
 import AppButton from '../../../component/AppButton';
 import AppText from '../../../component/AppText';
+import {global_styles} from '../../../utils/globalStyles';
 
 type Props = {
   onPressButton: (property: string, value: string) => void;
@@ -23,14 +24,14 @@ const UserCustomProperty: React.FC<Props> = React.memo(({onPressButton}) => {
     <View>
       <AppText style={styles.titleText}>Create custom user property</AppText>
       <TextInput
-        style={styles.input}
+        style={global_styles.input}
         onChangeText={setProperty}
         placeholder="Custom Property"
         value={property}
       />
 
       <TextInput
-        style={styles.input}
+        style={global_styles.input}
         onChangeText={setPropertyValue}
         placeholder="Custom Value"
         value={propertyValue}
@@ -40,7 +41,7 @@ const UserCustomProperty: React.FC<Props> = React.memo(({onPressButton}) => {
         disabled={!isValid}
         text="Tag Custom User Property"
         containerStyle={[
-          styles.button,
+          global_styles.button,
           {backgroundColor: isValid ? palette.black : palette.gray},
         ]}
         onPress={() => {
@@ -48,7 +49,7 @@ const UserCustomProperty: React.FC<Props> = React.memo(({onPressButton}) => {
           setPropertyValue('');
           setProperty('');
         }}
-        textStyle={styles.buttontText}
+        textStyle={global_styles.buttontText}
       />
     </View>
   );
