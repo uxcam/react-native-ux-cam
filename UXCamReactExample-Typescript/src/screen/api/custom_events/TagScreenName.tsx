@@ -35,7 +35,6 @@ const TagScreenName: React.FC<Props> = React.memo(({onPressButton}) => {
           Keyboard.dismiss();
           if (!isEmpty(name)) {
             onPressButton(name.trim());
-            setName('');
           }
         }}
         textStyle={global_styles.buttontText}

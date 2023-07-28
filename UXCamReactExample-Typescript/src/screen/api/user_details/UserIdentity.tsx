@@ -29,7 +29,6 @@ const UserIdentity: React.FC<Props> = React.memo(({onPressButton}) => {
           Keyboard.dismiss();
           if (!isEmpty(identity)) {
             onPressButton(identity.trim());
-            setIdentity('');
           }
         }}
         textStyle={global_styles.buttontText}

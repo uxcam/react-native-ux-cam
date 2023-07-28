@@ -46,8 +46,6 @@ const UserCustomProperty: React.FC<Props> = React.memo(({onPressButton}) => {
         ]}
         onPress={() => {
           onPressButton(property.trim(), propertyValue.trim());
-          setPropertyValue('');
-          setProperty('');
         }}
         textStyle={global_styles.buttontText}
       />

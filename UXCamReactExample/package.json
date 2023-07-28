@@ -5,7 +5,7 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "start": "npx react-native start --reset-cache",
+    "start": "react-native start",
     "test": "jest",
     "lint": "eslint ."
   },

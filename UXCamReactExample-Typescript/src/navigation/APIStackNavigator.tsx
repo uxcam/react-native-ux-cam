@@ -2,9 +2,8 @@ import React from 'react';
 
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import APIScreen from '../screen/api/APIScreen';
-
-import UserDetailsScreen from '../screen/api/userdetails';
-import CustomEventsScreen from '../screen/api/CustomEvents';
+import CustomEventsScreen from '../screen/api/custom_events';
+import UserDetailsScreen from '../screen/api/user_details';
 
 const Stack = createNativeStackNavigator();
 

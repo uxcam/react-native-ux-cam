@@ -63,10 +63,6 @@ const KeyValueEvents: React.FC<Props> = React.memo(({onPressButton}) => {
 
           if (!isEmpty(key)) {
             onPressButton(customEventKey, {[key]: value ?? ''});
-
-            setCustomEventKey('');
-            setKey('');
-            setValue('');
           }
         }}
         textStyle={global_styles.buttontText}
