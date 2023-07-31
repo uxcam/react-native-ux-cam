@@ -25,6 +25,16 @@ const APIScreen = React.memo(() => {
             desc: 'Trigger different event for data collection in app',
           },
           {
+            title: 'Crash reporting',
+            screen: 'CrashReportingScreen',
+            desc: 'Emulate different kinds of exceptions for crash report',
+          },
+          {
+            title: 'ANR events',
+            screen: 'ANREventScreen',
+            desc: 'Emulate ANR eventsp',
+          },
+          {
             title: 'Session controls',
             screen: 'SessionControlScreen',
             desc: 'Control the session either by cancelling it, stopping it and uploading it or by starting new session ',
