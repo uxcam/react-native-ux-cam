@@ -2,8 +2,8 @@ import React from 'react';
 
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import APIScreen from '../screen/api/APIScreen';
-
-import UserDetailScreen from '../screen/api/userdetails';
+import CustomEventsScreen from '../screen/api/custom_events';
+import UserDetailsScreen from '../screen/api/user_details';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,11 +19,20 @@ const APIStackNavigator = () => (
     />
 
     <Stack.Screen
-      name={'UserDetailScreen'}
-      component={UserDetailScreen}
+      name={'UserDetailsScreen'}
+      component={UserDetailsScreen}
       options={{
         headerShown: true,
-        title: 'UserDetails',
+        title: 'User Details',
+      }}
+    />
+
+    <Stack.Screen
+      name={'CustomEventsScreen'}
+      component={CustomEventsScreen}
+      options={{
+        headerShown: true,
+        title: 'Custom Events',
       }}
     />
   </Stack.Navigator>
