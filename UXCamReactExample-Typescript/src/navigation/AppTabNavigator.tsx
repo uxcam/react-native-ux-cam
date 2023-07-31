@@ -2,10 +2,10 @@ import React from 'react';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import HomeStackNavigator from './HomeStackNavigator';
-import AuthStackNavigator from './AuthStackNavigator';
-import {palette} from '../utils/palette';
 import APIStackNavigator from './APIStackNavigator';
 import UIStackNavigator from './UIStackNavigator';
+import SettingNavigator from './SettingNavigator';
+import {palette} from '../utils/palette';
 
 const Tab = createBottomTabNavigator();
 
@@ -42,10 +42,10 @@ const AppTabNavigator = () => (
     />
 
     <Tab.Screen
-      name={'AuthStackNavigator'}
-      component={AuthStackNavigator}
+      name={'SettingNavigator'}
+      component={SettingNavigator}
       options={{
-        title: 'Setting',
+        title: 'Settings',
       }}
     />
   </Tab.Navigator>
