@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {UXCamConfiguration} from 'react-native-ux-cam';
 
 import {startUXCam} from '../utils/config';
 import {useAppDispatch, useAppSelector} from '../hooks/appHooks';
@@ -14,16 +15,26 @@ const AppContainer = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    AsyncStorage.getItem('startInfo').then(starInfo => {
-      if (starInfo) {
-        const data = JSON.parse(starInfo);
+    (async () => {
+      const configuration = await AsyncStorage.getItem('configuration');
+      const startInfo = await AsyncStorage.getItem('startInfo');
+
+      if (configuration && startInfo) {
+        const config: UXCamConfiguration = await JSON.parse(configuration);
+        const startInfoObj = await JSON.parse(startInfo);
+
         setStarted(true);
-        startUXCam(data.appkey, data.username);
-        dispatch(start({appkey: data.appkey, username: data.username}));
+        startUXCam(config, startInfoObj.username);
+        dispatch(
+          start({
+            appkey: startInfoObj.appkey,
+            username: startInfoObj.username,
+          }),
+        );
       } else {
-        setStarted(false);
+        setStarted(true);
       }
-    });
+    })();
   }, [dispatch]);
 
   if (isStarted === undefined) {
