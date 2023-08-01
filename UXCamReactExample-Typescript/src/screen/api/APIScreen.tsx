@@ -24,6 +24,11 @@ const APIScreen = React.memo(() => {
             screen: 'CustomEventsScreen',
             desc: 'Trigger different event for data collection in app',
           },
+          {
+            title: 'Session controls',
+            screen: 'SessionControlScreen',
+            desc: 'Control the session either by cancelling it, stopping it and uploading it or by starting new session ',
+          },
         ]}
         renderItem={({item}) => {
           return (
