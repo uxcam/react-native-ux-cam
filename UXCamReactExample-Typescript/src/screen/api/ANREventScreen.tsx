@@ -5,17 +5,13 @@ import BaseScreen from '../base_screen';
 import AppButton from '../../component/AppButton';
 import {global_styles} from '../../utils/globalStyles';
 
-async function sleep(msec: number) {
-  return new Promise(resolve => setTimeout(resolve, msec));
-}
-
 const ANREventScreen = React.memo(() => {
   const [freezeTime, setFreezeTime] = React.useState<string>('');
 
   const freezeAction = async () => {
-    console.log('Waiting for 10 second...');
-    await sleep(100000);
-    console.log('Waiting done 10 second');
+    for (let i = 0; i < Number(freezeTime); i++) {
+      for (let j = 0; j < 100000000; j++) {}
+    }
   };
 
   return (
