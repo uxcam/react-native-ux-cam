@@ -10,3 +10,7 @@ export const setStorage = async (akey: string, value: any) => {
 export const removeStorageValue = async (akey: string) => {
   await AsyncStorage.removeItem(akey);
 };
+
+export function capitalizeFLetter(string: string) {
+  return string.replace(/^./, string[0].toUpperCase());
+}
