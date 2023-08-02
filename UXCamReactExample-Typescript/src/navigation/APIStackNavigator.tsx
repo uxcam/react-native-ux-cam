@@ -61,7 +61,7 @@ const APIStackNavigator = () => (
       name={'ANREventScreen'}
       component={ANREventScreen}
       options={{
-        headerShown: true,
+        headerShown: false,
         title: 'ANR events',
       }}
     />

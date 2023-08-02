@@ -4,12 +4,14 @@ import {Keyboard, StyleSheet, TextInput, View} from 'react-native';
 import BaseScreen from '../base_screen';
 import AppButton from '../../component/AppButton';
 import {global_styles} from '../../utils/globalStyles';
+import {useNavigation} from '@react-navigation/native';
 
 const ANREventScreen = React.memo(() => {
   const [freezeTime, setFreezeTime] = React.useState<string>('');
-
+  const navigate = useNavigation();
   const freezeAction = async () => {
-    for (let i = 0; i < Number(freezeTime); i++) {
+    const time = freezeTime.length === 0 ? 10 : Number(freezeTime);
+    for (let i = 0; i < time; i++) {
       for (let j = 0; j < 100000000; j++) {}
     }
   };
@@ -31,6 +33,15 @@ const ANREventScreen = React.memo(() => {
           onPress={() => {
             Keyboard.dismiss();
             freezeAction();
+          }}
+          textStyle={global_styles.buttontText}
+        />
+
+        <AppButton
+          text="Back"
+          containerStyle={global_styles.button}
+          onPress={() => {
+            navigate.goBack();
           }}
           textStyle={global_styles.buttontText}
         />
