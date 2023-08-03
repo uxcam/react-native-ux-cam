@@ -26,7 +26,10 @@ const AppButton: React.FC<ButtonProps> = ({
   const content = children || <AppText style={textStyle}>{text}</AppText>;
 
   return (
-    <Pressable style={[styles.button, containerStyle]} {...rest}>
+    <Pressable
+      style={[styles.button, containerStyle]}
+      android_ripple={{color: palette.alto}}
+      {...rest}>
       {content}
     </Pressable>
   );

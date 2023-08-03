@@ -1,10 +1,11 @@
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {FlatList, StyleSheet} from 'react-native';
+import {FlatList, StyleSheet, View} from 'react-native';
 
 import {palette} from '../../utils/palette';
 import AppButton from '../../component/AppButton';
 import BaseScreen from '../base_screen';
+import AppText from '../../component/AppText';
 
 const APIScreen = React.memo(() => {
   const {navigate} = useNavigation();
@@ -12,17 +13,46 @@ const APIScreen = React.memo(() => {
     <BaseScreen screenName="APIScreen">
       <FlatList
         style={styles.container}
-        data={[{title: 'User Details', value: 'UserDetailScreen'}]}
+        data={[
+          {
+            title: 'User Details',
+            screen: 'UserDetailsScreen',
+            desc: 'Collect data of property of user with key value pair list',
+          },
+          {
+            title: 'Custom events',
+            screen: 'CustomEventsScreen',
+            desc: 'Trigger different event for data collection in app',
+          },
+          {
+            title: 'Crash reporting',
+            screen: 'CrashReportingScreen',
+            desc: 'Emulate different kinds of exceptions for crash report',
+          },
+          {
+            title: 'ANR events',
+            screen: 'ANREventScreen',
+            desc: 'Emulate ANR eventsp',
+          },
+          {
+            title: 'Session controls',
+            screen: 'SessionControlScreen',
+            desc: 'Control the session either by cancelling it, stopping it and uploading it or by starting new session ',
+          },
+        ]}
         renderItem={({item}) => {
           return (
-            <AppButton
-              containerStyle={styles.button}
-              textStyle={styles.buttonText}
-              text={item.title}
-              onPress={() => {
-                navigate(item.value as never);
-              }}
-            />
+            <>
+              <AppButton
+                containerStyle={styles.button}
+                onPress={() => {
+                  navigate(item.screen as never);
+                }}>
+                <AppText style={styles.title}>{item.title}</AppText>
+                <AppText style={styles.desc}>{item.desc}</AppText>
+              </AppButton>
+              <View style={styles.line} />
+            </>
           );
         }}
       />
@@ -35,16 +65,24 @@ export default APIScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginHorizontal: 12,
   },
   button: {
     padding: 16,
-    backgroundColor: palette.alto,
-    marginVertical: 12,
-    borderRadius: 6,
+    backgroundColor: palette.background,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
   },
-  buttonText: {
-    fontSize: 16,
+  title: {
+    fontSize: 18,
     color: palette.black,
+  },
+  desc: {
+    fontSize: 13,
+    color: palette.gray,
+    marginTop: 3,
+  },
+  line: {
+    height: 0.8,
+    backgroundColor: palette.darkGray,
   },
 });

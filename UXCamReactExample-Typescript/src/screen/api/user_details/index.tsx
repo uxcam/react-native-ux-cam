@@ -6,6 +6,8 @@ import UserCustomProperty from './UserCustomProperty';
 import AppButton from '../../../component/AppButton';
 import {palette} from '../../../utils/palette';
 import BaseScreen from '../../base_screen';
+import UserIdentity from './UserIdentity';
+import {global_styles} from '../../../utils/globalStyles';
 
 const UserDetailsScreen = React.memo(() => {
   const onPressTagCustomProperty = useCallback(
@@ -15,6 +17,11 @@ const UserDetailsScreen = React.memo(() => {
     },
     [],
   );
+
+  const onPressUserIdentity = useCallback((identity: string) => {
+    RNUxcam.setUserIdentity(identity);
+    console.log('New identity =', identity);
+  }, []);
 
   const onPressSetCompanyNameRole = useCallback(() => {
     let companyKey = 'Company Name';
@@ -36,16 +43,20 @@ const UserDetailsScreen = React.memo(() => {
   return (
     <BaseScreen screenName="UserDetailsScreen">
       <View style={styles.container}>
+        <UserIdentity onPressButton={onPressUserIdentity} />
+
         <AppButton
           text="Set Company Name, Role"
-          containerStyle={styles.companNameButton}
+          containerStyle={styles.button}
           onPress={onPressSetCompanyNameRole}
+          textStyle={global_styles.buttontText}
         />
 
         <AppButton
           text="Set Position Level"
-          containerStyle={styles.companNameButton}
+          containerStyle={styles.button}
           onPress={onPressSetPositionLevel}
+          textStyle={global_styles.buttontText}
         />
 
         <UserCustomProperty onPressButton={onPressTagCustomProperty} />
@@ -61,12 +72,8 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
-  companNameButton: {
-    marginVertical: 12,
-    backgroundColor: palette.customBlue,
-  },
-  positionButton: {
-    marginVertical: 12,
+  button: {
+    ...global_styles.button,
     backgroundColor: palette.customBlue,
   },
 });

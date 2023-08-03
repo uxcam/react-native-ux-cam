@@ -1,29 +1,10 @@
-import RNUxcam from 'react-native-ux-cam';
-import {UXCamOcclusionType} from 'react-native-ux-cam/UXCamOcclusion';
+import RNUxcam, {UXCamConfiguration} from 'react-native-ux-cam';
 
-export const startUXCam = (key: string, username: string) => {
+export const startUXCam = (
+  configuration: UXCamConfiguration,
+  username: string,
+) => {
   RNUxcam.optIntoSchematicRecordings();
-  const overlay = {
-    type: UXCamOcclusionType.Overlay,
-    color: 0x000000,
-  };
-
-  const configuration = {
-    userAppKey: key,
-    enableImprovedScreenCapture: true,
-    enableCrashHandling: true,
-    enableMultiSessionRecord: true,
-    enableAutomaticScreenNameTagging: false,
-    enableAdvancedGestureRecognition: true,
-    enableNetworkLogging: false,
-    // occlusions: [overlay],
-    // for improved screen capture on Android
-    /*
-      disable advanced gestures if you're having issues with
-      swipe gestures and touches during app interaction
-    */
-    // enableAdvancedGestureRecognition: false,
-  };
 
   console.log('Start UXCam API With configuration ====>> ', configuration);
 
@@ -34,4 +15,14 @@ export const startUXCam = (key: string, username: string) => {
   RNUxcam.addVerificationListener(result =>
     console.log(`UXCam: verificationResult: ${JSON.stringify(result)}`),
   );
+};
+
+export const updateConfiguration = (
+  configuration: UXCamConfiguration,
+  username: string,
+) => {
+  RNUxcam.updateConfiguration(configuration);
+  RNUxcam.setUserIdentity(username);
+
+  console.log('Updated UXCam configuration ====>> ', configuration);
 };

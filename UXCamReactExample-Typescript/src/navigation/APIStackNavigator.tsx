@@ -2,8 +2,11 @@ import React from 'react';
 
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import APIScreen from '../screen/api/APIScreen';
-
-import UserDetailScreen from '../screen/api/userdetails';
+import CustomEventsScreen from '../screen/api/custom_events';
+import UserDetailsScreen from '../screen/api/user_details';
+import SessionControlScreen from '../screen/api/session_control';
+import CrashReportingScreen from '../screen/api/CrashReportingScreen';
+import ANREventScreen from '../screen/api/ANREventScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,11 +22,47 @@ const APIStackNavigator = () => (
     />
 
     <Stack.Screen
-      name={'UserDetailScreen'}
-      component={UserDetailScreen}
+      name={'UserDetailsScreen'}
+      component={UserDetailsScreen}
       options={{
         headerShown: true,
-        title: 'UserDetails',
+        title: 'User Details',
+      }}
+    />
+
+    <Stack.Screen
+      name={'CustomEventsScreen'}
+      component={CustomEventsScreen}
+      options={{
+        headerShown: true,
+        title: 'Custom Events',
+      }}
+    />
+
+    <Stack.Screen
+      name={'SessionControlScreen'}
+      component={SessionControlScreen}
+      options={{
+        headerShown: true,
+        title: 'Session Control',
+      }}
+    />
+
+    <Stack.Screen
+      name={'CrashReportingScreen'}
+      component={CrashReportingScreen}
+      options={{
+        headerShown: true,
+        title: 'Crash reporting',
+      }}
+    />
+
+    <Stack.Screen
+      name={'ANREventScreen'}
+      component={ANREventScreen}
+      options={{
+        headerShown: false,
+        title: 'ANR events',
       }}
     />
   </Stack.Navigator>
