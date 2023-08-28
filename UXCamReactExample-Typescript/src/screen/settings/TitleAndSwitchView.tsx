@@ -19,6 +19,7 @@ const TitleAndSwitchView: React.FC<Props> = React.memo(
         </AppText>
 
         <Switch
+          accessibilityLabel={title}
           trackColor={{false: palette.alto, true: palette.green}}
           thumbColor={palette.white}
           ios_backgroundColor={palette.alto}
