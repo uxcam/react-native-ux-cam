@@ -5,6 +5,7 @@
 
 Version | Changes
 ------- | ----------
+5.4.11 | Updated iOS SDK to 3.6.5 and Android to 3.6.14
 5.4.10 | Updated iOS SDK to 3.6.4
 5.4.9 | Updated Android SDK to 3.6.13
 5.4.8 | Updated Android to 3.6.8 and Remove JCenter dependency in Android
