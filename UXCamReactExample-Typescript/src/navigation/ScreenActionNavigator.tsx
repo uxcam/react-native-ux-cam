@@ -7,6 +7,7 @@ import ScreenActionListView from '../screen/screen_action/ScreenActionListView';
 import ScreenActionGridView from '../screen/screen_action/ScreenActionGridView';
 import ScreenActionScrollView from '../screen/screen_action/ScreenActionScrollView';
 import ScreenActionViewGroup from '../screen/screen_action/ScreenActionViewGroup';
+import ScreenActionSubView from '../screen/screen_action/ScreenActionSubView';
 
 const Stack = createNativeStackNavigator();
 
@@ -51,6 +52,14 @@ const ScreenActionNavigator = () => {
         options={{
           headerShown: true,
           title: 'ViewGroup',
+        }}
+      />
+      <Stack.Screen
+        name="ScreenActionSubView"
+        component={ScreenActionSubView}
+        options={{
+          headerShown: true,
+          title: 'SubView',
         }}
       />
     </Stack.Navigator>

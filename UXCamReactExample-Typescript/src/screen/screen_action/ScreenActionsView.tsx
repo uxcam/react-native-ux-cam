@@ -30,6 +30,10 @@ const ScreenActionsView = React.memo(() => {
       title: 'ViewGroup Tab',
       screenName: 'ScreenActionViewGroup',
     },
+    {
+      title: 'SubView Tab',
+      screenName: 'ScreenActionSubView',
+    },
   ];
 
   const renderItem = useCallback(
