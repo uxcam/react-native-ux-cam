@@ -60,7 +60,7 @@ ${
     };
 
     return (
-      <View key={commonText()} style={[styles.container, containerStyle]}>
+      <View style={[styles.container, containerStyle]}>
         <AppText style={styles.commonText}>{commonText()}</AppText>
         <Pressable
           ref={button => {

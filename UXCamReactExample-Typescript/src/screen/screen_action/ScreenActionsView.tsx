@@ -26,6 +26,10 @@ const ScreenActionsView = React.memo(() => {
       title: 'ScrollView Tab',
       screenName: 'ScreenActionScrollView',
     },
+    {
+      title: 'ViewGroup Tab',
+      screenName: 'ScreenActionViewGroup',
+    },
   ];
 
   const renderItem = useCallback(
