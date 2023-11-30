@@ -5,6 +5,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import ScreenActionsView from '../screen/screen_action/ScreenActionsView';
 import ScreenActionListView from '../screen/screen_action/ScreenActionListView';
 import ScreenActionGridView from '../screen/screen_action/ScreenActionGridView';
+import ScreenActionScrollView from '../screen/screen_action/ScreenActionScrollView';
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +34,14 @@ const ScreenActionNavigator = () => {
         options={{
           headerShown: true,
           title: 'Grid View',
+        }}
+      />
+      <Stack.Screen
+        name="ScreenActionScrollView"
+        component={ScreenActionScrollView}
+        options={{
+          headerShown: true,
+          title: 'ScrollView',
         }}
       />
     </Stack.Navigator>
