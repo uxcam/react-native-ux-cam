@@ -24,7 +24,7 @@
     "react-native-safe-area-context": "^4.6.3",
     "react-native-screens": "^3.22.0",
     "react-native-toast-message": "^2.1.6",
-    "react-native-ux-cam": "^5.4.8",
+    "react-native-ux-cam": "^5.4.13",
     "react-native-video": "^5.2.1",
     "react-native-webview": "^13.2.2",
     "react-redux": "^8.1.1"

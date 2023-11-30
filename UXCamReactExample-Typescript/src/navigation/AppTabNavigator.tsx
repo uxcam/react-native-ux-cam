@@ -4,7 +4,9 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import HomeStackNavigator from './HomeStackNavigator';
 import APIStackNavigator from './APIStackNavigator';
 import UIStackNavigator from './UIStackNavigator';
+import ScreenActionNavigator from './ScreenActionNavigator';
 import SettingNavigator from './SettingNavigator';
+
 import {palette} from '../utils/palette';
 
 const Tab = createBottomTabNavigator();
@@ -38,6 +40,14 @@ const AppTabNavigator = () => (
       component={APIStackNavigator}
       options={{
         title: 'API',
+      }}
+    />
+
+    <Tab.Screen
+      name={'ScreenActionNavigator'}
+      component={ScreenActionNavigator}
+      options={{
+        title: 'Screen Actions',
       }}
     />
 

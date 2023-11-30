@@ -5850,10 +5850,10 @@ react-native-toast-message@^2.1.6:
   resolved "https://registry.yarnpkg.com/react-native-toast-message/-/react-native-toast-message-2.1.6.tgz#322827c66901fa22cb3db614c7383cc717f5bbe2"
   integrity sha512-VctXuq20vmRa9AE13acaNZhrLcS3FaBS2zEevS3+vhBsnVZYG0FIlWIis9tVnpnNxUb3ART+BWtwQjzSttXTng==
 
-react-native-ux-cam@^5.4.8:
-  version "5.4.8"
-  resolved "https://registry.yarnpkg.com/react-native-ux-cam/-/react-native-ux-cam-5.4.8.tgz#8e5964cceb6a45ac853534ff41618dfdbb959a99"
-  integrity sha512-DvFFLHZJM2mxll3ldcGiSdu8L6pQ/800Q5V8jApulk7fWiGY/ADMrIUcTl7I0pZpwIKRoMJnrTLRc2FmdkvvRw==
+react-native-ux-cam@^5.4.13:
+  version "5.4.13"
+  resolved "https://registry.yarnpkg.com/react-native-ux-cam/-/react-native-ux-cam-5.4.13.tgz#34dc4202ad3951ccf8051ae7e86827214543fa55"
+  integrity sha512-G4W8MhRFZ6anU8OmVKzg8LAZa/ATjSXtNOYgivkDK41IZff+DKALHY0idifQIu+cHABzz76VyehnNLq/yromLg==
 
 react-native-video@^5.2.1:
   version "5.2.1"

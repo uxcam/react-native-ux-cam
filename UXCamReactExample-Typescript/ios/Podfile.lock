@@ -508,11 +508,11 @@ PODS:
   - RNScreens (3.22.0):
     - React-Core
     - React-RCTImage
-  - RNUxcam (5.4.8):
+  - RNUxcam (5.4.13):
     - React-Core
-    - UXCam (~> 3.6.3)
+    - UXCam (~> 3.6.7)
   - SocketRocket (0.6.1)
-  - UXCam (3.6.3)
+  - UXCam (3.6.7)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -767,9 +767,9 @@ SPEC CHECKSUMS:
   ReactCommon: e593d19c9e271a6da4d0bd7f13b28cfeae5d164b
   RNCAsyncStorage: 4b98ac3c64efa4e35c1197cb0c5ca5e9f5d4c666
   RNScreens: 68fd1060f57dd1023880bf4c05d74784b5392789
-  RNUxcam: 649e13448114968183c55c58358c30dc3c639cf2
+  RNUxcam: 88b57b611dade52a0acd795e1c6411941eac0d2f
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
-  UXCam: 5c8bf404e3ad81161d543c18803646f56f82db45
+  UXCam: a6f553191b310500b8e495aabd1dc7b7de6da9b3
   Yoga: 65286bb6a07edce5e4fe8c90774da977ae8fc009
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
