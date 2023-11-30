@@ -18,6 +18,10 @@ const ScreenActionsView = React.memo(() => {
       title: 'List Tab',
       screenName: 'ScreenActionListView',
     },
+    {
+      title: 'Grid Tab',
+      screenName: 'ScreenActionGridView',
+    },
   ];
 
   const renderItem = useCallback(

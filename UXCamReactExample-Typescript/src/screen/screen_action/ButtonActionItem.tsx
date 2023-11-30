@@ -115,14 +115,13 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     borderWidth: 1,
     alignSelf: 'center',
-    padding: 8,
     marginVertical: 5,
   },
   button: {
     minWidth: '60%',
     alignSelf: 'center',
     flexDirection: 'row',
-    marginVertical: 6,
+    marginVertical: 8,
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
@@ -130,5 +129,11 @@ const styles = StyleSheet.create({
   },
   bug: {width: 30, height: 30, marginRight: 5},
   title: {fontSize: 16, fontWeight: '500'},
-  commonText: {fontSize: 14, fontWeight: '400', color: palette.black},
+  commonText: {
+    fontSize: 14,
+    fontWeight: '400',
+    color: palette.black,
+    marginHorizontal: 8,
+    marginTop: 8,
+  },
 });
