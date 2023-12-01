@@ -11,4 +11,6 @@ export const images: any = {
   frenchFries: require('../../assets/list/frenchFries.jpeg'),
   burger: require('../../assets/list/burger.jpeg'),
   tick: require('../../assets/common/tick.png'),
+  menu: require('../../assets/common/menu.png'),
+  stack: require('../../assets/common/stack.png'),
 };

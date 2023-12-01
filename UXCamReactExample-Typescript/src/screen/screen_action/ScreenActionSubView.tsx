@@ -25,12 +25,14 @@ const ScreenActionSubView = React.memo(() => {
             },
           ]}>
           <ButtonActionItem
+            key={i * numColumns}
             item={buttonActions[i * numColumns]}
             containerStyle={styles.itemContainerView}
             buttonStyle={styles.itemButton}
           />
           {i * numColumns + 1 < buttonActions.length && (
             <ButtonActionItem
+              key={i * numColumns + 1}
               item={buttonActions[i * numColumns + 1]}
               containerStyle={styles.itemContainerView}
               buttonStyle={styles.itemButton}
