@@ -311,27 +311,42 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void logEvent(String event, ReadableMap properties) {
-        if (properties != null) {
-            
-            HashMap<String, Object> map = new HashMap<String, Object>();
+        HashMap<String, Object> convertedProperties = new HashMap<>();
 
+        if (properties != null) {
             ReadableMapKeySetIterator iterator = properties.keySetIterator();
+
             while (iterator.hasNextKey()) {
                 String key = iterator.nextKey();
                 ReadableType type = properties.getType(key);
-                if (type == ReadableType.Boolean) {
-                    map.put(key, properties.getBoolean(key));
-                } else if (type == ReadableType.Number) {
-                    map.put(key, properties.getDouble(key));
-                } else {
-                    map.put(key, properties.getString(key));
+                try {
+                    switch (type) {
+                        case Null:
+                            convertedProperties.put(key, "");
+                        case Boolean:
+                            convertedProperties.put(key, properties.getBoolean(key));
+                            break;
+                        case Number:
+                            convertedProperties.put(key, properties.getDouble(key));
+                            break;
+                        case String:
+                            convertedProperties.put(key, properties.getString(key));
+                            break;
+                        case Map:
+                            convertedProperties.put(key, properties.getMap(key).toString());
+                            break;
+                        case Array:
+                            convertedProperties.put(key, properties.getArray(key).toString());
+                            break;
+                    }
+                } catch (NullPointerException | NoSuchKeyException | UnexpectedNativeTypeException e) {
+                    convertedProperties.put(key, "");
+                    e.printStackTrace();
                 }
             }
-            UXCam.logEvent(event, map);
-        } else {
-            UXCam.logEvent(event);
         }
 
+        UXCam.logEvent(event, convertedProperties);
     }
 
     @ReactMethod
