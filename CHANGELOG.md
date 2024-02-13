@@ -5,6 +5,7 @@
 
 Version | Changes
 ------- | ----------
+5.4.14 | Updated iOS SDK to 3.6.9 and Android to 3.6.21
 5.4.13 | Updated iOS SDK to 3.6.7 and Android to 3.6.18, Updated minSdkVersion to 21 for Android
 5.4.12 | Updated iOS SDK to 3.6.6 and Android to 3.6.16
 5.4.11 | Updated iOS SDK to 3.6.5 and Android to 3.6.14
