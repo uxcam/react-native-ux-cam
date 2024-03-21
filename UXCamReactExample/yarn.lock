@@ -2646,9 +2646,9 @@ invariant@*, invariant@^2.2.4:
     loose-envify "^1.0.0"
 
 ip@^1.1.5:
-  version "1.1.5"
-  resolved "https://registry.npmjs.org/ip/-/ip-1.1.5.tgz"
-  integrity sha1-vd7XARQpCCjAoDnnLvJfWq7ENUo=
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/ip/-/ip-1.1.9.tgz#8dfbcc99a754d07f425310b86a99546b1151e396"
+  integrity sha512-cyRxvOEpNHNtchU3Ln9KC/auJgup87llfQpQ+t5ghoC/UhL16SWzbueiCsdTnWmqAWl7LadfuwhlqmtOaqMHdQ==
 
 is-accessor-descriptor@^0.1.6:
   version "0.1.6"
@@ -4078,7 +4078,7 @@ react-native-screens@^3.13.1:
     warn-once "^0.1.0"
 
 "react-native-ux-cam@file:../uxcam-react-wrapper":
-  version "5.4.6"
+  version "5.4.15"
 
 react-native-video@^5.2.0:
   version "5.2.1"
