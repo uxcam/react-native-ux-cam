@@ -43,5 +43,5 @@ rootProject.allprojects {
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
-    implementation 'com.uxcam:uxcam:3.6.23'
+    implementation 'com.uxcam:uxcam:3.6.25'
 }
