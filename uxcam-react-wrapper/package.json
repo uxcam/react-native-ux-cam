@@ -1,9 +1,9 @@
 {
   "name": "react-native-ux-cam",
-  "version": "5.4.15",
+  "version": "5.4.16",
   "description": "React Native wrapper for uxcam.com.",
   "license": "MIT",
-  "author": "admin@uxcam.com for UXCam Inc. after Mark Miyashita <negativetwelve@gmail.com>",
+  "author": "admin@uxcam.com",
   "homepage": "https://github.com/uxcam/react-native-ux-cam",
   "repository": "uxcam/react-native-ux-cam",
   "main": "index.js",

@@ -1,3 +1,4 @@
+import React from 'react';
 import Video from 'react-native-video';
 
 export function VideoScreen() {
