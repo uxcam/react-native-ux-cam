@@ -406,5 +406,6 @@ export interface UXCamConfiguration {
     enableAutomaticScreenNameTagging?: boolean;
     enableAdvancedGestureRecognition?: boolean;
     enableNetworkLogging?: boolean;
+    enableImprovedScreenCapture:? boolean;
     occlusions?: UXCamOcclusion[];
 }
