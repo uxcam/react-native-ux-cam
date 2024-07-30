@@ -1,34 +1,39 @@
 {
-  "name": "react-native-ux-cam",
-  "version": "5.4.16",
-  "description": "React Native wrapper for uxcam.com.",
-  "license": "MIT",
-  "author": "admin@uxcam.com",
-  "homepage": "https://github.com/uxcam/react-native-ux-cam",
-  "repository": "uxcam/react-native-ux-cam",
-  "main": "index.js",
-  "types": "index.d.ts",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [
-    "react-native",
-    "android",
-    "ios",
-    "react-native",
-    "user-sessions",
-    "ux",
-    "uxcam",
-    "ux-cam"
+    "name": "react-native-ux-cam",
+    "version": "5.4.16",
+    "description": "React Native wrapper for uxcam.com.",
+    "react-native": "src/index",
+    "main": "src/index",
+    "source": "src/index",
+    "types": "src/index.d.ts",
+    "keywords": [
+        "react-native",
+        "android",
+        "ios",
+        "react-native",
+        "user-sessions",
+        "ux",
+        "uxcam",
+        "ux-cam"
   ],
-  "peerDependencies": {
-    "react-native": ">=0.60.0"
-  },
-  "devDependencies": {
-    "@types/jest": "^27.5.0",
-    "@types/react": "^18.0.8",
-    "@types/react-native": "^0.67.6",
-    "@types/react-test-renderer": "^18.0.0",
-    "typescript": "^4.6.4"
-  }
+    "repository": "https://github.com/uxcam/react-native-ux-cam",
+    "author": "admin@uxcam.com",
+    "license": "MIT",
+    "homepage": "https://github.com/uxcam/react-native-ux-cam",
+    "devDependencies": {
+        "@types/jest": "^27.5.0",
+        "@types/react": "^18.0.8",
+        "@types/react-native": "^0.67.6",
+        "@types/react-test-renderer": "^18.0.0",
+        "typescript": "^4.6.4"
+    },
+    "peerDependencies": {
+       "react-native": ">=0.60.0"
+    },
+    "codegenConfig": {
+        "name": "RNUxcamSpec",
+        "type": "all",
+        "jsSrcsDir": "src"
+    }
+            
 }
