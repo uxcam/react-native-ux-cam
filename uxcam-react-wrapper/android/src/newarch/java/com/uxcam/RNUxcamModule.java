@@ -205,14 +205,4 @@ public class RNUxcamModule extends NativeRNUxcamSpec {
     public void setSessionProperty(String key, String value) {
         this.impl.setSessionProperty(key, value);
     }
-
-    @Override
-    public void configurationForUXCam(Promise promise) { 
-        this.impl.configurationForUXCam(promise);
-    }
-
-    @Override
-    public void updateConfiguration(ReadableMap configuration) {
-        this.impl.updateConfiguration(configuration);
-    }
 }
