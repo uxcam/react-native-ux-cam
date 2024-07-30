@@ -50,37 +50,7 @@ export interface Spec extends TurboModule {
     
     applyOcclusion: (occlusion: Object) => void;
     removeOcclusion: (occlusion: Object) => void;
-
-    configurationForUXCam: () => Promise<Configuration | undefined | null>;
-    updateConfiguration: (configuration: Object) => void;
    
-    
-    
-    // 
-    // 
-    // setSessionProperty: (propertyName: string, value: string) => void;
-    // 
-    // //addVerificationListener: (status: (status: { success: boolean })=>void) => EmitterSubscription;
-    // disableCrashHandling: (disable: boolean) => void;
-    
-    // getMultiSessionRecord: () => boolean;
-    // setMultiSessionRecord: (multiSessionRecord: boolean) => void;
-
-    // setAutomaticScreenNameTagging: (autoScreenTagging: boolean) => void;
-    // addScreenNameToIgnore: (screenName: string) => void;
-
-    // addScreenNamesToIgnore: (screenNames: string[]) => void;
-    // removeScreenNameToIgnore: (screenName: string) => void;
-
-    // removeScreenNamesToIgnore: (screenNames: string[]) => void;
-
-    // removeAllScreenNamesToIgnore: () => void;
-    // screenNamesBeingIgnored: () => string[];
-
-    // setPushNotificationToken: (token: string) => void;
-
-    // reportBugEvent: (eventName: string, properties?: UnsafeObject) => void;
-    // enableAdvancedGestureRecognizers: (enable: boolean) => void;
 
     // Event Listeneres
     addListener: (eventType: string) => void;

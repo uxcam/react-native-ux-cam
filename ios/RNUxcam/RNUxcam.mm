@@ -72,46 +72,7 @@ RCT_EXPORT_METHOD(startWithConfiguration:(NSDictionary *)config)
         self.lastVerifyResult = @(started);
     }
     ];
-}
-
-RCT_EXPORT_METHOD(configurationForUXCam:(RCTPromiseResolveBlock)resolve
-                  reject:(RCTPromiseRejectBlock)reject)
-{
-    UXCamConfiguration *configuration = UXCam.configuration;
-    
-    if (configuration)
-    {
-        NSDictionary *configDict = @{
-            RNUxcam_AppKey: configuration.userAppKey,
-            RNUxcam_MultiSession: @(configuration.enableMultiSessionRecord),
-            RNUxcam_CrashHandling: @(configuration.enableCrashHandling),
-            RNUxcam_ScreenTag: @(configuration.enableAutomaticScreenNameTagging),
-            RNUxcam_AdvancedGestures: @(configuration.enableAdvancedGestureRecognition),
-            RNUxcam_EnableNetworkLogs: @(configuration.enableNetworkLogging)
-        };
-        resolve(configDict);
-    }
-    else
-    {
-        NSString *code = @"no_configuration";
-        NSString *message = @"Please start UXCam with startWithConfiguration first to get configuration";
-        NSError *error = [NSError errorWithDomain:@"RNUXCam" code:1 userInfo:@{NSLocalizedDescriptionKey : message}];
-        
-        reject(code, message, error);
-    }
-}
-
-RCT_EXPORT_METHOD(updateConfiguration:(NSDictionary *)config)
-{
-    UXCamConfiguration *configuration = UXCam.configuration;
-    if (!configuration)
-    {
-        NSLog(@"Please start UXCam with startWithConfiguration first before updating configuration");
-        return;
-        
-    }
-    [self updateConfiguration:configuration fromDict:config];
-}      
+}  
 
 - (void)updateConfiguration:(UXCamConfiguration *)configuration fromDict:(NSDictionary *)config
 {

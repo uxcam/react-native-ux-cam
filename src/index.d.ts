@@ -21,16 +21,6 @@ export default class UXCam {
      static startWithKey: (userAppKey: string) => void;
 
     /**
-     * Returns configuration object for current session
-     */
-    static configurationForUXCam: () => Promise<Configuration | undefined | null>;
-   
-    /**
-     * Update current configuration with different values
-     */
-    static updateConfiguration: (configuration: Configuration) => void;
-
-    /**
      * Apply manual occlusion to screens in the app. 
      * This will be applied to all the screens until it is not removed manually again using {@link #removeOcclusion(occlusion)} method
      */
@@ -89,15 +79,6 @@ export default class UXCam {
      
         @parameter occludeAll Set `true` to hide all UITextField views on the screen in the recording, `false` to stop occluding them from the screen recording.
      */
-    static occludeAllTextView: () => void;
-
-    /**
-        Hide / un-hide all UITextField views on the screen
-     
-        Call this when you want to hide the contents of all UITextFields from the screen capture. Default is `false`.
-     
-        @parameter occludeAll Set `true` to hide all UITextField views on the screen in the recording, `false` to stop occluding them from the screen recording.
-     */
     static occludeAllTextFields: (occludeAll: boolean) => void;
 
     /**
@@ -143,14 +124,6 @@ export default class UXCam {
         @parameter status Function to call that will receive verification status boolean value.
      */
     static addVerificationListener: (status: (status: { success: boolean })=>void) => EmitterSubscription;
-
-	/**
- 	*  @brief Call this before calling startWithKey to disable UXCam from capturing sessions that crash
- 	*
- 	*  @param disable `true` to disable crash capture
- 	*  @note By default crash handling is enabled.
- 	*/
-	static disableCrashHandling: (disable: boolean) => void;
 
     /**
      *  Returns the current recording status
@@ -263,19 +236,6 @@ export default class UXCam {
     static resumeShortBreakForAnotherApp: () => void;
 
     /**
-     *  Get whether UXCam is set to automatically record a new session when the app resumes from the background
-    */
-    static getMultiSessionRecord: () => boolean;
-
-    /**
-     *  Set whether to record multiple sessions or not
-     *
-     *  @parameter multiSessionRecord `true` to record a new session automatically when the device comes out of the background. If `false` then a single session is recorded, when stopped (either programmatically with `stopApplicationAndUploadData` or by the app going to the background) then no more sessions are recorded until `startWithKey` is called again).
-     *  @note The default setting is to record a new session each time a device comes out of the background. This flag can be set to `false` to stop that. You can also set this with the appropriate startWithKey: variant. (This will be reset each time startWithKey is called)
-    */
-    static setMultiSessionRecord: (multiSessionRecord: boolean) => void;
-
-    /**
      *  @brief Deletes any sessions that are awaiting upload
      *  @note Advanced use only. This is not needed for most developers. This can't be called until UXCam startWithKey: has completed
      */
@@ -326,77 +286,4 @@ export default class UXCam {
         @parameter screenName Name to apply to the current screen in the session video
     */
     static tagScreenName: (screenName: string) => void;
-
-    /**
-        Enable / disable the automatic tagging of screen names
-        
-        @note By default UXCam will tag new screen names automatically. You can override this using the `tagScreenName` method or use this method to disable the automatic tagging.
-    
-        @parameters autoScreenTagging Set to `true` to enable automatic screen name tagging (the default) or `false` to disable it
-    */
-    static setAutomaticScreenNameTagging: (autoScreenTagging: boolean) => void;
-
-    /**
-        Add a name to the list of screens names that wont be added to the timeline in automatic screen name tagging mode
-    
-        This will not impact gesture or action recording - just that the timeline on the dashboard will not contain an entry for this screen name if it appears after this call.
-        Use this if you have view controllers that are presented but which are not primary user interaction screens to make your dashboard timeline easier to understand.
-    
-        @param screenName A name to add to the list of screens to ignore
-    
-        @note This is a convenience method for `addScreenNamesToIgnore([nameToIgnore])`
-    */
-    static addScreenNameToIgnore: (screenName: string) => void;
-
-    /**
-        Add a list of names to the list of screens names that wont be added to the timeline in automatic screen name tagging mode
-    
-        This will not impact gesture or action recording - just that the timeline on the dashboard will not contain an entry for any of the screens in this list encountered after this call.
-        Use this if you have view controllers that are presented but which are not primary user interaction screens to make your dashboard timeline easier to understand.
-    
-        @param screenNames A list of screen names to add to the ignore list
-    */
-    static addScreenNamesToIgnore: (screenNames: string[]) => void;
-
-    /**
-        Remove the a name from the list of screens to be ignored in automatic screen name tagging mode
-
-        @param screenName The name to remove from the list of ignored screens
-        @note This is a convenience method for `removeScreenNamesToIgnore([nameToRemove])`
-    */
-    static removeScreenNameToIgnore: (screenName: string) => void;
-
-    /**
-        Remove the a list of names from the list of screens to be ignored in automatic screen name tagging mode
-    
-        @param screenNames A list of names to remove from the ignore list
-    */
-    static removeScreenNamesToIgnore: (screenNames: string[]) => void;
-
-    // Remove all entries from the list of screen names to be ignored in automatic screen name tagging mode
-    static removeAllScreenNamesToIgnore: () => void;
-
-    // Get the list of screen names that are being ignored in automatic screen name tagging mode
-    static screenNamesBeingIgnored: () => string[];
-
-    /**
-        Set the token to be used to send push notifications to the app
-        @param token Push notification token
-    */
-    static setPushNotificationToken: (token: string) => void;
-
-    /** 
-        Send a report of a problem your app encountered to be displayed in the dashboard
-        @param eventName Name of the problem event
-        @param properties Properties object associated with the event
-        @note Only number and string property types are supported to a maximum count of 100 and maximum size per entry of 1KiB
-    */
-    static reportBugEvent: (eventName: string, properties?: any) => void;
-
-    /** 
-        Enable/Disable advanced gesture recognition like swipe and pinch gestures.
-        @param enable Set `true` to enable or `false` to disable before `startWithKey`. Default is `true`.
-        @note Disable this on iOS if you are having problems with swipes or other gestures being interrupted while recording sessions.
-    */
-    static enableAdvancedGestureRecognizers: (enable: boolean) => void;
 }

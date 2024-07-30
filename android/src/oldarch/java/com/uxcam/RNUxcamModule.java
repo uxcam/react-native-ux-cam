@@ -202,14 +202,4 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
     public void setSessionProperty(String key, String value) {
         this.impl.setSessionProperty(key, value);
     }
-
-    @ReactMethod
-    public void configurationForUXCam(Promise promise) { 
-        this.impl.configurationForUXCam(promise);
-    }
-
-    @ReactMethod
-    public void updateConfiguration(ReadableMap configuration) {
-        this.impl.updateConfiguration(configuration);
-    }
 }

@@ -213,14 +213,6 @@ public class RNUxcamModuleImpl {
         
     }
 
-    public void configurationForUXCam(Promise promise) {
-        // TODO:- Not implemented
-    }
-
-    public void updateConfiguration(ReadableMap configuration) {
-        // TODO:- Not implemented
-    }
-
     public void applyOcclusion(ReadableMap occlusionMap) {
         UXCamOcclusion occlusion = getOcclusion(occlusionMap.toHashMap());
         UXCam.applyOcclusion(occlusion);

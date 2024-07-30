@@ -20,14 +20,6 @@ export default class UXCam {
         UXCam.startWithConfiguration(configuration);
     }
 
-    static async configurationForUXCam() {
-        return await UXCamBridge.configurationForUXCam();
-    }
-
-    static updateConfiguration(configuration) {
-        UXCamBridge.updateConfiguration(configuration);
-    }
-
     static applyOcclusion(occlusion) {
         UXCamBridge.applyOcclusion(occlusion);
     }
