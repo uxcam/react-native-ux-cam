@@ -3,6 +3,7 @@
 #import <UXCam/UXCamConfiguration.h>
 #import <UXCam/UXOcclusionHeaders.h>
 #import <React/RCTUIManager.h>
+#import <React/RCTUIManagerUtils.h>
 #import <React/RCTConvert.h>
 
 // Thanks to this guard, we won't import this header when we build for the old architecture.
@@ -304,20 +305,22 @@ RCT_EXPORT_METHOD(occludeSensitiveScreen:(BOOL)hideScreen hideGestures:(BOOL)hid
 
 RCT_EXPORT_METHOD(occludeSensitiveView:(double)tag hideGestures:(BOOL)hideGestures)
 {
-    [_viewRegistry_DEPRECATED addUIBlock:^(RCTViewRegistry *viewRegistry) {
-        UIView *view = [self->_viewRegistry_DEPRECATED viewForReactTag:@(tag)];
-        // Temporary fix for handling null views in new architecture mode until this is fully migrated to shadow nodes
-        if (![self isViewAvailableAndAttachedToSuperView:view]) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-                UIView *view = [self->_viewRegistry_DEPRECATED viewForReactTag:@(tag)];
-                if ([self isViewAvailableAndAttachedToSuperView:view]) {
-                    [self occludeView:view hideGesture:hideGestures];
-                }
-            });
-        } else {
-            [self occludeView:view hideGesture:hideGestures];
-        }
-    }];
+    RCTExecuteOnUIManagerQueue(^{
+        [self->_viewRegistry_DEPRECATED addUIBlock:^(RCTViewRegistry *viewRegistry) {
+            UIView *view = [self->_viewRegistry_DEPRECATED viewForReactTag:@(tag)];
+            // Temporary fix for handling null views in new architecture mode until this is fully migrated to shadow nodes
+            if (![self isViewAvailableAndAttachedToSuperView:view]) {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                    UIView *view = [self->_viewRegistry_DEPRECATED viewForReactTag:@(tag)];
+                    if ([self isViewAvailableAndAttachedToSuperView:view]) {
+                        [self occludeView:view hideGesture:hideGestures];
+                    }
+                });
+            } else {
+                [self occludeView:view hideGesture:hideGestures];
+            }
+        }];
+    });
 }
 
 - (BOOL)isViewAvailableAndAttachedToSuperView:(UIView *)view {
