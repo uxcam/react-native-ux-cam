@@ -2,6 +2,7 @@ package com.uxcam;
 
 import android.app.Activity;
 import android.util.Log;
+import android.view.View;
 
 import com.facebook.react.bridge.NoSuchKeyException;
 import com.facebook.react.bridge.Promise;
@@ -16,9 +17,16 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.ReadableType;
+import com.facebook.react.bridge.UIManager;
+import com.facebook.react.bridge.UiThreadUtil;
 import com.facebook.react.bridge.UnexpectedNativeTypeException;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.facebook.react.uimanager.NativeViewHierarchyManager;
+import com.facebook.react.uimanager.UIBlock;
+import com.facebook.react.uimanager.UIManagerHelper;
+import com.facebook.react.uimanager.UIManagerModule;
+import com.facebook.react.uimanager.common.UIManagerType;
 import com.uxcam.screenshot.model.UXCamBlur;
 import com.uxcam.screenshot.model.UXCamOverlay;
 import com.uxcam.screenshot.model.UXCamOcclusion;
@@ -252,27 +260,59 @@ public class RNUxcamModuleImpl {
     }
 
     public void occludeSensitiveViewWithGesture(final int id) {
-       UxcamUIBlock uiBlock = new UxcamUIBlock(id, getReactApplicationContext(), view -> {
-        UXCam.occludeSensitiveView(view);
-        return null;
-       });
-       uiBlock.addToUIManager();
+       findView(id, (new RNUxViewFinder() {
+           @Override
+           public void obtainView(View view) {
+               UXCam.occludeSensitiveView(view);
+           }
+       }));
     }
 
     public void occludeSensitiveViewWithoutGesture(final int id) {
-       UxcamUIBlock uiBlock = new UxcamUIBlock(id, getReactApplicationContext(), view -> {
-           UXCam.occludeSensitiveViewWithoutGesture(view);
-           return null;
-       });
-       uiBlock.addToUIManager();
+        findView(id, (new RNUxViewFinder() {
+            @Override
+            public void obtainView(View view) {
+                UXCam.occludeSensitiveViewWithoutGesture(view);
+            }
+        }));
     }
 
     public void unOccludeSensitiveView(final double id) {
-        UxcamUIBlock uiBlock = new UxcamUIBlock((int)id, getReactApplicationContext(), view -> {
-            UXCam.unOccludeSensitiveView(view);
-            return null;
-        });
-       uiBlock.addToUIManager();
+        findView((int) id, (new RNUxViewFinder() {
+            @Override
+            public void obtainView(View view) {
+                UXCam.unOccludeSensitiveView(view);
+            }
+        }));
+    }
+
+    private void findView(final int tag, RNUxViewFinder viewFinder) {
+        int type = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED ? UIManagerType.FABRIC : UIManagerType.DEFAULT;
+        UIManager uiManager = UIManagerHelper.getUIManager(getReactApplicationContext(), type);
+        assert uiManager != null;
+        if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+            // Temporary fix for nullable view on new architecture due to lazy loading
+            UiThreadUtil.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    View view = uiManager.resolveView(tag);
+                    if (view != null) {
+                        viewFinder.obtainView(view);
+                    }
+                }
+            }, 100);
+        } else {
+            ((UIManagerModule)uiManager).addUIBlock(new UIBlock() {
+                @Override
+                public void execute(NativeViewHierarchyManager nativeViewHierarchyManager) {
+                    View view = nativeViewHierarchyManager.resolveView(tag);
+                    if (view != null) {
+                        viewFinder.obtainView(view);
+                    }
+                }
+            });
+        }
+
     }
 
     public void optInOverall() {
