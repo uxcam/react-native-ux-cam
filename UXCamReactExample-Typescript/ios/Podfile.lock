@@ -1026,71 +1026,6 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-video (6.4.3):
-    - DoubleConversion
-    - glog
-    - RCT-Folly (= 2024.01.01.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Codegen
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-jsi
-    - react-native-video/Video (= 6.4.3)
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
-  - react-native-video/Fabric (6.4.3):
-    - DoubleConversion
-    - glog
-    - RCT-Folly (= 2024.01.01.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Codegen
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-jsi
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
-  - react-native-video/Video (6.4.3):
-    - DoubleConversion
-    - glog
-    - RCT-Folly (= 2024.01.01.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Codegen
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-jsi
-    - react-native-video/Fabric
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
   - react-native-webview (13.10.5):
     - DoubleConversion
     - glog
@@ -1390,14 +1325,14 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNUxcam (5.4.16):
+  - RNUxcam (6.0.0):
     - RCT-Folly (= 2024.01.01.00)
     - RCTRequired
     - RCTTypeSafety
     - React-Codegen
     - React-Core
     - ReactCommon/turbomodule/core
-    - UXCam (~> 3.6.13)
+    - UXCam (~> 3.6.15)
   - SocketRocket (0.7.0)
   - UXCam (3.6.15)
   - Yoga (0.0.0)
@@ -1439,7 +1374,6 @@ DEPENDENCIES:
   - react-native-maps (from `../node_modules/react-native-maps`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
-  - react-native-video (from `../node_modules/react-native-video`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
@@ -1540,8 +1474,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-pager-view"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
-  react-native-video:
-    :path: "../node_modules/react-native-video"
   react-native-webview:
     :path: "../node_modules/react-native-webview"
   React-nativeconfig:
@@ -1631,7 +1563,6 @@ SPEC CHECKSUMS:
   react-native-maps: 667f9b975549c6fa9b1631bf859440f68ebd3b8f
   react-native-pager-view: 9ef669f7a27e1abd103c0bfe2c6c990552c8e1bb
   react-native-safe-area-context: 3f3ae0d1a7da79904e825caba491e57479c6c8bb
-  react-native-video: 8f870a9a2d11d57982e79fade97587eeae662360
   react-native-webview: 6e6512596be329c332cd2ea44a3643c022eb4d23
   React-nativeconfig: b0073a590774e8b35192fead188a36d1dca23dec
   React-NativeModulesApple: 81bc2bcb4e7da59a9de76f3b70c796abf049702e
@@ -1657,7 +1588,7 @@ SPEC CHECKSUMS:
   ReactCommon: c4278abb4fdef5568fd9023d691bd2ff024c1b09
   RNCAsyncStorage: 45b6bde4cf5409120263d19d345e90bb589f095e
   RNScreens: 0e536bfe7b08a9fb769ffbfe63aa8271769a8b84
-  RNUxcam: e9d6d7f93c343d3484f4332d598035e0d15a57c2
+  RNUxcam: de9f144541f37a9b04ebb732eb2ba7d81b79028f
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   UXCam: dab8e85b4c7fecdf09081d46b249099059a0451f
   Yoga: 348f8b538c3ed4423eb58a8e5730feec50bce372

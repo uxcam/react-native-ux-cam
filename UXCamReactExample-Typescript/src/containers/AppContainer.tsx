@@ -37,9 +37,7 @@ const AppContainer = () => {
     })();
   }, [dispatch]);
 
-  if (isStarted === undefined) {
-    return <View style={{flex: 1}} />;
-  }
+ 
 
   return appkey.length > 0 ? <AppTabNavigator /> : <AuthStackNavigator />;
 };

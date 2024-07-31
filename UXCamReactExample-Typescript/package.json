@@ -26,7 +26,6 @@
     "react-native-screens": "^3.32.0",
     "react-native-toast-message": "^2.2.0",
     "react-native-ux-cam": "../uxcam-react-wrapper",
-    "react-native-video": "^6.3.0",
     "react-native-webview": "^13.10.4",
     "react-redux": "^9.1.2"
   },
@@ -45,7 +44,7 @@
     "jest": "^29.6.3",
     "prettier": "2.8.8",
     "react-test-renderer": "18.2.0",
-    "typescript": "5.0.4"
+    "typescript": "^5.5.0"
   },
   "engines": {
     "node": ">=16"
