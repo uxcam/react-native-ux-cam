@@ -30,8 +30,8 @@ static NSString* const RNUxcam_BlurRadius = @"blurRadius";
 static NSString* const RNUxcam_HideGestures = @"hideGestures";
 static NSString* const RNUxcam_OverlayColor = @"color";
 
-static NSString* const RNUxcam_PluginType = "react-native";
-static NSString* const RNUxcam_PluginVersion = "6.0.0";
+static NSString* const RNUxcam_PluginType = @"react-native";
+static NSString* const RNUxcam_PluginVersion = @"6.0.0";
 
 
 @interface RNUxcam ()
@@ -46,14 +46,14 @@ RCT_EXPORT_MODULE();
 @synthesize viewRegistry_DEPRECATED = _viewRegistry_DEPRECATED;
 
 /// TODO: Investigate if we can remove this and run on a general background Q
-- (dispatch_queue_t)methodQueue 
+- (dispatch_queue_t)methodQueue
 {
     return dispatch_get_main_queue();
 }
 
 + (BOOL)requiresMainQueueSetup
 {
-  return YES;
+    return YES;
 }
 
 #pragma mark The main entry point - start the UXCam system with the provided configuration
@@ -75,7 +75,46 @@ RCT_EXPORT_METHOD(startWithConfiguration:(NSDictionary *)config)
         self.lastVerifyResult = @(started);
     }
     ];
-}  
+}
+
+RCT_EXPORT_METHOD(configurationForUXCam:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
+{
+    UXCamConfiguration *configuration = UXCam.configuration;
+    
+    if (configuration)
+    {
+        NSDictionary *configDict = @{
+            RNUxcam_AppKey: configuration.userAppKey,
+            RNUxcam_MultiSession: @(configuration.enableMultiSessionRecord),
+            RNUxcam_CrashHandling: @(configuration.enableCrashHandling),
+            RNUxcam_ScreenTag: @(configuration.enableAutomaticScreenNameTagging),
+            RNUxcam_AdvancedGestures: @(configuration.enableAdvancedGestureRecognition),
+            RNUxcam_EnableNetworkLogs: @(configuration.enableNetworkLogging)
+        };
+        resolve(configDict);
+    }
+    else
+    {
+        NSString *code = @"no_configuration";
+        NSString *message = @"Please start UXCam with startWithConfiguration first to get configuration";
+        NSError *error = [NSError errorWithDomain:@"RNUXCam" code:1 userInfo:@{NSLocalizedDescriptionKey : message}];
+        
+        reject(code, message, error);
+    }
+}
+
+RCT_EXPORT_METHOD(updateConfiguration:(NSDictionary *)config)
+{
+    UXCamConfiguration *configuration = UXCam.configuration;
+    if (!configuration)
+    {
+        NSLog(@"Please start UXCam with startWithConfiguration first before updating configuration");
+        return;
+        
+    }
+    [self updateConfiguration:configuration fromDict:config];
+}
 
 - (void)updateConfiguration:(UXCamConfiguration *)configuration fromDict:(NSDictionary *)config
 {
@@ -242,49 +281,52 @@ RCT_EXPORT_METHOD(removeOcclusion:(NSDictionary *)occlusion)
 
 - (void)verifyEventSender:(BOOL)verifyResult
 {
-	if (self.numEventListeners > 0)
-	{
-		NSDictionary* eventBody = @{@"success": @(verifyResult)};
-		if (verifyResult == FALSE)
-		{
-			NSString *message = @"UXCam session verification failed"; /// TODO: Localise
-			NSError *error = [NSError errorWithDomain:@"RNUXCam" code:1 userInfo:@{NSLocalizedDescriptionKey : message}];
-			
-			eventBody = @{@"success": @(verifyResult), @"error": error};
-		}
-		
-		[self sendEventWithName:RNUxcam_VerifyEvent_Name body:eventBody];
-	}
+    if (self.numEventListeners > 0)
+    {
+        NSDictionary* eventBody = @{@"success": @(verifyResult)};
+        if (verifyResult == FALSE)
+        {
+            NSString *message = @"UXCam session verification failed"; /// TODO: Localise
+            NSError *error = [NSError errorWithDomain:@"RNUXCam" code:1 userInfo:@{NSLocalizedDescriptionKey : message}];
+            
+            eventBody = @{@"success": @(verifyResult), @"error": error};
+        }
+        
+        [self sendEventWithName:RNUxcam_VerifyEvent_Name body:eventBody];
+    }
 }
 
 RCT_EXPORT_METHOD(occludeAllTextFields:(BOOL)occludeAll)
 {
-	[UXCam occludeAllTextFields:occludeAll];
+    [UXCam occludeAllTextFields:occludeAll];
 }
 
 RCT_EXPORT_METHOD(occludeSensitiveScreen:(BOOL)hideScreen hideGestures:(BOOL)hideGestures)
 {
-	[UXCam occludeSensitiveScreen:hideScreen hideGestures:hideGestures];
+    [UXCam occludeSensitiveScreen:hideScreen hideGestures:hideGestures];
 }
 
 RCT_EXPORT_METHOD(occludeSensitiveView:(double)tag hideGestures:(BOOL)hideGestures)
 {
     RCTExecuteOnUIManagerQueue(^{
         [self->_viewRegistry_DEPRECATED addUIBlock:^(RCTViewRegistry *viewRegistry) {
-            UIView *view = [self->_viewRegistry_DEPRECATED viewForReactTag:@(tag)];
-            // Temporary fix for handling null views in new architecture mode until this is fully migrated to shadow nodes
-            if (![self isViewAvailableAndAttachedToSuperView:view]) {
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-                    UIView *view = [self->_viewRegistry_DEPRECATED viewForReactTag:@(tag)];
-                    if ([self isViewAvailableAndAttachedToSuperView:view]) {
-                        [self occludeView:view hideGesture:hideGestures];
-                    }
-                });
-            } else {
-                [self occludeView:view hideGesture:hideGestures];
-            }
+            RCTExecuteOnMainQueue(^{
+                UIView *view = [self->_viewRegistry_DEPRECATED viewForReactTag:@(tag)];
+                // Temporary fix for handling null views in new architecture mode until this is fully migrated to shadow nodes
+                if (![self isViewAvailableAndAttachedToSuperView:view]) {
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                        UIView *view = [self->_viewRegistry_DEPRECATED viewForReactTag:@(tag)];
+                        if ([self isViewAvailableAndAttachedToSuperView:view]) {
+                            [self occludeView:view hideGesture:hideGestures];
+                        }
+                    });
+                } else {
+                    [self occludeView:view hideGesture:hideGestures];
+                }
+            });
         }];
     });
+    
 }
 
 - (BOOL)isViewAvailableAndAttachedToSuperView:(UIView *)view {
@@ -309,101 +351,101 @@ RCT_EXPORT_METHOD(unOccludeSensitiveView:(double)tag)
 
 RCT_EXPORT_METHOD(optInOverall)
 {
-	[UXCam optInOverall];
+    [UXCam optInOverall];
 }
 
 RCT_EXPORT_METHOD(optOutOverall)
 {
-	[UXCam optOutOverall];
+    [UXCam optOutOverall];
 }
 
 RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSNumber *, optInOverallStatus)
 {
-	return @(UXCam.optInOverallStatus);
+    return @(UXCam.optInOverallStatus);
 }
 
 RCT_EXPORT_METHOD(optIntoSchematicRecordings)
 {
-	[UXCam optIntoSchematicRecordings];
+    [UXCam optIntoSchematicRecordings];
 }
 
 RCT_EXPORT_METHOD(optOutOfSchematicRecordings)
 {
-	[UXCam optOutOfSchematicRecordings];
+    [UXCam optOutOfSchematicRecordings];
 }
 
 RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSNumber *, optInSchematicRecordingStatus)
 {
-	return @(UXCam.optInSchematicRecordingStatus);
+    return @(UXCam.optInSchematicRecordingStatus);
 }
 
 RCT_EXPORT_METHOD(optIntoVideoRecording)
 {
     // fallback to schematic recording
-	[UXCam optIntoSchematicRecordings];
+    [UXCam optIntoSchematicRecordings];
 }
 
 RCT_EXPORT_METHOD(optOutOfVideoRecording)
 {
-	[UXCam optOutOfSchematicRecordings];
+    [UXCam optOutOfSchematicRecordings];
 }
 
 RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSNumber *, optInVideoRecordingStatus)
 {
-	return @(UXCam.optInSchematicRecordingStatus);
+    return @(UXCam.optInSchematicRecordingStatus);
 }
 
 RCT_EXPORT_METHOD(startNewSession)
 {
-	[UXCam startNewSession];
+    [UXCam startNewSession];
 }
 
 RCT_EXPORT_METHOD(stopSessionAndUploadData)
 {
-	[UXCam stopSessionAndUploadData];
+    [UXCam stopSessionAndUploadData];
 }
 
 RCT_EXPORT_METHOD(cancelCurrentSession)
 {
-	[UXCam cancelCurrentSession];
+    [UXCam cancelCurrentSession];
 }
 
 RCT_EXPORT_METHOD(urlForCurrentSession:(RCTPromiseResolveBlock)resolve
-				  reject:(RCTPromiseRejectBlock)reject)
+                  reject:(RCTPromiseRejectBlock)reject)
 {
-	NSString *url = [UXCam urlForCurrentSession];
-	
-	if (url)
-	{
-		resolve(url);
-	}
-	else
-	{
-		NSString *code = @"no_url";
-		NSString *message = @"Could not retrieve the url for the current session.";
-		NSError *error = [NSError errorWithDomain:@"RNUXCam" code:2 userInfo:nil];
-		
-		reject(code, message, error);
-	}
+    NSString *url = [UXCam urlForCurrentSession];
+    
+    if (url)
+    {
+        resolve(url);
+    }
+    else
+    {
+        NSString *code = @"no_url";
+        NSString *message = @"Could not retrieve the url for the current session.";
+        NSError *error = [NSError errorWithDomain:@"RNUXCam" code:2 userInfo:nil];
+        
+        reject(code, message, error);
+    }
 }
 
 RCT_EXPORT_METHOD(urlForCurrentUser:(RCTPromiseResolveBlock)resolve
-						   reject:(RCTPromiseRejectBlock)reject)
+                  reject:(RCTPromiseRejectBlock)reject)
 {
-	NSString *url = [UXCam urlForCurrentUser];
-	
-	if (url)
-	{
-		resolve(url);
-	}
-	else
-	{
-		NSString *code = @"no_url";
-		NSString *message = @"Could not retrieve the url for the current user.";
-		NSError *error = [NSError errorWithDomain:@"RNUXCam" code:1 userInfo:nil];
-		
-		reject(code, message, error);
-	}
+    NSString *url = [UXCam urlForCurrentUser];
+    
+    if (url)
+    {
+        resolve(url);
+    }
+    else
+    {
+        NSString *code = @"no_url";
+        NSString *message = @"Could not retrieve the url for the current user.";
+        NSError *error = [NSError errorWithDomain:@"RNUXCam" code:1 userInfo:nil];
+        
+        reject(code, message, error);
+    }
 }
 
 RCT_EXPORT_METHOD(uploadPendingSession)
@@ -413,17 +455,17 @@ RCT_EXPORT_METHOD(uploadPendingSession)
 
 RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSNumber *, pendingSessionCount)
 {
-	return @(UXCam.pendingUploads);
+    return @(UXCam.pendingUploads);
 }
 
 RCT_EXPORT_METHOD(deletePendingUploads)
 {
-	[UXCam deletePendingUploads];
+    [UXCam deletePendingUploads];
 }
 
 RCT_EXPORT_METHOD(allowShortBreakForAnotherApp:(BOOL)continueSession)
 {
-	[UXCam allowShortBreakForAnotherApp:continueSession];
+    [UXCam allowShortBreakForAnotherApp:continueSession];
 }
 
 RCT_EXPORT_METHOD(allowShortBreakForAnotherAppInMillis:(double)duration)
@@ -434,17 +476,17 @@ RCT_EXPORT_METHOD(allowShortBreakForAnotherAppInMillis:(double)duration)
 
 RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSNumber *, isRecording)
 {
-	return @(UXCam.isRecording);
+    return @(UXCam.isRecording);
 }
 
 RCT_EXPORT_METHOD(pauseScreenRecording)
 {
-	[UXCam pauseScreenRecording];
+    [UXCam pauseScreenRecording];
 }
 
 RCT_EXPORT_METHOD(resumeScreenRecording)
 {
-	[UXCam resumeScreenRecording];
+    [UXCam resumeScreenRecording];
 }
 
 RCT_EXPORT_METHOD(tagScreenName:(NSString *)screenName)
@@ -454,29 +496,28 @@ RCT_EXPORT_METHOD(tagScreenName:(NSString *)screenName)
 
 RCT_EXPORT_METHOD(logEvent:(NSString *)eventName properties:(nullable NSDictionary<NSString *, id> *)properties)
 {
-	[UXCam logEvent:eventName withProperties:properties];
+    [UXCam logEvent:eventName withProperties:properties];
 }
 
 RCT_EXPORT_METHOD(setUserIdentity:(NSString *)userIdentity)
 {
-	[UXCam setUserIdentity:userIdentity];
+    [UXCam setUserIdentity:userIdentity];
 }
 
 RCT_EXPORT_METHOD(setUserProperty:(NSString *)propertyName value:(NSString *)value)
 {
-	[UXCam setUserProperty:propertyName value:value];
+    [UXCam setUserProperty:propertyName value:value];
 }
 
 RCT_EXPORT_METHOD(setSessionProperty:(NSString *)propertyName value:(NSString *)value)
 {
-	[UXCam setSessionProperty:propertyName value:value];
+    [UXCam setSessionProperty:propertyName value:value];
 }
-
 
 // Thanks to this guard, we won't compile this code when we build for the old architecture.
 #ifdef RCT_NEW_ARCH_ENABLED
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
-    (const facebook::react::ObjCTurboModule::InitParams &)params
+(const facebook::react::ObjCTurboModule::InitParams &)params
 {
     return std::make_shared<facebook::react::NativeRNUxcamSpecJSI>(params);
 }
