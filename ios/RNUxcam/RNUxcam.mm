@@ -30,6 +30,9 @@ static NSString* const RNUxcam_BlurRadius = @"blurRadius";
 static NSString* const RNUxcam_HideGestures = @"hideGestures";
 static NSString* const RNUxcam_OverlayColor = @"color";
 
+static NSString* const RNUxcam_PluginType = "react-native";
+static NSString* const RNUxcam_PluginVersion = "6.0.0";
+
 
 @interface RNUxcam ()
 @property (atomic, strong) NSNumber* lastVerifyResult;
@@ -57,7 +60,7 @@ RCT_EXPORT_MODULE();
 RCT_EXPORT_METHOD(startWithConfiguration:(NSDictionary *)config)
 {
     self.lastVerifyResult = nil;
-    [UXCam pluginType:@"react-native" version:@"5.4.16"];
+    [UXCam pluginType:RNUxcam_PluginType version:RNUxcam_PluginVersion];
     
     NSString *userAppKey = config[RNUxcam_AppKey];
     if (!userAppKey || ![userAppKey isKindOfClass:NSString.class])
@@ -300,7 +303,7 @@ RCT_EXPORT_METHOD(unOccludeSensitiveView:(double)tag)
 {
     UIView *view = [_viewRegistry_DEPRECATED viewForReactTag:@(tag)];
     if (view) {
-        [UXCam occludeSensitiveView:view];
+        [UXCam unOccludeSensitiveView:view];
     }
 }
 
@@ -425,7 +428,7 @@ RCT_EXPORT_METHOD(allowShortBreakForAnotherApp:(BOOL)continueSession)
 
 RCT_EXPORT_METHOD(allowShortBreakForAnotherAppInMillis:(double)duration)
 {
-	[UXCam allowShortBreakForAnotherApp:YES];
+    [UXCam allowShortBreakForAnotherApp:YES];
     [UXCam setAllowShortBreakMaxDuration:duration];
 }
 
