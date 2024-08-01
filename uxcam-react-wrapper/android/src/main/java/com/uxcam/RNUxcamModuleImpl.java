@@ -37,9 +37,6 @@ public class RNUxcamModuleImpl {
 
     public static final String MODULE_NAME = "RNUxcam";
 
-    private static final String UXCAM_PLUGIN_TYPE = "react-native";
-    private static final String UXCAM_REACT_PLUGIN_VERSION = "5.4.16";
-
     private static final String UXCAM_VERIFICATION_EVENT_KEY = "UXCam_Verification_Event";
     private static final String PARAM_SUCCESS_KEY = "success";
     private static final String PARAM_ERROR_MESSAGE_KEY = "error";
@@ -57,6 +54,9 @@ public class RNUxcamModuleImpl {
     public static final String CONFIG = "config";
     public static final String BLUR_RADIUS = "blurRadius";
     public static final String HIDE_GESTURES = "hideGestures";
+
+    private static final String UXCAM_PLUGIN_TYPE = "react-native";
+    private static final String UXCAM_REACT_PLUGIN_VERSION = "6.0.0";
 
     private final ReactApplicationContext reactContext;
 
@@ -204,8 +204,6 @@ public class RNUxcamModuleImpl {
         return blurBuilder.build();
     }
 
-    
-
     private void sendEvent(ReactApplicationContext reactContext,
                            WritableMap params) {
         reactContext
@@ -214,11 +212,11 @@ public class RNUxcamModuleImpl {
     }
 
     public void addListener(String eventName) {
-       
+       // Handled through initializer, only for interface confirmation
     }
 
     public void removeListeners(double count) {
-        
+        // Not needed on android, only for interface confirmation
     }
 
     public void applyOcclusion(ReadableMap occlusionMap) {
@@ -360,7 +358,7 @@ public class RNUxcamModuleImpl {
     }
 
     public void uploadPendingSession() {
-        // TODO: Not implemented
+        // Method not available in android
     }
 
     public void deletePendingUploads() {

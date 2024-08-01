@@ -11,6 +11,7 @@ const platformIOS = platform === "ios" ? true : false;
 const platformAndroid = platform === "android" ? true : false;
 
 export default class UXCam {
+    
     static startWithConfiguration(configuration) {
         UXCamBridge.startWithConfiguration(configuration);
     }
