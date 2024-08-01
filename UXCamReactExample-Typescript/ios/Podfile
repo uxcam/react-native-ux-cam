@@ -30,6 +30,7 @@ target 'ReactTypeScriptSample' do
 
   use_react_native!(
     :path => config[:reactNativePath],
+    :hermes_enabled => false
   )
 
   target 'ReactTypeScriptSampleTests' do
