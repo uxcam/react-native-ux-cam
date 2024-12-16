@@ -56,7 +56,7 @@ public class RNUxcamModuleImpl {
     public static final String HIDE_GESTURES = "hideGestures";
 
     private static final String UXCAM_PLUGIN_TYPE = "react-native";
-    private static final String UXCAM_REACT_PLUGIN_VERSION = "6.0.1";
+    private static final String UXCAM_REACT_PLUGIN_VERSION = "6.0.2";
 
     private final ReactApplicationContext reactContext;
 
