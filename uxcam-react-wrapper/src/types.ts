@@ -1,5 +1,6 @@
 export interface Configuration {
     userAppKey: string;
+    enableIntegrationLogging?: boolean;
     enableMultiSessionRecord?: boolean;
     enableCrashHandling?: boolean;
     enableAutomaticScreenNameTagging?: boolean;
