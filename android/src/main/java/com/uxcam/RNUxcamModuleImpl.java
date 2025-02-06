@@ -406,6 +406,7 @@ public class RNUxcamModuleImpl {
                     switch (type) {
                         case Null:
                             convertedProperties.put(key, "");
+                            break;
                         case Boolean:
                             convertedProperties.put(key, properties.getBoolean(key));
                             break;
