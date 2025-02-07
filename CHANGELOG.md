@@ -5,6 +5,8 @@
 
 Version | Changes
 ------- | ----------
+6.0.3  | Updated iOS SDK to 3.6.21 and Android to 3.6.37
+6.0.2  | Updated iOS SDK to 3.6.20 and Android to 3.6.36
 6.0.1  | Updated iOS SDK to 3.6.17 and Android to 3.6.33
 6.0.0  | Added support for new architecture
 5.4.16 | Updated iOS SDK to 3.6.13 and Android to 3.6.26
