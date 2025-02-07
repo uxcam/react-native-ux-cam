@@ -42,6 +42,7 @@ public class RNUxcamModuleImpl {
     private static final String PARAM_ERROR_MESSAGE_KEY = "error";
 
     public static final String USER_APP_KEY = "userAppKey";
+    public static final String ENABLE_INTEGRATION_LOGGING = "enableIntegrationLogging";
     public static final String ENABLE_MUTLI_SESSION_RECORD = "enableMultiSessionRecord";
     public static final String ENABLE_CRASH_HANDLING = "enableCrashHandling";
     public static final String ENABLE_AUTOMATIC_SCREEN_NAME_TAGGING = "enableAutomaticScreenNameTagging";
@@ -56,7 +57,7 @@ public class RNUxcamModuleImpl {
     public static final String HIDE_GESTURES = "hideGestures";
 
     private static final String UXCAM_PLUGIN_TYPE = "react-native";
-    private static final String UXCAM_REACT_PLUGIN_VERSION = "6.0.2";
+    private static final String UXCAM_REACT_PLUGIN_VERSION = "6.0.3";
 
     private final ReactApplicationContext reactContext;
 
@@ -111,6 +112,7 @@ public class RNUxcamModuleImpl {
             return null;
          }
 
+         Boolean enableIntegrationLogging = (Boolean) configMap.get(ENABLE_INTEGRATION_LOGGING);
          Boolean enableMultiSessionRecord = (Boolean) configMap.get(ENABLE_MUTLI_SESSION_RECORD);
          Boolean enableCrashHandling = (Boolean) configMap.get(ENABLE_CRASH_HANDLING);
          Boolean enableAutomaticScreenNameTagging = (Boolean) configMap.get(ENABLE_AUTOMATIC_SCREEN_NAME_TAGGING);
@@ -122,6 +124,8 @@ public class RNUxcamModuleImpl {
              occlusionList = convertToOcclusionList(occlusionObjects);
          } 
          UXConfig.Builder uxConfigBuilder = new UXConfig.Builder(appKey);
+         if (enableIntegrationLogging != null)
+             uxConfigBuilder.enableIntegrationLogging(enableIntegrationLogging);
          if (enableMultiSessionRecord != null)
              uxConfigBuilder.enableMultiSessionRecord(enableMultiSessionRecord);
          if (enableCrashHandling != null)
