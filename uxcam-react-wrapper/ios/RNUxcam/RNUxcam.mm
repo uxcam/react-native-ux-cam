@@ -15,6 +15,7 @@ static NSString* const RNUxcam_VerifyEvent_Name = @"UXCam_Verification_Event";
 
 // Configuration Keys
 static NSString* const RNUxcam_AppKey = @"userAppKey";
+static NSString* const RNUxcam_IntegrationLogging = @"enableIntegrationLogging";
 static NSString* const RNUxcam_MultiSession = @"enableMultiSessionRecord";
 static NSString* const RNUxcam_CrashHandling = @"enableCrashHandling";
 static NSString* const RNUxcam_ScreenTag = @"enableAutomaticScreenNameTagging";
@@ -31,7 +32,7 @@ static NSString* const RNUxcam_HideGestures = @"hideGestures";
 static NSString* const RNUxcam_OverlayColor = @"color";
 
 static NSString* const RNUxcam_PluginType = @"react-native";
-static NSString* const RNUxcam_PluginVersion = @"6.0.2";
+static NSString* const RNUxcam_PluginVersion = @"6.0.3";
 
 
 @interface RNUxcam ()
@@ -86,6 +87,7 @@ RCT_EXPORT_METHOD(configurationForUXCam:(RCTPromiseResolveBlock)resolve
     {
         NSDictionary *configDict = @{
             RNUxcam_AppKey: configuration.userAppKey,
+            RNUxcam_IntegrationLogging: @(configuration.enableIntegrationLogging),
             RNUxcam_MultiSession: @(configuration.enableMultiSessionRecord),
             RNUxcam_CrashHandling: @(configuration.enableCrashHandling),
             RNUxcam_ScreenTag: @(configuration.enableAutomaticScreenNameTagging),
@@ -118,6 +120,11 @@ RCT_EXPORT_METHOD(updateConfiguration:(NSDictionary *)config)
 
 - (void)updateConfiguration:(UXCamConfiguration *)configuration fromDict:(NSDictionary *)config
 {
+     NSNumber *enableIntegrationLogging = config[RNUxcam_IntegrationLogging];
+    if (enableIntegrationLogging)
+    {
+        configuration.enableIntegrationLogging = [RCTConvert BOOL:enableIntegrationLogging];
+    }
     NSNumber *enableMultiSessionRecord = config[RNUxcam_MultiSession];
     if (enableMultiSessionRecord)
     {
