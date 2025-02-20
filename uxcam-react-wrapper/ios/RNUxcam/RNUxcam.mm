@@ -32,7 +32,7 @@ static NSString* const RNUxcam_HideGestures = @"hideGestures";
 static NSString* const RNUxcam_OverlayColor = @"color";
 
 static NSString* const RNUxcam_PluginType = @"react-native";
-static NSString* const RNUxcam_PluginVersion = @"6.0.3";
+static NSString* const RNUxcam_PluginVersion = @"6.0.4";
 
 
 @interface RNUxcam ()
