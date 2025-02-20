@@ -501,7 +501,7 @@ RCT_EXPORT_METHOD(tagScreenName:(NSString *)screenName)
     [UXCam tagScreenName:screenName];
 }
 
-RCT_EXPORT_METHOD(logEvent:(NSString *)eventName properties:(nullable NSDictionary<NSString *, id> *)properties)
+RCT_EXPORT_METHOD(logEvent:(NSString *)eventName properties:(NSDictionary<NSString *, id> * _Nullable)properties)
 {
     [UXCam logEvent:eventName withProperties:properties];
 }
