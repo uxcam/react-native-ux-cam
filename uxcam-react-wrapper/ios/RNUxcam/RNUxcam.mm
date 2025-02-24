@@ -32,7 +32,7 @@ static NSString* const RNUxcam_HideGestures = @"hideGestures";
 static NSString* const RNUxcam_OverlayColor = @"color";
 
 static NSString* const RNUxcam_PluginType = @"react-native";
-static NSString* const RNUxcam_PluginVersion = @"6.0.3";
+static NSString* const RNUxcam_PluginVersion = @"6.0.4";
 
 
 @interface RNUxcam ()
@@ -501,7 +501,7 @@ RCT_EXPORT_METHOD(tagScreenName:(NSString *)screenName)
     [UXCam tagScreenName:screenName];
 }
 
-RCT_EXPORT_METHOD(logEvent:(NSString *)eventName properties:(nullable NSDictionary<NSString *, id> *)properties)
+RCT_EXPORT_METHOD(logEvent:(NSString *)eventName properties:(NSDictionary<NSString *, id> * _Nullable)properties)
 {
     [UXCam logEvent:eventName withProperties:properties];
 }
