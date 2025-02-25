@@ -117,7 +117,7 @@ export default class UXCam {
      
         @note Only number and string property types are supported to a maximum count of 100 and maximum size per entry of 1KiB
      */
-    static logEvent: (eventName: string, properties?: Object) => void;
+    static logEvent: (eventName: string, properties: Object | null) => void
 
     /**
         UXCam verification listener that returns success/failure status. TRUE status means the session was successfully verified and started.
