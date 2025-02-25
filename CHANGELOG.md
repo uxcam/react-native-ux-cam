@@ -5,6 +5,7 @@
 
 Version | Changes
 ------- | ----------
+6.0.5  | Fix nullable not mapping properly on iOS on RN 0.78
 6.0.4  | Updated iOS SDK to 3.6.22 and Android to 3.6.38
 6.0.3  | Updated iOS SDK to 3.6.21 and Android to 3.6.37
 6.0.2  | Updated iOS SDK to 3.6.20 and Android to 3.6.36
