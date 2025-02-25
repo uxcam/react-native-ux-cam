@@ -9,7 +9,7 @@ const Stack = createNativeStackNavigator();
 const SettingNavigator = () => (
   <Stack.Navigator initialRouteName={'SettingsScreen'}>
     <Stack.Screen
-      name={'Settings'}
+      name={'SettingsScreen'}
       component={SettingsScreen}
       options={{
         headerShown: true,

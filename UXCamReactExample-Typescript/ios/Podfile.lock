@@ -1631,7 +1631,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (4.9.0):
+  - RNScreens (4.9.1):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.11.18.00)
@@ -1652,9 +1652,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNScreens/common (= 4.9.0)
+    - RNScreens/common (= 4.9.1)
     - Yoga
-  - RNScreens/common (4.9.0):
+  - RNScreens/common (4.9.1):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.11.18.00)
@@ -1676,7 +1676,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNUxcam (6.0.4):
+  - RNUxcam (6.0.5):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.11.18.00)
@@ -2000,8 +2000,8 @@ SPEC CHECKSUMS:
   ReactCodegen: ac5a109657cbb973aa80c8037230decbc7a7e981
   ReactCommon: 398ba0acfaaceec1ed1d6791d94d7646fb1e030f
   RNCAsyncStorage: 2971f2b9274a0ee209300961556337245a18bdc0
-  RNScreens: 864e881e5b17195e7d54c446f33c20676d8c1158
-  RNUxcam: ae4bc75932a34e3a73a5e789db65423056f8b950
+  RNScreens: be44c347c9ae035bc78da28e283f484fa37e916f
+  RNUxcam: 6a2731b952954c65ecfa060f04536b8f719c515d
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   UXCam: 9ff7948ec24c7cad33c7f537dfd1b3b2c27335bf
   Yoga: afd04ff05ebe0121a00c468a8a3c8080221cb14c
