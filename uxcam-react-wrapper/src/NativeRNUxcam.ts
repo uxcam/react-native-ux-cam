@@ -35,7 +35,7 @@ export interface Spec extends TurboModule {
 
     tagScreenName: (screenName: string) => void;
 
-    logEvent: (eventName: string, properties?: Object) => void;
+    logEvent: (eventName: string, properties: Object | null) => void;
     setUserIdentity: (userIdentity: string) => void;
 
     // Here value should be either number | string but as union types are not officially supported, we pass value as string

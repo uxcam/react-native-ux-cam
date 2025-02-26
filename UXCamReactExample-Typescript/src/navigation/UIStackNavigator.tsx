@@ -20,7 +20,7 @@ const Stack = createNativeStackNavigator();
 const UIStackNavigator = () => (
   <Stack.Navigator initialRouteName={'UIOptionScreen'}>
     <Stack.Screen
-      name={'UIOption'}
+      name={'UIOptionScreen'}
       component={UIOptionScreen}
       options={{
         headerShown: true,
