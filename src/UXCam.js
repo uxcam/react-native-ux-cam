@@ -324,13 +324,25 @@ export default class UXCam {
 
     static occludeSensitiveView(sensitiveView) {
         if (sensitiveView) {
-            UXCamBridge.occludeSensitiveView(findNodeHandle(sensitiveView), false);
+            const tag = findNodeHandle(sensitiveView);
+            if (tag) {
+                // Add a small delay to allow the native view to be registered
+                setTimeout(() => {
+                    UXCamBridge.occludeSensitiveView(tag, false);
+                }, 10); 
+            }
         }
     }
 
     static occludeSensitiveViewWithoutGesture(sensitiveView) {
         if (sensitiveView) {
-            UXCamBridge.occludeSensitiveView(findNodeHandle(sensitiveView), true);
+            const tag = findNodeHandle(sensitiveView);
+            if (tag) {
+                // Add a small delay to allow the native view to be registered
+                setTimeout(() => {
+                    UXCamBridge.occludeSensitiveView(tag, true);
+                }, 10);
+            }
         }
     }
 
