@@ -81,6 +81,8 @@ android {
         applicationId "com.reacttypescriptsample"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+        resValue "string", "google_maps_key",
+                 project.properties["MAPS_API_KEY"] ?: ""
         versionCode 1
         versionName "1.0"
     }

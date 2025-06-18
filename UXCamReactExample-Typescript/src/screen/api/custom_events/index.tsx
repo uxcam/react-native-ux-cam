@@ -72,7 +72,7 @@ const CustomEventsScreen = React.memo(() => {
   // Sending Events and Properties
   const sendEventWithProperties = (name: string, properties?: any) => {
     if (properties === undefined) {
-      UXCam.logEvent(name);
+      UXCam.logEvent(name, {});
     } else {
       UXCam.logEvent(name, properties);
     }
