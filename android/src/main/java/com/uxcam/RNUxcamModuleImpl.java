@@ -23,6 +23,7 @@ import com.facebook.react.bridge.UnexpectedNativeTypeException;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.uimanager.NativeViewHierarchyManager;
+import com.facebook.react.uimanager.IllegalViewOperationException;
 import com.facebook.react.uimanager.UIBlock;
 import com.facebook.react.uimanager.UIManagerHelper;
 import com.facebook.react.uimanager.UIManagerModule;
@@ -297,24 +298,31 @@ public class RNUxcamModuleImpl {
             UiThreadUtil.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    View view = uiManager.resolveView(tag);
-                    if (view != null) {
-                        viewFinder.obtainView(view);
+                    try {
+                        View view = uiManager.resolveView(tag);
+                        if (view != null) {
+                            viewFinder.obtainView(view);
+                        }
+                    } catch (IllegalViewOperationException e) {
+                        // Skip occlusion if view no longer exists
                     }
                 }
             }, 100);
         } else {
-            ((UIManagerModule)uiManager).addUIBlock(new UIBlock() {
+            ((UIManagerModule) uiManager).addUIBlock(new UIBlock() {
                 @Override
                 public void execute(NativeViewHierarchyManager nativeViewHierarchyManager) {
-                    View view = nativeViewHierarchyManager.resolveView(tag);
-                    if (view != null) {
-                        viewFinder.obtainView(view);
+                    try {
+                        View view = nativeViewHierarchyManager.resolveView(tag);
+                        if (view != null) {
+                            viewFinder.obtainView(view);
+                        }
+                    } catch (IllegalViewOperationException e) {
+                        // Skip occlusion if view no longer exists
                     }
                 }
             });
         }
-
     }
 
     public void optInOverall() {
