@@ -27,6 +27,11 @@ export default class App extends Component<Props> {
       type: UXCamOcclusionType.Overlay,
       color: 0x000000,
     };
+
+    const ai = {
+      type: UXCamOcclusionType.AITextOcclusion,
+      recognitionLanguages: ['en-US'],
+    };
     const configuration = {
       userAppKey: 'YOUR UXCAM API KEY GOES HERE',
       enableImprovedScreenCapture: true, // for improved screen capture on Android
@@ -35,7 +40,7 @@ export default class App extends Component<Props> {
         swipe gestures and touches during app interaction
       */
       // enableAdvancedGestureRecognition: false,
-      //occlusions: [overlay]
+      occlusions: [ai],
     };
 
     RNUxcam.startWithConfiguration(configuration);
