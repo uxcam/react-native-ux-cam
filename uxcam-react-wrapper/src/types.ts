@@ -12,7 +12,8 @@ export interface Configuration {
 export enum OcclusionType {
     OccludeAllTextFields = 1,
     Overlay = 2,
-    Blur = 3
+    Blur = 3,
+    AITextOcclusion = 4
 }
 
 export interface Occlusion {

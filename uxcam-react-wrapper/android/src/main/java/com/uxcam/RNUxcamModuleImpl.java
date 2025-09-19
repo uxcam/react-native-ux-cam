@@ -32,6 +32,7 @@ import com.uxcam.screenshot.model.UXCamBlur;
 import com.uxcam.screenshot.model.UXCamOverlay;
 import com.uxcam.screenshot.model.UXCamOcclusion;
 import com.uxcam.screenshot.model.UXCamOccludeAllTextFields;
+import com.uxcam.screenshot.model.UXCamAITextOcclusion;
 import com.uxcam.datamodel.UXConfig;
 
 public class RNUxcamModuleImpl {
@@ -56,9 +57,9 @@ public class RNUxcamModuleImpl {
     public static final String CONFIG = "config";
     public static final String BLUR_RADIUS = "blurRadius";
     public static final String HIDE_GESTURES = "hideGestures";
-
+    public static final String RECOGNITION_LANGUAGES = "recognitionLanguages";
     private static final String UXCAM_PLUGIN_TYPE = "react-native";
-    private static final String UXCAM_REACT_PLUGIN_VERSION = "6.0.7";
+    private static final String UXCAM_REACT_PLUGIN_VERSION = "7.0.0";
 
     private final ReactApplicationContext reactContext;
 
@@ -163,6 +164,8 @@ public class RNUxcamModuleImpl {
                 return (UXCamOcclusion) getOverlay(occlusionMap);
             case 3:
                 return (UXCamOcclusion) getBlur(occlusionMap);
+            case 4:
+                return (UXCamOcclusion) getAITextOcclusion(occlusionMap);
             default:
                 return null;
         }
@@ -207,6 +210,11 @@ public class RNUxcamModuleImpl {
         if (hideGestures != null)
             blurBuilder.withoutGesture(hideGestures);
         return blurBuilder.build();
+    }
+
+    private UXCamAITextOcclusion getAITextOcclusion(Map<String, Object> aiMap) {
+        List<String> recognitionLanguages = (List<String>) aiMap.get(RECOGNITION_LANGUAGES);
+        return new UXCamAITextOcclusion.Builder().recognitionLanguages(recognitionLanguages).build();
     }
 
     private void sendEvent(ReactApplicationContext reactContext,

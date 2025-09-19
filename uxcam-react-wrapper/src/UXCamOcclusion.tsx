@@ -27,3 +27,12 @@ export class UXOcclueAllTextFields implements Occlusion {
         this.type = OcclusionType.OccludeAllTextFields;
     }
 }
+
+export class UXAITextOcclusion implements Occlusion {
+    readonly type: OcclusionType;
+    constructor() {
+        this.type = OcclusionType.AITextOcclusion;
+    }
+
+    recognitionLanguages?: string[];
+}

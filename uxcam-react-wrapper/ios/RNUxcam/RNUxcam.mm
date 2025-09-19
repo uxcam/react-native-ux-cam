@@ -213,6 +213,12 @@ RCT_EXPORT_METHOD(updateConfiguration:(NSDictionary *)config)
             UXCamOccludeAllTextFields *occlude = [[UXCamOccludeAllTextFields alloc] init];
             return occlude;
         }
+
+        case UXOcclusionTypeAITextOcclusion:
+        {
+            UXCamAITextOcclusion *ai = [[UXCamAITextOcclusion alloc] initWithRecognitionLanguages:json[RNUxcam_RecognitionLanguages]];
+            return ai;
+        }
         default:
             return nil;
     }
