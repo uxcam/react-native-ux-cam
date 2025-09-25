@@ -7,6 +7,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        mavenLocal()
     }
 
     dependencies {
@@ -61,15 +62,17 @@ rootProject.allprojects {
     repositories {
         google()
         jcenter()
-        maven {
-            url 'https://sdk.uxcam.com/android/'
-        }
+        // maven {
+        //     url 'https://sdk.uxcam.com/android/'
+        // }
+        mavenLocal()
     }
 }
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
-    implementation 'com.uxcam:uxcam:3.6.43'
+    // implementation 'com.uxcam:uxcam:3.6.43'
+    implementation 'com.uxcam:uxcam-debug:3.7.5-alpha.1'
 }
 
 if (isNewArchitectureEnabled()) {
