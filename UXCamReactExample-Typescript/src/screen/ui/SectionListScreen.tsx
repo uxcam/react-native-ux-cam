@@ -1,10 +1,11 @@
 import React from 'react';
-import {StyleSheet, View, SectionList, StatusBar, Image} from 'react-native';
+import {StyleSheet, Text, View, SectionList, StatusBar, Image} from 'react-native';
 
 import {palette} from '../../utils/palette';
 import AppText from '../../component/AppText';
 import {images} from '../../utils/images';
 import BaseScreen from '../base_screen';
+import RNUxcam from 'react-native-ux-cam';
 
 const DATA = [
   {
@@ -45,7 +46,12 @@ const SectionListScreen = React.memo(() => (
               style={styles.image}
               resizeMode="stretch"
             />
-            <AppText style={styles.title}>{item.title}</AppText>
+            <Text 
+            style={styles.title}
+            ref={label => {
+              RNUxcam.occludeSensitiveView(label);
+            }}
+            >{item.title}</Text>
           </View>
         )}
         renderSectionHeader={({section: {title}}) => (

@@ -10,19 +10,64 @@ import {
   TextInput,
   Modal,
   Alert,
+  Text,
   ImageBackground,
 } from 'react-native';
 import {palette} from '../../utils/palette';
 import {images} from '../../utils/images';
 import AppText from '../../component/AppText';
 import AppButton from '../../component/AppButton';
+import FullScreenBottomSheet from '../../component/FullScreenBottomSheet';
 import BaseScreen from '../base_screen';
+import RNUxcam from 'react-native-ux-cam';
+import { useFocusEffect } from '@react-navigation/native';
+
+function FormWithTextFieldOcclusion() {
+  useFocusEffect(
+    React.useCallback(() => {
+      // Occlude all text fields on this screen
+      RNUxcam.occludeAllTextFields(true);
+
+      return () => {
+        // Stop occluding when leaving screen
+        RNUxcam.occludeAllTextFields(false);
+      };
+    }, [])
+  );
+
+  return (
+    <View style={styles.formContainer}>
+      <AppText style={styles.formTitle}>Form with Text Field Occlusion</AppText>
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        keyboardType="email-address"
+        autoCapitalize="none"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        secureTextEntry
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Phone Number"
+        keyboardType="phone-pad"
+      />
+      <AppButton
+        style={[styles.button, styles.buttonOpen]}
+        onPress={() => Alert.alert('Form submitted')}>
+        <AppText style={styles.textStyle}>Submit Form</AppText>
+      </AppButton>
+    </View>
+  );
+}
 
 const SimpleComponentScreen = React.memo(() => {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   const [refreshing, setRefreshing] = React.useState(false);
-  const [number, onChangeNumber] = React.useState('');
+  //const [number, onChangeNumber] = React.useState('');
   const [modalVisible, setModalVisible] = useState(false);
 
   const onRefresh = React.useCallback(() => {
@@ -40,17 +85,15 @@ const SimpleComponentScreen = React.memo(() => {
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
-          <AppText style={styles.pullDownText}>
+          <Text
+            ref={label => {
+              RNUxcam.occludeSensitiveView(label);
+            }}
+            style={styles.pullDownText}>
             Pull down to see RefreshControl indicator
-          </AppText>
+          </Text>
 
-          <TextInput
-            style={styles.input}
-            onChangeText={onChangeNumber}
-            value={number}
-            placeholder="Placeholder"
-            keyboardType="numeric"
-          />
+          <FormWithTextFieldOcclusion />
 
           <Switch
             trackColor={{false: palette.green, true: palette.customBlue}}
@@ -109,6 +152,10 @@ const SimpleComponentScreen = React.memo(() => {
             onPress={() => setModalVisible(true)}>
             <AppText style={styles.textStyle}>Show Modal</AppText>
           </AppButton>
+          <FullScreenBottomSheet
+            isVisible={modalVisible}
+            onClose={() => setModalVisible(false)}
+          />
         </ScrollView>
       </View>
     </BaseScreen>
@@ -195,6 +242,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     backgroundColor: `${palette.black}c0`,
     padding: 50,
+  },
+  formContainer: {
+    width: '100%',
+    padding: 20,
+    marginVertical: 20,
+  },
+  formTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 20,
+    color: palette.black,
   },
 });
 

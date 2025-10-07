@@ -21,6 +21,7 @@
     "react-native-element-dropdown": "^2.12.2",
     "react-native-image-picker": "^7.2.3",
     "react-native-maps": "^1.20.1",
+    "react-native-modal": "^14.0.0-rc.1",
     "react-native-pager-view": "^6.6.1",
     "react-native-safe-area-context": "^5.0.0",
     "react-native-screens": "^4.3.0",
