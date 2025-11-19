@@ -1,6 +1,6 @@
 {
     "name": "react-native-ux-cam",
-    "version": "6.0.7",
+    "version": "6.0.8",
     "description": "React Native wrapper for uxcam.com.",
     "react-native": "src/index",
     "main": "src/index",
