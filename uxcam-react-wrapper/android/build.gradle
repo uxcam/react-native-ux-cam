@@ -61,6 +61,7 @@ rootProject.allprojects {
     repositories {
         google()
         jcenter()
+        mavenLocal()
         maven {
             url 'https://sdk.uxcam.com/android/'
         }
@@ -69,7 +70,7 @@ rootProject.allprojects {
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
-    implementation 'com.uxcam:uxcam:3.6.43'
+    implementation 'com.uxcam:uxcam-debug:3.8.2-alpha.2'
 }
 
 if (isNewArchitectureEnabled()) {

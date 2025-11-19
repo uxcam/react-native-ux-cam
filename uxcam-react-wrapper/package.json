@@ -20,6 +20,9 @@
     "author": "admin@uxcam.com",
     "license": "MIT",
     "homepage": "https://github.com/uxcam/react-native-ux-cam",
+    "dependencies": {
+        "@babel/runtime": "^7.20.0"
+    },
     "devDependencies": {
         "@types/jest": "^27.5.0",
         "@types/react": "^18.0.8",
