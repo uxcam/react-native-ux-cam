@@ -60,7 +60,7 @@ repositories {
 rootProject.allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven {
             url 'https://sdk.uxcam.com/android/'
         }
