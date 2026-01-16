@@ -1,6 +1,8 @@
 
 import { Occlusion, OcclusionType } from "./types";
 
+export { OcclusionType } from "./types";
+
 export class UXBlur implements Occlusion {
     readonly type: OcclusionType;
     constructor() {
