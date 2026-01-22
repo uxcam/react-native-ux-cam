@@ -15,9 +15,6 @@ buildscript {
 }
 
 def isNewArchitectureEnabled() {
-    if (project.hasProperty("uxcamNewArchEnabled")) {
-        return project.uxcamNewArchEnabled == "true"
-    }
     return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
 }
 
