@@ -35,7 +35,7 @@
     },
     "codegenConfig": {
         "name": "RNUxcamSpec",
-        "type": "all",
+        "type": "modules",
         "jsSrcsDir": "src"
     }
             
