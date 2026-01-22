@@ -1,7 +1,7 @@
-import RNUxcam, {UXCamConfiguration} from 'react-native-ux-cam';
+import RNUxcam, {Configuration} from 'react-native-ux-cam';
 
 export const startUXCam = (
-  configuration: UXCamConfiguration,
+  configuration: Configuration,
   username: string,
 ) => {
   RNUxcam.optIntoSchematicRecordings();
@@ -18,10 +18,9 @@ export const startUXCam = (
 };
 
 export const updateConfiguration = (
-  configuration: UXCamConfiguration,
+  configuration: Configuration,
   username: string,
 ) => {
-  RNUxcam.updateConfiguration(configuration);
   RNUxcam.setUserIdentity(username);
 
   console.log('Updated UXCam configuration ====>> ', configuration);

@@ -24,6 +24,7 @@ if (isNewArchitectureEnabled()) {
 }
 
 android {
+    namespace "com.uxcam"
     compileSdkVersion safeExtGet('compileSdkVersion', 33)
     buildToolsVersion safeExtGet('buildToolsVersion', "33.0.1")
 
@@ -60,7 +61,7 @@ repositories {
 rootProject.allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven {
             url 'https://sdk.uxcam.com/android/'
         }
@@ -68,8 +69,8 @@ rootProject.allprojects {
 }
 
 dependencies {
-    implementation 'com.facebook.react:react-native:+'
-    implementation 'com.uxcam:uxcam:3.8.6'
+    implementation("com.facebook.react:react-android")
+    implementation 'com.uxcam:uxcam:3.8.10'
 }
 
 if (isNewArchitectureEnabled()) {
@@ -77,5 +78,5 @@ if (isNewArchitectureEnabled()) {
          jsRootDir = file("../src/")
          libraryName = "RNUxcam"
          codegenJavaPackageName = "com.uxcam"
-     }
- }
+    }
+}

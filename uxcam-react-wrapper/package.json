@@ -1,6 +1,6 @@
 {
     "name": "react-native-ux-cam",
-    "version": "6.0.9",
+    "version": "6.0.10",
     "description": "React Native wrapper for uxcam.com.",
     "react-native": "src/index",
     "main": "src/index",
@@ -35,7 +35,7 @@
     },
     "codegenConfig": {
         "name": "RNUxcamSpec",
-        "type": "all",
+        "type": "modules",
         "jsSrcsDir": "src"
     }
             
