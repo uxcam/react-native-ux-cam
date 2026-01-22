@@ -6,7 +6,6 @@ buildscript {
 
     repositories {
         google()
-        mavenLocal()
         mavenCentral()
     }
 
@@ -59,14 +58,12 @@ repositories {
         // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
         url "$projectDir/../node_modules/react-native/android"
     }
-    mavenLocal()
     mavenCentral()
 }
 
 rootProject.allprojects {
     repositories {
         google()
-        mavenLocal()
         mavenCentral()
         maven {
             url 'https://sdk.uxcam.com/android/'
