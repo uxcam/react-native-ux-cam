@@ -9,7 +9,7 @@
 import React, {Component} from 'react';
 import {StyleSheet} from 'react-native';
 import RNUxcam from 'react-native-ux-cam';
-import {UXCamOcclusionType} from 'react-native-ux-cam/UXCamOcclusion';
+import {OcclusionType} from 'react-native-ux-cam';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {VideoScreen} from './screens/VideoScreen.js';
@@ -24,7 +24,7 @@ export default class App extends Component<Props> {
   componentDidMount() {
     RNUxcam.optIntoSchematicRecordings();
     const overlay = {
-      type: UXCamOcclusionType.Overlay,
+      type: OcclusionType.Overlay,
       color: 0x000000,
     };
     const configuration = {
