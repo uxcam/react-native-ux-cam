@@ -70,7 +70,7 @@ rootProject.allprojects {
 
 dependencies {
     implementation("com.facebook.react:react-android")
-    implementation 'com.uxcam:uxcam:3.8.11'
+    implementation 'com.uxcam:uxcam:3.8.12'
 }
 
 if (isNewArchitectureEnabled()) {
