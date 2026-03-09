@@ -286,4 +286,19 @@ export default class UXCam {
         @parameter screenName Name to apply to the current screen in the session video
     */
     static tagScreenName: (screenName: string) => void;
+
+    /**
+     *  Enable or disable JavaScript console log capture from WKWebViews.
+     *  When enabled, console.log/info/warn/error/debug calls in web views will be captured.
+     *
+     *  @parameter enabled Set `true` to enable JS console log capture, `false` to disable
+     */
+    static setJavaScriptConsoleLogCaptureEnabled: (enabled: boolean) => void;
+
+    /**
+     *  Returns whether JavaScript console log capture is currently enabled.
+     *
+     *  @return `true` if JS console log capture is enabled
+     */
+    static isJavaScriptConsoleLogCaptureEnabled: () => boolean;
 }

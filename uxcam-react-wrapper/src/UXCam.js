@@ -352,4 +352,23 @@ export default class UXCam {
         }
     }
 
+    /**
+     *  Enable or disable JavaScript console log capture from WKWebViews.
+     *  When enabled, console.log/info/warn/error/debug calls in web views will be captured.
+     *
+     *  @parameter enabled Set `true` to enable JS console log capture, `false` to disable
+     */
+    static setJavaScriptConsoleLogCaptureEnabled(enabled) {
+        UXCamBridge.setJavaScriptConsoleLogCaptureEnabled(enabled);
+    }
+
+    /**
+     *  Returns whether JavaScript console log capture is currently enabled.
+     *
+     *  @return `true` if JS console log capture is enabled
+     */
+    static isJavaScriptConsoleLogCaptureEnabled() {
+        return UXCamBridge.isJavaScriptConsoleLogCaptureEnabled();
+    }
+
 }

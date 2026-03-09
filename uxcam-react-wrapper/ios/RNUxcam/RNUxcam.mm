@@ -521,6 +521,16 @@ RCT_EXPORT_METHOD(setSessionProperty:(NSString *)propertyName value:(NSString *)
     [UXCam setSessionProperty:propertyName value:value];
 }
 
+RCT_EXPORT_METHOD(setJavaScriptConsoleLogCaptureEnabled:(BOOL)enabled)
+{
+    [UXCam setJavaScriptConsoleLogCaptureEnabled:enabled];
+}
+
+RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSNumber *, isJavaScriptConsoleLogCaptureEnabled)
+{
+    return @([UXCam isJavaScriptConsoleLogCaptureEnabled]);
+}
+
 // Thanks to this guard, we won't compile this code when we build for the old architecture.
 #ifdef RCT_NEW_ARCH_ENABLED
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:

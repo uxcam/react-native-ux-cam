@@ -205,4 +205,14 @@ public class RNUxcamModule extends NativeRNUxcamSpec {
     public void setSessionProperty(String key, String value) {
         this.impl.setSessionProperty(key, value);
     }
+
+    @Override
+    public void setJavaScriptConsoleLogCaptureEnabled(boolean enabled) {
+        this.impl.setJavaScriptConsoleLogCaptureEnabled(enabled);
+    }
+
+    @Override
+    public boolean isJavaScriptConsoleLogCaptureEnabled() {
+        return this.impl.isJavaScriptConsoleLogCaptureEnabled();
+    }
 }

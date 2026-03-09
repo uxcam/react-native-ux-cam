@@ -456,4 +456,12 @@ public class RNUxcamModuleImpl {
      public void setSessionProperty(String key, String value) {
         UXCam.setSessionProperty(key, value);
     }
+
+    public void setJavaScriptConsoleLogCaptureEnabled(boolean enabled) {
+        UXCam.setJavaScriptConsoleLogCaptureEnabled(enabled);
+    }
+
+    public boolean isJavaScriptConsoleLogCaptureEnabled() {
+        return UXCam.isJavaScriptConsoleLogCaptureEnabled();
+    }
 }
