@@ -16,7 +16,10 @@ export default class UXCam {
     static startWithConfiguration(configuration) {
         UXCamBridge.startWithConfiguration(configuration);
         // Auto-patch react-native-webview for JS console log capture
-        patchWebViewModule();
+        // Enabled by default; skip only if explicitly disabled in configuration
+        if (configuration.enableJavaScriptConsoleLogCapture !== false) {
+            patchWebViewModule();
+        }
     }
 
     static startWithKey(userAppKey) {
@@ -353,28 +356,6 @@ export default class UXCam {
         if (view) {
             UXCamBridge.unOccludeSensitiveView(findNodeHandle(view));
         }
-    }
-
-    /**
-     *  Enable or disable JavaScript console log capture from WKWebViews.
-     *  When enabled, console.log/info/warn/error/debug calls in web views will be captured.
-     *
-     *  @parameter enabled Set `true` to enable JS console log capture, `false` to disable
-     */
-    static setJavaScriptConsoleLogCaptureEnabled(enabled) {
-        UXCamBridge.setJavaScriptConsoleLogCaptureEnabled(enabled);
-        if (enabled) {
-            patchWebViewModule();
-        }
-    }
-
-    /**
-     *  Returns whether JavaScript console log capture is currently enabled.
-     *
-     *  @return `true` if JS console log capture is enabled
-     */
-    static isJavaScriptConsoleLogCaptureEnabled() {
-        return UXCamBridge.isJavaScriptConsoleLogCaptureEnabled();
     }
 
 }

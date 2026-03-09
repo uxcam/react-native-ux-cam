@@ -207,16 +207,6 @@ public class RNUxcamModule extends NativeRNUxcamSpec {
     }
 
     @Override
-    public void setJavaScriptConsoleLogCaptureEnabled(boolean enabled) {
-        this.impl.setJavaScriptConsoleLogCaptureEnabled(enabled);
-    }
-
-    @Override
-    public boolean isJavaScriptConsoleLogCaptureEnabled() {
-        return this.impl.isJavaScriptConsoleLogCaptureEnabled();
-    }
-
-    @Override
     public void reportJavaScriptConsoleLog(String level, String message) {
         this.impl.reportJavaScriptConsoleLog(level, message);
     }

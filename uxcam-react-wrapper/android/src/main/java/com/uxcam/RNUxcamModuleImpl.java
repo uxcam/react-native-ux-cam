@@ -56,6 +56,7 @@ public class RNUxcamModuleImpl {
     public static final String CONFIG = "config";
     public static final String BLUR_RADIUS = "blurRadius";
     public static final String HIDE_GESTURES = "hideGestures";
+    public static final String ENABLE_JS_CONSOLE_LOG_CAPTURE = "enableJavaScriptConsoleLogCapture";
 
     private static final String UXCAM_PLUGIN_TYPE = "react-native";
     private static final String UXCAM_REACT_PLUGIN_VERSION = "6.0.13";
@@ -117,7 +118,8 @@ public class RNUxcamModuleImpl {
          Boolean enableMultiSessionRecord = (Boolean) configMap.get(ENABLE_MUTLI_SESSION_RECORD);
          Boolean enableCrashHandling = (Boolean) configMap.get(ENABLE_CRASH_HANDLING);
          Boolean enableAutomaticScreenNameTagging = (Boolean) configMap.get(ENABLE_AUTOMATIC_SCREEN_NAME_TAGGING);
-         Boolean enableImprovedScreenCapture = (Boolean) configMap.get(ENABLE_IMPROVED_SCREEN_CAPTURE); 
+         Boolean enableImprovedScreenCapture = (Boolean) configMap.get(ENABLE_IMPROVED_SCREEN_CAPTURE);
+         Boolean enableJSConsoleLogCapture = (Boolean) configMap.get(ENABLE_JS_CONSOLE_LOG_CAPTURE);
          // // occlusion
          List<UXCamOcclusion> occlusionList = null;
          if (configMap.get(OCCLUSION) != null) {
@@ -137,8 +139,10 @@ public class RNUxcamModuleImpl {
              Log.d("config", "improved screen capture enabled " + enableImprovedScreenCapture);
              uxConfigBuilder.enableImprovedScreenCapture(enableImprovedScreenCapture);
          }
+         if (enableJSConsoleLogCapture != null)
+             uxConfigBuilder.enableJavaScriptConsoleLogCapture(enableJSConsoleLogCapture);
          if (occlusionList != null)
-             uxConfigBuilder.occlusions(occlusionList); 
+             uxConfigBuilder.occlusions(occlusionList);
          UXConfig config = uxConfigBuilder.build();
          return config;
     }
@@ -457,16 +461,8 @@ public class RNUxcamModuleImpl {
         UXCam.setSessionProperty(key, value);
     }
 
-    public void setJavaScriptConsoleLogCaptureEnabled(boolean enabled) {
-        UXCam.setJavaScriptConsoleLogCaptureEnabled(enabled);
-    }
-
-    public boolean isJavaScriptConsoleLogCaptureEnabled() {
-        return UXCam.isJavaScriptConsoleLogCaptureEnabled();
-    }
-
     public void reportJavaScriptConsoleLog(String level, String message) {
-        if (UXCam.isJavaScriptConsoleLogCaptureEnabled() && message != null && !message.isEmpty()) {
+        if (com.uxcam.datamodel.SettingsData.javaScriptConsoleLogCaptureEnabled && message != null && !message.isEmpty()) {
             android.util.Log.d("UXCam:JS", "[" + level.toUpperCase() + "] " + message);
         }
     }

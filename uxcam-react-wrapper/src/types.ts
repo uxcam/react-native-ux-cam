@@ -6,6 +6,7 @@ export interface Configuration {
     enableAutomaticScreenNameTagging?: boolean;
     enableAdvancedGestureRecognition?: boolean;
     enableNetworkLogging?: boolean;
+    enableJavaScriptConsoleLogCapture?: boolean;
     occlusions?: Occlusion[];
 }
 

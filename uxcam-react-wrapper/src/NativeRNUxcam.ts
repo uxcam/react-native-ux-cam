@@ -51,9 +51,7 @@ export interface Spec extends TurboModule {
     applyOcclusion: (occlusion: Object) => void;
     removeOcclusion: (occlusion: Object) => void;
 
-    // JavaScript console log capture
-    setJavaScriptConsoleLogCaptureEnabled: (enabled: boolean) => void;
-    isJavaScriptConsoleLogCaptureEnabled: () => boolean;
+    // JavaScript console log capture (internal, used by UXCamWebView)
     reportJavaScriptConsoleLog: (level: string, message: string) => void;
 
     // Event Listeneres

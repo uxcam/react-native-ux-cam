@@ -204,16 +204,6 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void setJavaScriptConsoleLogCaptureEnabled(boolean enabled) {
-        this.impl.setJavaScriptConsoleLogCaptureEnabled(enabled);
-    }
-
-    @ReactMethod(isBlockingSynchronousMethod = true)
-    public boolean isJavaScriptConsoleLogCaptureEnabled() {
-        return this.impl.isJavaScriptConsoleLogCaptureEnabled();
-    }
-
-    @ReactMethod
     public void reportJavaScriptConsoleLog(String level, String message) {
         this.impl.reportJavaScriptConsoleLog(level, message);
     }

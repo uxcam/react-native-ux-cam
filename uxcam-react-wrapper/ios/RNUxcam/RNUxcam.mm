@@ -21,6 +21,7 @@ static NSString* const RNUxcam_CrashHandling = @"enableCrashHandling";
 static NSString* const RNUxcam_ScreenTag = @"enableAutomaticScreenNameTagging";
 static NSString* const RNUxcam_AdvancedGestures = @"enableAdvancedGestureRecognition";
 static NSString* const RNUxcam_EnableNetworkLogs = @"enableNetworkLogging";
+static NSString* const RNUxcam_EnableJSConsoleLogCapture = @"enableJavaScriptConsoleLogCapture";
 
 static NSString* const RNUxcam_Occlusion = @"occlusions";
 static NSString* const RNUxcam_OccludeScreens = @"screens";
@@ -150,7 +151,12 @@ RCT_EXPORT_METHOD(updateConfiguration:(NSDictionary *)config)
     {
         configuration.enableNetworkLogging = [RCTConvert BOOL:enableNetworkLogging];
     }
-    
+    NSNumber *enableJSConsoleLogCapture = config[RNUxcam_EnableJSConsoleLogCapture];
+    if (enableJSConsoleLogCapture)
+    {
+        configuration.enableJavaScriptConsoleLogCapture = [RCTConvert BOOL:enableJSConsoleLogCapture];
+    }
+
     NSArray *occlusionList = config[RNUxcam_Occlusion];
     if (occlusionList && ![occlusionList isKindOfClass:NSNull.class]) {
         UXCamOcclusion *occlusion = [[UXCamOcclusion alloc] init];
@@ -521,19 +527,9 @@ RCT_EXPORT_METHOD(setSessionProperty:(NSString *)propertyName value:(NSString *)
     [UXCam setSessionProperty:propertyName value:value];
 }
 
-RCT_EXPORT_METHOD(setJavaScriptConsoleLogCaptureEnabled:(BOOL)enabled)
-{
-    [UXCam setJavaScriptConsoleLogCaptureEnabled:enabled];
-}
-
-RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSNumber *, isJavaScriptConsoleLogCaptureEnabled)
-{
-    return @([UXCam isJavaScriptConsoleLogCaptureEnabled]);
-}
-
 RCT_EXPORT_METHOD(reportJavaScriptConsoleLog:(NSString *)level message:(NSString *)message)
 {
-    if ([UXCam isJavaScriptConsoleLogCaptureEnabled] && message.length > 0) {
+    if (UXCam.configuration.enableJavaScriptConsoleLogCapture && message.length > 0) {
         NSLog(@"[UXCam:JS]: [%@] %@", level.uppercaseString, message);
     }
 }
