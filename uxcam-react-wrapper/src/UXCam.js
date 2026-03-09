@@ -1,4 +1,5 @@
 import { Platform, NativeModules, findNodeHandle, NativeEventEmitter } from 'react-native'
+import { patchWebViewModule } from './UXCamWebView';
 
 const isTurboModuleEnabled = global.__turboModuleProxy != null;
 const UXCamBridge = isTurboModuleEnabled ? require("./NativeRNUxcam").default : NativeModules.RNUxcam;
@@ -11,9 +12,11 @@ const platformIOS = platform === "ios" ? true : false;
 const platformAndroid = platform === "android" ? true : false;
 
 export default class UXCam {
-    
+
     static startWithConfiguration(configuration) {
         UXCamBridge.startWithConfiguration(configuration);
+        // Auto-patch react-native-webview for JS console log capture
+        patchWebViewModule();
     }
 
     static startWithKey(userAppKey) {
@@ -360,6 +363,9 @@ export default class UXCam {
      */
     static setJavaScriptConsoleLogCaptureEnabled(enabled) {
         UXCamBridge.setJavaScriptConsoleLogCaptureEnabled(enabled);
+        if (enabled) {
+            patchWebViewModule();
+        }
     }
 
     /**

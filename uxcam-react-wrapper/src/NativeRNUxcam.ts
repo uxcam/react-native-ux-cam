@@ -54,6 +54,7 @@ export interface Spec extends TurboModule {
     // JavaScript console log capture
     setJavaScriptConsoleLogCaptureEnabled: (enabled: boolean) => void;
     isJavaScriptConsoleLogCaptureEnabled: () => boolean;
+    reportJavaScriptConsoleLog: (level: string, message: string) => void;
 
     // Event Listeneres
     addListener: (eventType: string) => void;

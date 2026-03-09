@@ -464,4 +464,10 @@ public class RNUxcamModuleImpl {
     public boolean isJavaScriptConsoleLogCaptureEnabled() {
         return UXCam.isJavaScriptConsoleLogCaptureEnabled();
     }
+
+    public void reportJavaScriptConsoleLog(String level, String message) {
+        if (UXCam.isJavaScriptConsoleLogCaptureEnabled() && message != null && !message.isEmpty()) {
+            android.util.Log.d("UXCam:JS", "[" + level.toUpperCase() + "] " + message);
+        }
+    }
 }
