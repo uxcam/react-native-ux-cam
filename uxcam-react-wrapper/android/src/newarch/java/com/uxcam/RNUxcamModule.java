@@ -207,7 +207,7 @@ public class RNUxcamModule extends NativeRNUxcamSpec {
     }
 
     @Override
-    public void reportJavaScriptConsoleLog(String level, String message) {
-        this.impl.reportJavaScriptConsoleLog(level, message);
+    public void reportJavaScriptConsoleLog(String level, String message, double jsTimestampMs) {
+        this.impl.reportJavaScriptConsoleLog(level, message, jsTimestampMs);
     }
 }

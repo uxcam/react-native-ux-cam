@@ -461,9 +461,10 @@ public class RNUxcamModuleImpl {
         UXCam.setSessionProperty(key, value);
     }
 
-    public void reportJavaScriptConsoleLog(String level, String message) {
+    public void reportJavaScriptConsoleLog(String level, String message, double jsTimestampMs) {
         if (com.uxcam.datamodel.SettingsData.javaScriptConsoleLogCaptureEnabled && message != null && !message.isEmpty()) {
             android.util.Log.d("UXCam:JS", "[" + level.toUpperCase() + "] " + message);
+            // TODO: Wire into Android SDK's session data with timeline offset from jsTimestampMs
         }
     }
 }

@@ -204,7 +204,7 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void reportJavaScriptConsoleLog(String level, String message) {
-        this.impl.reportJavaScriptConsoleLog(level, message);
+    public void reportJavaScriptConsoleLog(String level, String message, double jsTimestampMs) {
+        this.impl.reportJavaScriptConsoleLog(level, message, jsTimestampMs);
     }
 }

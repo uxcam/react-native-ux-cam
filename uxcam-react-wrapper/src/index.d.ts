@@ -288,19 +288,3 @@ export default class UXCam {
     */
     static tagScreenName: (screenName: string) => void;
 }
-
-/**
- * A WebView component that automatically captures JavaScript console logs
- * (console.log/info/warn/error/debug) and forwards them to the UXCam SDK.
- *
- * Drop-in replacement for react-native-webview's WebView component.
- * Requires `react-native-webview` to be installed as a peer dependency.
- *
- * @example
- * ```tsx
- * import { UXCamWebView } from 'react-native-ux-cam';
- *
- * <UXCamWebView source={{ uri: 'https://example.com' }} />
- * ```
- */
-export const UXCamWebView: React.ForwardRefExoticComponent<any & React.RefAttributes<any>>;

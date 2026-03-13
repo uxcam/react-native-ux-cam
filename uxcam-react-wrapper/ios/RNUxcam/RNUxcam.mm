@@ -93,7 +93,8 @@ RCT_EXPORT_METHOD(configurationForUXCam:(RCTPromiseResolveBlock)resolve
             RNUxcam_CrashHandling: @(configuration.enableCrashHandling),
             RNUxcam_ScreenTag: @(configuration.enableAutomaticScreenNameTagging),
             RNUxcam_AdvancedGestures: @(configuration.enableAdvancedGestureRecognition),
-            RNUxcam_EnableNetworkLogs: @(configuration.enableNetworkLogging)
+            RNUxcam_EnableNetworkLogs: @(configuration.enableNetworkLogging),
+            RNUxcam_EnableJSConsoleLogCapture: @(configuration.enableJavaScriptConsoleLogCapture)
         };
         resolve(configDict);
     }
@@ -527,11 +528,9 @@ RCT_EXPORT_METHOD(setSessionProperty:(NSString *)propertyName value:(NSString *)
     [UXCam setSessionProperty:propertyName value:value];
 }
 
-RCT_EXPORT_METHOD(reportJavaScriptConsoleLog:(NSString *)level message:(NSString *)message)
+RCT_EXPORT_METHOD(reportJavaScriptConsoleLog:(NSString *)level message:(NSString *)message timestamp:(double)jsTimestampMs)
 {
-    if (UXCam.configuration.enableJavaScriptConsoleLogCapture && message.length > 0) {
-        NSLog(@"[UXCam:JS]: [%@] %@", level.uppercaseString, message);
-    }
+    [UXCam reportConsoleLog:level message:message source:@"react-native" timestamp:jsTimestampMs];
 }
 
 // Thanks to this guard, we won't compile this code when we build for the old architecture.
