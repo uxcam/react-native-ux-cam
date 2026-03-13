@@ -1,7 +1,43 @@
-import { Platform, NativeModules, findNodeHandle, NativeEventEmitter } from 'react-native'
+import { Platform, NativeModules, findNodeHandle, NativeEventEmitter, AppState } from 'react-native'
+const { UXLogBuffer } = require('./UXLogBuffer');
 
 const isTurboModuleEnabled = global.__turboModuleProxy != null;
 const UXCamBridge = isTurboModuleEnabled ? require("./NativeRNUxcam").default : NativeModules.RNUxcam;
+
+// --- React Native JS runtime (Hermes/JSC) console capture ---
+let __uxcamRNConsolePatched = false;
+
+function patchRNConsole() {
+    if (__uxcamRNConsolePatched) return;
+    __uxcamRNConsolePatched = true;
+
+    const buffer = new UXLogBuffer({
+        transport: (batch) => {
+            for (const entry of batch) {
+                try {
+                    UXCamBridge.reportJavaScriptConsoleLog(entry.l, entry.m, entry.t);
+                } catch (e) { /* bridge not ready */ }
+            }
+        },
+    });
+
+    const levels = ['log', 'info', 'warn', 'error', 'debug'];
+    levels.forEach((level) => {
+        const original = console[level];
+        if (typeof original !== 'function') return;
+        console[level] = function (...args) {
+            buffer.enqueue(level, args);
+            return original.apply(console, args);
+        };
+    });
+
+    // Flush remaining buffer when app goes to background or is about to terminate
+    AppState.addEventListener('change', (nextState) => {
+        if (nextState === 'background' || nextState === 'inactive') {
+            buffer.flush();
+        }
+    });
+}
 
 const RNUxcam_VerifyEvent_Name = 'UXCam_Verification_Event';
 
@@ -11,9 +47,14 @@ const platformIOS = platform === "ios" ? true : false;
 const platformAndroid = platform === "android" ? true : false;
 
 export default class UXCam {
-    
+
     static startWithConfiguration(configuration) {
         UXCamBridge.startWithConfiguration(configuration);
+        // Auto-capture JS console logs unless explicitly disabled
+        // WebView content logs are handled automatically by native WKScriptMessageHandler
+        if (configuration.enableJavaScriptConsoleLogCapture !== false) {
+            patchRNConsole();
+        }
     }
 
     static startWithKey(userAppKey) {
@@ -213,7 +254,7 @@ export default class UXCam {
         } else if (typeof duration == 'number') {
             UXCamBridge.allowShortBreakForAnotherAppInMillis(duration);
         }
-        
+
     }
 
     /**
@@ -249,7 +290,7 @@ export default class UXCam {
     /**
         UXCam normally captures the view controller name automatically but in cases where it this is not sufficient (such as in OpenGL applications)
         or where you would like to set a different unique name, use this function to set the name.
-    
+
         @parameter screenName Name to apply to the current screen in the session video
     */
     static tagScreenName(screenName) {
@@ -258,10 +299,10 @@ export default class UXCam {
 
     /**
         Insert a general event, with associated properties, into the timeline - stores the event with the timestamp when it was added.
-     
+
         @parameter eventName Name of the event to attach to the session recording at the current time
         @parameter properties An Object of properties to associate with this event
-     
+
         @note Only number and string property types are supported to a maximum count of 100 and maximum size per entry of 1KiB
      */
     static logEvent(eventName, properties) {
@@ -271,7 +312,7 @@ export default class UXCam {
      /**
      UXCam uses a unique number to tag a device.
      You can set a user identity for a device allowing you to more easily search for it on the dashboard and review their sessions further.
-     
+
      @parameters userIdentity String to apply to this user (device) in this recording session
      */
      static setUserIdentity(userIdentity) {
@@ -280,10 +321,10 @@ export default class UXCam {
 
     /**
      Add a key/value property for this user
-     
+
      @parameter propertyName Name of the property to attach to the user
      @parameter value A value to associate with this property
-     
+
      @note Only number and string value types are supported to a maximum size per entry of 1KiB
      */
      static setUserProperty(propertyName, value) {
@@ -296,10 +337,10 @@ export default class UXCam {
 
     /**
      Add a single key/value property to this session
-     
+
      @parameter propertyName Name of the property to attach to the session recording
      @parameter value A value to associate with this property
-     
+
      @note Only number and string value types are supported to a maximum size per entry of 1KiB
      */
     static setSessionProperty(propertyName, value) {
@@ -329,7 +370,7 @@ export default class UXCam {
                 // Add a small delay to allow the native view to be registered
                 setTimeout(() => {
                     UXCamBridge.occludeSensitiveView(tag, false);
-                }, 10); 
+                }, 10);
             }
         }
     }

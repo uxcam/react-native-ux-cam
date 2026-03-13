@@ -21,6 +21,7 @@ static NSString* const RNUxcam_CrashHandling = @"enableCrashHandling";
 static NSString* const RNUxcam_ScreenTag = @"enableAutomaticScreenNameTagging";
 static NSString* const RNUxcam_AdvancedGestures = @"enableAdvancedGestureRecognition";
 static NSString* const RNUxcam_EnableNetworkLogs = @"enableNetworkLogging";
+static NSString* const RNUxcam_EnableJSConsoleLogCapture = @"enableJavaScriptConsoleLogCapture";
 
 static NSString* const RNUxcam_Occlusion = @"occlusions";
 static NSString* const RNUxcam_OccludeScreens = @"screens";
@@ -92,7 +93,8 @@ RCT_EXPORT_METHOD(configurationForUXCam:(RCTPromiseResolveBlock)resolve
             RNUxcam_CrashHandling: @(configuration.enableCrashHandling),
             RNUxcam_ScreenTag: @(configuration.enableAutomaticScreenNameTagging),
             RNUxcam_AdvancedGestures: @(configuration.enableAdvancedGestureRecognition),
-            RNUxcam_EnableNetworkLogs: @(configuration.enableNetworkLogging)
+            RNUxcam_EnableNetworkLogs: @(configuration.enableNetworkLogging),
+            RNUxcam_EnableJSConsoleLogCapture: @(configuration.enableJavaScriptConsoleLogCapture)
         };
         resolve(configDict);
     }
@@ -150,7 +152,12 @@ RCT_EXPORT_METHOD(updateConfiguration:(NSDictionary *)config)
     {
         configuration.enableNetworkLogging = [RCTConvert BOOL:enableNetworkLogging];
     }
-    
+    NSNumber *enableJSConsoleLogCapture = config[RNUxcam_EnableJSConsoleLogCapture];
+    if (enableJSConsoleLogCapture)
+    {
+        configuration.enableJavaScriptConsoleLogCapture = [RCTConvert BOOL:enableJSConsoleLogCapture];
+    }
+
     NSArray *occlusionList = config[RNUxcam_Occlusion];
     if (occlusionList && ![occlusionList isKindOfClass:NSNull.class]) {
         UXCamOcclusion *occlusion = [[UXCamOcclusion alloc] init];
@@ -519,6 +526,11 @@ RCT_EXPORT_METHOD(setUserProperty:(NSString *)propertyName value:(NSString *)val
 RCT_EXPORT_METHOD(setSessionProperty:(NSString *)propertyName value:(NSString *)value)
 {
     [UXCam setSessionProperty:propertyName value:value];
+}
+
+RCT_EXPORT_METHOD(reportJavaScriptConsoleLog:(NSString *)level message:(NSString *)message timestamp:(double)jsTimestampMs)
+{
+    [UXCam reportConsoleLog:level message:message source:@"react-native" timestamp:jsTimestampMs];
 }
 
 // Thanks to this guard, we won't compile this code when we build for the old architecture.

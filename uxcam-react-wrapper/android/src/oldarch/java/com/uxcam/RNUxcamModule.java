@@ -202,4 +202,9 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
     public void setSessionProperty(String key, String value) {
         this.impl.setSessionProperty(key, value);
     }
+
+    @ReactMethod
+    public void reportJavaScriptConsoleLog(String level, String message, double jsTimestampMs) {
+        this.impl.reportJavaScriptConsoleLog(level, message, jsTimestampMs);
+    }
 }

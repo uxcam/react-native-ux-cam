@@ -50,7 +50,9 @@ export interface Spec extends TurboModule {
     
     applyOcclusion: (occlusion: Object) => void;
     removeOcclusion: (occlusion: Object) => void;
-   
+
+    // JavaScript console log capture (internal, used by patchRNConsole)
+    reportJavaScriptConsoleLog: (level: string, message: string, timestamp: number) => void;
 
     // Event Listeneres
     addListener: (eventType: string) => void;
