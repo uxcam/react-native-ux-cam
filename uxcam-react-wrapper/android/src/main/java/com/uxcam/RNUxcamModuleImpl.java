@@ -117,7 +117,7 @@ public class RNUxcamModuleImpl {
          Boolean enableMultiSessionRecord = (Boolean) configMap.get(ENABLE_MUTLI_SESSION_RECORD);
          Boolean enableCrashHandling = (Boolean) configMap.get(ENABLE_CRASH_HANDLING);
          Boolean enableAutomaticScreenNameTagging = (Boolean) configMap.get(ENABLE_AUTOMATIC_SCREEN_NAME_TAGGING);
-         Boolean enableImprovedScreenCapture = (Boolean) configMap.get(ENABLE_IMPROVED_SCREEN_CAPTURE);
+         Boolean enableImprovedScreenCapture = (Boolean) configMap.get(ENABLE_IMPROVED_SCREEN_CAPTURE); 
          // // occlusion
          List<UXCamOcclusion> occlusionList = null;
          if (configMap.get(OCCLUSION) != null) {
@@ -138,7 +138,7 @@ public class RNUxcamModuleImpl {
              uxConfigBuilder.enableImprovedScreenCapture(enableImprovedScreenCapture);
          }
          if (occlusionList != null)
-             uxConfigBuilder.occlusions(occlusionList);
+             uxConfigBuilder.occlusions(occlusionList); 
          UXConfig config = uxConfigBuilder.build();
          return config;
     }
