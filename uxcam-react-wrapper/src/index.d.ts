@@ -1,4 +1,3 @@
-import React from "react";
 import { EmitterSubscription } from "react-native";
 import { Configuration, Occlusion } from "./types";
 
