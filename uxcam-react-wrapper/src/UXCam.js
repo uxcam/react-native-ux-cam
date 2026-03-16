@@ -52,7 +52,7 @@ export default class UXCam {
         UXCamBridge.startWithConfiguration(configuration);
         // Auto-capture JS console logs unless explicitly disabled
         // WebView content logs are handled automatically by native WKScriptMessageHandler
-        if (configuration.enableJavaScriptConsoleLogCapture !== false) {
+        if (configuration.enableJavaScriptConsoleLogCapture !== false && platformIOS) {
             patchRNConsole();
         }
     }
