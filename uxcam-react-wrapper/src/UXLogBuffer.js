@@ -2,7 +2,8 @@
  * UXLogBuffer — Shared log buffer for UXCam JavaScript console log capture.
  *
  * Sentry-inspired design:
- * - Lazy serialization: primitives → String(), objects → '[Object]' (no JSON.stringify)
+ * - Safe serialization: primitives → String(), objects → depth-limited JSON (max 3 levels, 512 chars)
+ * - Circular reference protection via WeakSet
  * - Adaptive flush: errors flush immediately, others batch
  * - Configurable buffer size, flush interval, max message length
  * - Transport callback for platform-specific delivery
@@ -23,8 +24,9 @@ class UXLogBuffer {
     }
 
     /**
-     * Lazy serialization — avoids JSON.stringify overhead.
-     * Primitives are converted via String(), objects show as [Object].
+     * Safe serialization with depth limit — gives meaningful object content
+     * without the cost/risk of full JSON.stringify (circular refs, huge objects).
+     * Max depth 3, max 512 chars per arg, try/catch for safety.
      */
     _fmt(arg) {
         if (arg === undefined) return 'undefined';
@@ -32,8 +34,37 @@ class UXLogBuffer {
         const t = typeof arg;
         if (t === 'string') return arg;
         if (t === 'number' || t === 'boolean') return '' + arg;
-        // Sentry pattern: don't serialize objects on the hot path
-        return '[Object]';
+        if (t === 'function') return '[Function]';
+        // Safe stringify with depth limit for objects/arrays
+        try {
+            const s = this._safeStringify(arg, 3);
+            return s.length > 512 ? s.slice(0, 512) + '...' : s;
+        } catch (e) {
+            return '[Object]';
+        }
+    }
+
+    /**
+     * Depth-limited JSON serialization. Avoids circular ref crashes
+     * and limits output size by capping recursion depth.
+     * Uses a depth map per-object to track depth correctly across branches.
+     */
+    _safeStringify(obj, maxDepth) {
+        const seen = new WeakSet();
+        const depthMap = new WeakMap();
+        depthMap.set(obj, 0);
+        return JSON.stringify(obj, function (key, value) {
+            if (typeof value === 'object' && value !== null) {
+                if (seen.has(value)) return '[Circular]';
+                seen.add(value);
+                // Compute depth: parent depth + 1 (root is 0)
+                const parentDepth = (this && typeof this === 'object') ? (depthMap.get(this) || 0) : 0;
+                const currentDepth = parentDepth + (key === '' ? 0 : 1);
+                depthMap.set(value, currentDepth);
+                if (currentDepth >= maxDepth) return Array.isArray(value) ? '[Array]' : '[Object]';
+            }
+            return value;
+        });
     }
 
     /**

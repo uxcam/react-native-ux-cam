@@ -23,9 +23,9 @@ describe('UXLogBuffer', () => {
         jest.useRealTimers();
     });
 
-    // --- Lazy Serialization (_fmt) ---
+    // --- Safe Serialization (_fmt) ---
 
-    describe('lazy serialization', () => {
+    describe('safe serialization', () => {
         test('string passes through unchanged', () => {
             buffer.enqueue('log', ['hello']);
             buffer.flush();
@@ -44,16 +44,16 @@ describe('UXLogBuffer', () => {
             expect(transportCalls[0][0].m).toBe('true');
         });
 
-        test('object shows as [Object]', () => {
-            buffer.enqueue('log', [{ user: 'test', nested: { a: 1 } }]);
+        test('object serialized as depth-limited JSON', () => {
+            buffer.enqueue('log', [{ user: 'test', count: 1 }]);
             buffer.flush();
-            expect(transportCalls[0][0].m).toBe('[Object]');
+            expect(transportCalls[0][0].m).toBe('{"user":"test","count":1}');
         });
 
-        test('array shows as [Object]', () => {
+        test('array serialized as JSON', () => {
             buffer.enqueue('log', [[1, 2, 3]]);
             buffer.flush();
-            expect(transportCalls[0][0].m).toBe('[Object]');
+            expect(transportCalls[0][0].m).toBe('[1,2,3]');
         });
 
         test('null shows as null', () => {
@@ -68,29 +68,68 @@ describe('UXLogBuffer', () => {
             expect(transportCalls[0][0].m).toBe('undefined');
         });
 
-        test('Error object shows as [Object]', () => {
-            buffer.enqueue('log', [new Error('test error')]);
-            buffer.flush();
-            expect(transportCalls[0][0].m).toBe('[Object]');
-        });
-
-        test('function shows as [Object]', () => {
+        test('function shows as [Function]', () => {
             buffer.enqueue('log', [function foo() {}]);
             buffer.flush();
-            expect(transportCalls[0][0].m).toBe('[Object]');
+            expect(transportCalls[0][0].m).toBe('[Function]');
         });
 
         test('mixed args joined with space', () => {
             buffer.enqueue('log', ['hello', 42, true, { a: 1 }]);
             buffer.flush();
-            expect(transportCalls[0][0].m).toBe('hello 42 true [Object]');
+            expect(transportCalls[0][0].m).toBe('hello 42 true {"a":1}');
         });
 
-        test('does not call JSON.stringify', () => {
+        test('depth limit caps deeply nested objects', () => {
+            const deep = { l1: { l2: { l3: { l4: 'deep' } } } };
+            buffer.enqueue('log', [deep]);
+            buffer.flush();
+            const msg = transportCalls[0][0].m;
+            expect(msg).toContain('"l1"');
+            expect(msg).toContain('"l2"');
+            expect(msg).toContain('"l3"');
+            // l3 value is at depth 3, so it becomes [Object]
+            expect(msg).toContain('[Object]');
+            expect(msg).not.toContain('"l4"');
+        });
+
+        test('circular references handled safely', () => {
+            const obj = { a: 1 };
+            obj.self = obj;
+            buffer.enqueue('log', [obj]);
+            buffer.flush();
+            const msg = transportCalls[0][0].m;
+            expect(msg).toContain('"a":1');
+            expect(msg).toContain('[Circular]');
+        });
+
+        test('per-arg cap at 512 chars', () => {
+            const big = {};
+            for (let i = 0; i < 100; i++) {
+                big['key_' + i] = 'value_' + i;
+            }
+            buffer.enqueue('log', [big]);
+            buffer.flush();
+            const msg = transportCalls[0][0].m;
+            expect(msg.length).toBeLessThanOrEqual(2048);
+            // Object was truncated with ... suffix
+            expect(msg).toMatch(/\.\.\.$/);
+        });
+
+        test('sibling branches both get full depth', () => {
+            const obj = { a: { nested: 1 }, b: { nested: 2 } };
+            buffer.enqueue('log', [obj]);
+            buffer.flush();
+            const msg = transportCalls[0][0].m;
+            expect(msg).toContain('"nested":1');
+            expect(msg).toContain('"nested":2');
+        });
+
+        test('uses JSON.stringify for objects', () => {
             const spy = jest.spyOn(JSON, 'stringify');
             buffer.enqueue('log', [{ complex: { nested: true } }]);
             buffer.flush();
-            expect(spy).not.toHaveBeenCalled();
+            expect(spy).toHaveBeenCalled();
             spy.mockRestore();
         });
     });

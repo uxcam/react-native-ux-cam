@@ -462,9 +462,6 @@ public class RNUxcamModuleImpl {
     }
 
     public void reportJavaScriptConsoleLog(String level, String message, double jsTimestampMs) {
-        if (com.uxcam.datamodel.SettingsData.javaScriptConsoleLogCaptureEnabled && message != null && !message.isEmpty()) {
-            android.util.Log.d("UXCam:JS", "[" + level.toUpperCase() + "] " + message);
-            // TODO: Wire into Android SDK's session data with timeline offset from jsTimestampMs
-        }
+        UXCam.reportConsoleLog(level, message, "react-native", jsTimestampMs);
     }
 }
