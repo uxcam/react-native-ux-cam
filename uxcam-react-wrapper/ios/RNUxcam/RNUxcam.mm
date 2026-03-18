@@ -152,12 +152,6 @@ RCT_EXPORT_METHOD(updateConfiguration:(NSDictionary *)config)
     {
         configuration.enableNetworkLogging = [RCTConvert BOOL:enableNetworkLogging];
     }
-    NSNumber *enableJSConsoleLogCapture = config[RNUxcam_EnableJSConsoleLogCapture];
-    if (enableJSConsoleLogCapture)
-    {
-        configuration.enableJavaScriptConsoleLogCapture = [RCTConvert BOOL:enableJSConsoleLogCapture];
-    }
-
     NSArray *occlusionList = config[RNUxcam_Occlusion];
     if (occlusionList && ![occlusionList isKindOfClass:NSNull.class]) {
         UXCamOcclusion *occlusion = [[UXCamOcclusion alloc] init];
@@ -528,10 +522,6 @@ RCT_EXPORT_METHOD(setSessionProperty:(NSString *)propertyName value:(NSString *)
     [UXCam setSessionProperty:propertyName value:value];
 }
 
-RCT_EXPORT_METHOD(reportJavaScriptConsoleLog:(NSString *)level message:(NSString *)message timestamp:(double)jsTimestampMs)
-{
-    [UXCam reportConsoleLog:level message:message source:@"react-native" timestamp:jsTimestampMs];
-}
 
 // Thanks to this guard, we won't compile this code when we build for the old architecture.
 #ifdef RCT_NEW_ARCH_ENABLED

@@ -1,43 +1,7 @@
-import { Platform, NativeModules, findNodeHandle, NativeEventEmitter, AppState } from 'react-native'
-const { UXLogBuffer } = require('./UXLogBuffer');
+import { Platform, NativeModules, findNodeHandle, NativeEventEmitter } from 'react-native'
 
 const isTurboModuleEnabled = global.__turboModuleProxy != null;
 const UXCamBridge = isTurboModuleEnabled ? require("./NativeRNUxcam").default : NativeModules.RNUxcam;
-
-// --- React Native JS runtime (Hermes/JSC) console capture ---
-let __uxcamRNConsolePatched = false;
-
-function patchRNConsole() {
-    if (__uxcamRNConsolePatched) return;
-    __uxcamRNConsolePatched = true;
-
-    const buffer = new UXLogBuffer({
-        transport: (batch) => {
-            for (const entry of batch) {
-                try {
-                    UXCamBridge.reportJavaScriptConsoleLog(entry.l, entry.m, entry.t);
-                } catch (e) { /* bridge not ready */ }
-            }
-        },
-    });
-
-    const levels = ['log', 'info', 'warn', 'error', 'debug'];
-    levels.forEach((level) => {
-        const original = console[level];
-        if (typeof original !== 'function') return;
-        console[level] = function (...args) {
-            buffer.enqueue(level, args);
-            return original.apply(console, args);
-        };
-    });
-
-    // Flush remaining buffer when app goes to background or is about to terminate
-    AppState.addEventListener('change', (nextState) => {
-        if (nextState === 'background' || nextState === 'inactive') {
-            buffer.flush();
-        }
-    });
-}
 
 const RNUxcam_VerifyEvent_Name = 'UXCam_Verification_Event';
 
@@ -50,9 +14,6 @@ export default class UXCam {
 
     static startWithConfiguration(configuration) {
         UXCamBridge.startWithConfiguration(configuration);
-        if (configuration.enableJavaScriptConsoleLogCapture !== false && platformIOS) {
-            patchRNConsole();
-        }
     }
 
     static startWithKey(userAppKey) {
