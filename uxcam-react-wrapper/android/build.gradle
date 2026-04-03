@@ -62,15 +62,12 @@ rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
-        maven {
-            url 'https://sdk.uxcam.com/android/'
-        }
     }
 }
 
 dependencies {
     implementation("com.facebook.react:react-android")
-    implementation 'com.uxcam:uxcam:3.8.14'
+    implementation 'com.uxcam:uxcam:3.9.0'
 }
 
 if (isNewArchitectureEnabled()) {
