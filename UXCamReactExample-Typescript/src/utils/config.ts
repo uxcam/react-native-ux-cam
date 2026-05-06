@@ -4,7 +4,7 @@ export const startUXCam = (
   configuration: Configuration,
   username: string,
 ) => {
-  RNUxcam.optIntoSchematicRecordings();
+  RNUxcam.optIntoVideoRecording();
 
   console.log('Start UXCam API With configuration ====>> ', configuration);
 

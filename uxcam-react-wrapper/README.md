@@ -14,7 +14,7 @@ For iOS, you will need to update pod as well:
 ## Usage
 ```javascript
 import RNUxcam from 'react-native-ux-cam';
-RNUxcam.optIntoSchematicRecordings(); // Add this line to enable iOS screen recordings
+RNUxcam.optIntoVideoRecording(); // Add this line to enable screen recordings
  const configuration = {
     userAppKey: 'YOUR API KEY',
     /*
