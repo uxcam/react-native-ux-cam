@@ -149,7 +149,7 @@ export default class UXCam {
     static optOutOverall: () => void;
 
     /**
-     *  @deprecated Use {@link #optOutOfVideoRecording()} instead to start new session
+     *  @deprecated Use {@link #optOutOfVideoRecording()} instead to opt this device out of recordings
      *  This will opt this device out of schematic recordings for future sessions
      *  - any current session will be stopped and restarted with the last settings passed to `startWithKey`
      */
@@ -162,7 +162,7 @@ export default class UXCam {
     static optInOverall: () => void;
 
     /**
-     *  @deprecated Use {@link #optIntoVideoRecording()} instead to start new session
+     *  @deprecated Use {@link #optIntoVideoRecording()} instead to opt this device back into session recordings
      *  This will opt this device back into session recordings
      */
     static optIntoSchematicRecordings: () => void;
