@@ -45,7 +45,7 @@ const SchematicRecordingView: React.FC = React.memo(() => {
           ]}
           onPress={() => {
             Keyboard.dismiss();
-            UXCam.optIntoSchematicRecordings();
+            UXCam.optIntoVideoRecording();
             setReload(load => !load);
           }}>
           {isOptInto && (

@@ -161,6 +161,7 @@ export default class UXCam {
     static optInOverall: () => void;
 
     /**
+     *  @deprecated Use {@link #optIntoVideoRecording()} instead to start new session
      *  This will opt this device back into session recordings
      */
     static optIntoSchematicRecordings: () => void;
