@@ -32,7 +32,7 @@ static NSString* const RNUxcam_HideGestures = @"hideGestures";
 static NSString* const RNUxcam_OverlayColor = @"color";
 
 static NSString* const RNUxcam_PluginType = @"react-native";
-static NSString* const RNUxcam_PluginVersion = @"6.0.15";
+static NSString* const RNUxcam_PluginVersion = @"6.0.16";
 
 
 @interface RNUxcam ()
@@ -373,33 +373,32 @@ RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSNumber *, optInOverallStatus)
 
 RCT_EXPORT_METHOD(optIntoSchematicRecordings)
 {
-    [UXCam optIntoSchematicRecordings];
+    [UXCam optIntoVideoRecordings];
 }
 
 RCT_EXPORT_METHOD(optOutOfSchematicRecordings)
 {
-    [UXCam optOutOfSchematicRecordings];
+    [UXCam optOutOfVideoRecordings];
 }
 
 RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSNumber *, optInSchematicRecordingStatus)
 {
-    return @(UXCam.optInSchematicRecordingStatus);
+    return @(UXCam.optInVideoRecordingStatus);
 }
 
 RCT_EXPORT_METHOD(optIntoVideoRecording)
 {
-    // fallback to schematic recording
-    [UXCam optIntoSchematicRecordings];
+    [UXCam optIntoVideoRecordings];
 }
 
-RCT_EXPORT_METHOD(optOutOfVideoRecording)
+RCT_EXPORT_METHOD(optOutOfVideoRecordings)
 {
-    [UXCam optOutOfSchematicRecordings];
+    [UXCam optOutOfVideoRecordings];
 }
 
 RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSNumber *, optInVideoRecordingStatus)
 {
-    return @(UXCam.optInSchematicRecordingStatus);
+    return @(UXCam.optInVideoRecordingStatus);
 }
 
 RCT_EXPORT_METHOD(startNewSession)

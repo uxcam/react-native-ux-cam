@@ -149,6 +149,7 @@ export default class UXCam {
     static optOutOverall: () => void;
 
     /**
+     *  @deprecated Use {@link #optOutOfVideoRecording()} instead to opt this device out of recordings
      *  This will opt this device out of schematic recordings for future sessions
      *  - any current session will be stopped and restarted with the last settings passed to `startWithKey`
      */
@@ -161,6 +162,7 @@ export default class UXCam {
     static optInOverall: () => void;
 
     /**
+     *  @deprecated Use {@link #optIntoVideoRecording()} instead to opt this device back into session recordings
      *  This will opt this device back into session recordings
      */
     static optIntoSchematicRecordings: () => void;
@@ -171,7 +173,9 @@ export default class UXCam {
      */
     static optInOverallStatus: () => boolean;
 
-    /** Returns the opt-in status of this device for schematic recordings
+    /** 
+     *  @deprecated Use {@link #optInVideoRecordingStatus()} instead to get the current video recording status
+     *  Returns the opt-in status of this device for schematic recordings
      *  @returns `true` if the device is opted in to schematic recordings, `false` otherwise. The default is `false`.
      *  @note Use in conjunction with optInOverallStatus to control the overall recording status for the device
      */
