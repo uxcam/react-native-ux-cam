@@ -35,6 +35,57 @@ instead of the `UXCam` pod. Leaving `UXCAM_USE_SPM` unset keeps the default Coco
 > native module cannot be autolinked purely through SPM. This is expected to become possible around
 > React Native 0.84.
 
+### Migrating an existing app from CocoaPods to SPM
+
+If you already use this package via CocoaPods and want to move the UXCam SDK over to Swift Package
+Manager, follow these steps in your **app** (not in this package):
+
+**Prerequisites**
+
+- React Native **0.75+** (for the `spm_dependency` helper).
+- You are willing to enable `use_frameworks! :linkage => :dynamic`. This is project-wide and may
+  require fixing other native modules that don't support dynamic frameworks.
+
+**Steps**
+
+1. Add dynamic frameworks to `ios/Podfile`:
+
+   ```ruby
+   # ios/Podfile
+   use_frameworks! :linkage => :dynamic
+   ```
+
+2. Clear the existing CocoaPods state so the old `UXCam` pod is removed:
+
+   ```sh
+   cd ios
+   rm -rf Pods Podfile.lock
+   ```
+
+3. Reinstall pods **with the opt-in flag**:
+
+   ```sh
+   UXCAM_USE_SPM=1 pod install
+   cd ..
+   ```
+
+4. Verify the migration:
+   - `UXCam` no longer appears in `ios/Podfile.lock` (it is no longer a pod).
+   - The pod install log shows `[SPM] Adding SPM dependency on product ["UXCam"]`.
+   - On first build, Xcode resolves the package: `Resolved source packages: UXCam`.
+
+> ⚠️ The `UXCAM_USE_SPM=1` flag must be present on **every** `pod install`. If you run `pod install`
+> without it, the package falls back to the CocoaPods `UXCam` pod. To make the opt-in permanent for
+> your team, set the variable in your CI and local build scripts (for example, export it in your
+> shell profile or prefix your `pod install` step), since CocoaPods has no per-project way to persist
+> an environment variable.
+
+**Reverting back to CocoaPods**
+
+Run `pod install` again **without** `UXCAM_USE_SPM` set (after clearing `Pods`/`Podfile.lock`), and
+the UXCam SDK returns to being a CocoaPods pod. You can also remove the `use_frameworks!` line if no
+other dependency needs it.
+
 ## Usage
 ```javascript
 import RNUxcam from 'react-native-ux-cam';

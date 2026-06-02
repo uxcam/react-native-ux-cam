@@ -11,7 +11,7 @@ uxcam_version = '3.8.2'
 # React Native's `spm_dependency` helper (available since RN 0.75) and requires
 # the host app to use `use_frameworks! :linkage => :dynamic`. CocoaPods stays
 # the default so existing integrations are unaffected.
-uxcam_use_spm = ENV['UXCAM_USE_SPM'] == '1' && respond_to?(:spm_dependency)
+uxcam_use_spm = ENV['UXCAM_USE_SPM'] == '1' && defined?(spm_dependency) != nil
 
 Pod::Spec.new do |s|
   s.name         = "RNUxcam"
