@@ -5,6 +5,7 @@
 
 Version | Changes
 ------- | ----------
+6.0.18  | Optional Swift Package Manager sourcing of the UXCam iOS SDK (set `UXCAM_USE_SPM=1` for `pod install`); added future-facing `Package.swift` scaffold. CocoaPods remains the default.
 6.0.17  | Updated iOS SDK to 3.8.2 and Android to 3.10.2
 6.0.16  | Updated iOS SDK to 3.8.1 and Android to 3.10.0
 6.0.15  | Updated iOS SDK to 3.7.12 and Android to 3.9.0
