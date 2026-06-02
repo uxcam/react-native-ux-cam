@@ -91,3 +91,7 @@ package-lock.json
 /UXCamReactExample/android/.project
 /UXCamReactExample/android/.settings
 /UXCamReactExample-Typescript/android/.project
+
+#SPM build artifacts
+/uxcam-react-wrapper/.build/
+Package.resolved

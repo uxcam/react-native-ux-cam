@@ -7,6 +7,22 @@ For iOS, you will need to update pod as well:
 
 `cd ios && pod update && cd ..`
 
+### iOS requirements (Swift Package Manager)
+
+The UXCam iOS SDK is integrated via **Swift Package Manager** (the [`uxcam-ios-sdk`](https://github.com/uxcam/uxcam-ios-sdk)
+package), so two things are required:
+
+- **React Native 0.75+** — needed for the `spm_dependency` helper that wires the SDK into your
+  `pod install`. Older versions will fail with a clear error from the podspec.
+- **Dynamic frameworks** — add `use_frameworks! :linkage => :dynamic` to your `ios/Podfile`. CocoaPods
+  still autolinks the React Native glue for this module, but the UXCam SDK itself comes through SPM
+  and is no longer published as a CocoaPods pod.
+
+```ruby
+# ios/Podfile
+use_frameworks! :linkage => :dynamic
+```
+
 >Starting from 5.3.0, we no longer support project with react native version <0.60.0. Use manual linking for older version to add [UXCam](https://github.com/uxcam/ios-sdk/raw/main/UXCam.xcframework.zip) to your project.
 
 >iOS 10 is the lowest version supported for recording sessions, which matches the default minimum version for new React Native projects.

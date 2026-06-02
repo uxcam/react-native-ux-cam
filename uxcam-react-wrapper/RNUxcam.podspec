@@ -2,6 +2,20 @@ package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 
 folly_compiler_flags = '-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32'
 
+# Version of the UXCam iOS SDK this wrapper depends on.
+uxcam_version = '3.8.2'
+
+# The UXCam iOS SDK is sourced exclusively through Swift Package Manager via
+# React Native's `spm_dependency` helper (available since RN 0.75). The host app
+# must therefore use `use_frameworks! :linkage => :dynamic`. CocoaPods still
+# autolinks the React Native glue for this module, but the UXCam SDK itself no
+# longer ships as a CocoaPods pod.
+unless respond_to?(:spm_dependency)
+  raise "[RNUxcam] react-native-ux-cam requires React Native 0.75+ (the `spm_dependency` " \
+        "helper) because the UXCam SDK is integrated via Swift Package Manager. " \
+        "Also ensure your Podfile uses `use_frameworks! :linkage => :dynamic`."
+end
+
 Pod::Spec.new do |s|
   s.name         = "RNUxcam"
   s.version      = package["version"]
@@ -16,9 +30,14 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/uxcam/react-native-ux-cam", :tag => "#{s.version}" }
   s.source_files = "ios/**/*.{h,m,mm}"
   s.requires_arc = true
-  s.static_framework = true
+  # No `static_framework` here: the SPM-sourced UXCam SDK requires the host app
+  # to use dynamic frameworks (`use_frameworks! :linkage => :dynamic`).
 
-  s.dependency 'UXCam' , '~> 3.8.2'
+  spm_dependency(s,
+    url: 'https://github.com/uxcam/uxcam-ios-sdk.git',
+    requirement: { kind: 'upToNextMajorVersion', minimumVersion: uxcam_version },
+    products: ['UXCam']
+  )
 
   if defined? install_modules_dependencies
     # Default React Native dependencies for 0.71 and above (new and legacy architecture)

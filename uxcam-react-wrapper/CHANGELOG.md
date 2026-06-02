@@ -5,6 +5,7 @@
 
 Version | Changes
 ------- | ----------
+6.1.0   | iOS: UXCam SDK now integrated via Swift Package Manager (uxcam-ios-sdk) instead of CocoaPods. Requires React Native 0.75+ and `use_frameworks! :linkage => :dynamic`.
 6.0.17  | Updated iOS SDK to 3.8.2 and Android to 3.10.2
 6.0.16  | Updated iOS SDK to 3.8.1 and Android to 3.10.0
 6.0.15  | Updated iOS SDK to 3.7.12 and Android to 3.9.0
