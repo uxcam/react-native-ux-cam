@@ -10,7 +10,7 @@ uxcam_version = '3.8.2'
 # must therefore use `use_frameworks! :linkage => :dynamic`. CocoaPods still
 # autolinks the React Native glue for this module, but the UXCam SDK itself no
 # longer ships as a CocoaPods pod.
-unless respond_to?(:spm_dependency)
+unless defined?(spm_dependency)
   raise "[RNUxcam] react-native-ux-cam requires React Native 0.75+ (the `spm_dependency` " \
         "helper) because the UXCam SDK is integrated via Swift Package Manager. " \
         "Also ensure your Podfile uses `use_frameworks! :linkage => :dynamic`."
