@@ -18,7 +18,7 @@
   ],
     "repository": "https://github.com/uxcam/react-native-ux-cam",
     "author": "admin@uxcam.com",
-    "license": "MIT",
+    "license": "BSD-3-Clause",
     "homepage": "https://github.com/uxcam/react-native-ux-cam",
     "dependencies": {
         "@babel/runtime": "^7.20.0"
