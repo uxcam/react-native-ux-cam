@@ -82,7 +82,6 @@ yarn-error.log
 node_modules/
 npm-debug.log
 build
-package-lock.json
 
 # VS Code
 .vscode
