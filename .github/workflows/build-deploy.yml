@@ -1,107 +1,134 @@
 name: Publish React Native Package
+
 on:
   workflow_dispatch:
     inputs:
-      publish: 
-        description: Publish react native package
+      publish:
+        description: Publish react native package to npm
         type: boolean
         default: false
         required: true
 
+permissions: {}
+
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   job_release:
-    runs-on: ubuntu-latest
-    name: 'Release a new version'
+    name: Release a new version
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write # push tag
+    defaults:
+      run:
+        working-directory: uxcam-react-wrapper
     steps:
-      - name: Check out current commit (${{github.sha}})
-        uses: actions/checkout@v3
+      - name: Harden runner
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
         with:
-          token: ${{ secrets.GH_RELEASE_PAT }}
+          egress-policy: audit
+          disable-sudo: true
+
+      - name: Check out ${{ github.sha }}
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
           fetch-depth: 0
-      - name: Set git user credentials 
+          persist-credentials: false
+
+      - name: Read package version
+        id: version
         run: |
-            git config user.email "uxcam-mobile@uxcam.com"
-            git config user.name "UXCam"
-      - name: Get version name
-        id: get-version
-        run: |
-            cd uxcam-react-wrapper/ 
-            version=$(jq -r '.version' package.json)
-            echo $version
-            echo "::set-output name=version::$version"
+          version="$(jq -r '.version' package.json)"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "Releasing v$version"
+
       - name: Setup Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
-          node-version: '14.x'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: "24.x"
+          registry-url: "https://registry.npmjs.org"
+
       - name: Install dependencies
-        run: |
-            cd uxcam-react-wrapper/
-            npm install
-      - name: Verify package
-        run: |
-            cd uxcam-react-wrapper/
-            npm publish --dry-run
+        # --legacy-peer-deps: react-native peerDep conflicts with @types/react devDep under npm 7+.
+        run: npm ci --legacy-peer-deps --ignore-scripts
+
+      - name: Verify package (dry run)
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Publish package
+        run: npm publish --dry-run
+
+      - name: Publish to npm 🚀
         if: ${{ inputs.publish }}
-        run: |
-            cd uxcam-react-wrapper/
-            npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Add new tag to github
+        run: npm publish
+
+      - name: Generate changelog
+        id: changelog
         if: ${{ inputs.publish }}
         run: |
-            version="v${{ steps.get-version.outputs.version }}"
-            git tag -a $version -m "Release: $version"
-            git push origin --tags
-      - name: Generate Changelogs
-        id: changelogs
-        run: |
-            if ${{ inputs.publish }}; then
-              current_tag=$(git describe --tags --abbrev=0)
-            else 
-              current_tag=HEAD
-            fi
+          previous_tag="$(git describe --tags --abbrev=0 "HEAD^" 2>/dev/null || echo '')"
+          range="HEAD"
+          [ -n "$previous_tag" ] && range="${previous_tag}..HEAD"
 
-            previous_tag=$(git describe --tags --abbrev=0 ${current_tag}^)  
-            logs=$(git log ${current_tag}...${previous_tag} --pretty=format:"%s" -i --grep="^feat.*:" --grep="^fix.*:" --no-merges)
+          logs="$(git log "$range" --no-merges --pretty=format:'%s' -i \
+            --grep='^feat.*:' --grep='^fix.*:' \
+            | awk -F ':' '{ sub(/^ */, "", $2); print "- " $2 }')"
 
-            #santize commit logs 
-            logs=$(awk -F ":" '{ print $2 }' <<< $logs | sed -e 's/^ *//g' | sed -e 's/^./\u&/g')
+          {
+            echo "logs<<CHANGELOG_EOF"
+            echo "$logs"
+            echo "CHANGELOG_EOF"
+          } >> "$GITHUB_OUTPUT"
+          echo "$logs"
 
-            #prepend line number 
-            logs=$(awk '{print NR, "-", $0}' <<< $logs)
-
-            # Remove new line in multiline change logs as sed doesn't support it
-            logs=$((sed -e '$ ! s/$/\\n/g' | tr -d '\n')  <<< $logs)
-            echo "::set-output name=logs::${logs}"
-            echo $logs
-            #save logs to new file 
-            touch changelog.txt
-            echo "$logs" > changelog.txt
-      - name: Generate Slack notification payload
-        id: slack-payload
+      - name: Create tag and GitHub Release
         if: ${{ inputs.publish }}
+        id: release
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          BODY: ${{ steps.changelog.outputs.logs }}
+          GH_TOKEN: ${{ github.token }}
         run: |
-            DATE=$(date +'%d/%m/%Y')
-            ESCAPED_DATE=$(echo "$DATE" | sed -e 's/[\/&]/\\&/g')
-            payload_path='./.github/workflows/slack-payload.json'
-            payload=$(cat $payload_path)
-            logs="${{ steps.changelogs.outputs.logs }}"
-            logs=$(sed -e 's/\\n/\\\\n/g' <<< $logs)
-            echo $logs
-          
-            echo "$payload" | sed -e "s/__PACKAGE_VERSION__/${{ steps.get-version.outputs.version }}/g" -e "s/__RELEASE_DATE__/${ESCAPED_DATE}/g" -e "s/__CHANGELOG__/$logs/g" > $payload_path
-            cat $payload_path
-      - name: Send notification to Slack
-        id: slack
+          url="$(gh release create "v$VERSION" \
+            --target "$GITHUB_SHA" \
+            --title "v$VERSION" \
+            --notes "$BODY" \
+            --latest)"
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+
+      - name: Notify Slack
         if: ${{ inputs.publish }}
-        uses: slackapi/slack-github-action@v1.18.0
+        uses: slackapi/slack-github-action@45a88b9581bfab2566dc881e2cd66d334e621e2c # v3.0.3
+        env:
+          PKG_VERSION: v${{ steps.version.outputs.version }}
+          CHANGELOG: ${{ steps.changelog.outputs.logs }}
+          RELEASE_URL: ${{ steps.release.outputs.url }}
         with:
-           payload-file-path: './.github/workflows/slack-payload.json'
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload-templated: true
+          payload: |
+            text: ":rocket: UXCam React Native Plugin {{ env.PKG_VERSION }} released :rocket:"
+            blocks:
+              - type: section
+                text:
+                  type: mrkdwn
+                  text: "<!here> UXCam React Native Plugin *{{ env.PKG_VERSION }}* has been released. :rocket:"
+              - type: section
+                fields:
+                  - type: mrkdwn
+                    text: "*SDK*\nReact Native Plugin"
+                  - type: mrkdwn
+                    text: "*Version*\n{{ env.PKG_VERSION }}"
+              - type: section
+                text:
+                  type: mrkdwn
+                  text: "*CHANGELOG (Internal):*\n{{ env.CHANGELOG }}"
+              - type: section
+                text:
+                  type: mrkdwn
+                  text: "<{{ env.RELEASE_URL }}|View release notes>"
