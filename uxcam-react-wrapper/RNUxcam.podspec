@@ -2,6 +2,9 @@ package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 
 folly_compiler_flags = '-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32'
 
+uxcam_version = '3.8.2'
+uxcam_use_spm = ENV['UXCAM_USE_SPM'] == '1' && defined?(spm_dependency) != nil
+
 Pod::Spec.new do |s|
   s.name         = "RNUxcam"
   s.version      = package["version"]
@@ -16,9 +19,17 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/uxcam/react-native-ux-cam", :tag => "#{s.version}" }
   s.source_files = "ios/**/*.{h,m,mm}"
   s.requires_arc = true
-  s.static_framework = true
+  s.static_framework = true unless uxcam_use_spm
 
-  s.dependency 'UXCam' , '~> 3.8.2'
+  if uxcam_use_spm
+    spm_dependency(s,
+      url: 'https://github.com/uxcam/uxcam-ios-sdk.git',
+      requirement: { kind: 'upToNextMajorVersion', minimumVersion: uxcam_version },
+      products: ['UXCam']
+    )
+  else
+    s.dependency 'UXCam', "~> #{uxcam_version}"
+  end
 
   if defined? install_modules_dependencies
     # Default React Native dependencies for 0.71 and above (new and legacy architecture)
