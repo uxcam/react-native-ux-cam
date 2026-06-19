@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.license      = "MIT"
   s.author       = { "author" => "author@uxcam.com" }
   s.platform     = :ios, "12.0"
-  s.source       = { :git => "https://github.com/uxcam/react-native-ux-cam", :tag => "#{s.version}" }
+  s.source       = { :git => "https://github.com/uxcam/react-native-ux-cam", :tag => "v#{s.version}" }
   s.source_files = "ios/**/*.{h,m,mm}"
   s.requires_arc = true
   s.static_framework = true

@@ -20,6 +20,22 @@
     "author": "admin@uxcam.com",
     "license": "BSD-3-Clause",
     "homepage": "https://github.com/uxcam/react-native-ux-cam",
+    "files": [
+        "CHANGELOG.md",
+        "README.md",
+        "RNUxcam.podspec",
+        "android/build.gradle",
+        "android/gradle/wrapper/gradle-wrapper.jar",
+        "android/gradle/wrapper/gradle-wrapper.properties",
+        "android/gradlew",
+        "android/gradlew.bat",
+        "android/src",
+        "android/src/main",
+        "android/src/newarch",
+        "android/src/oldarch",
+        "ios",
+        "src"
+    ],
     "dependencies": {
         "@babel/runtime": "^7.20.0"
     },
