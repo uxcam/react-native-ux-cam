@@ -1,13 +1,12 @@
 name: Publish React Native Package
 
 on:
-  workflow_dispatch:
-    inputs:
-      publish:
-        description: Publish react native package to npm
-        type: boolean
-        default: false
-        required: true
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, closed]
+  push:
+    tags:
+      - "v*"
 
 permissions: {}
 
@@ -16,12 +15,13 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  job_release:
-    name: Release a new version
+  release_readiness:
+    name: Validate release branch
+    if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' && startsWith(github.head_ref, 'release/v') }}
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     permissions:
-      contents: write # push tag
+      contents: read
     defaults:
       run:
         working-directory: uxcam-react-wrapper
@@ -38,41 +38,226 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Read package version
-        id: version
+      - name: Setup Node
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: "24.x"
+          registry-url: "https://registry.npmjs.org"
+          package-manager-cache: false
+
+      - name: Validate release branch inputs
+        env:
+          BRANCH_NAME: ${{ github.head_ref }}
+          GH_TOKEN: ${{ github.token }}
+          PACKAGE_NAME: react-native-ux-cam
         run: |
+          set -euo pipefail
+
+          expected_version="${BRANCH_NAME#release/v}"
           version="$(jq -r '.version' package.json)"
-          echo "version=$version" >> "$GITHUB_OUTPUT"
-          echo "Releasing v$version"
+          tag="v$version"
+
+          if ! echo "$expected_version" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z.-]+)?$'; then
+            echo "::error::Release branch must be named release/v<semver>; got $BRANCH_NAME"
+            exit 1
+          fi
+
+          if [ "$version" != "$expected_version" ]; then
+            echo "::error::package.json version $version does not match release branch version $expected_version"
+            exit 1
+          fi
+
+          android_version="$(sed -n 's/.*UXCAM_REACT_PLUGIN_VERSION = "\([^"]*\)".*/\1/p' android/src/main/java/com/uxcam/RNUxcamModuleImpl.java)"
+          ios_version="$(sed -n 's/.*RNUxcam_PluginVersion = @"\([^"]*\)".*/\1/p' ios/RNUxcam/RNUxcam.mm)"
+
+          if [ "$android_version" != "$version" ]; then
+            echo "::error::Android plugin version $android_version does not match package version $version"
+            exit 1
+          fi
+
+          if [ "$ios_version" != "$version" ]; then
+            echo "::error::iOS plugin version $ios_version does not match package version $version"
+            exit 1
+          fi
+
+          if ! grep -F ':tag => "v#{s.version}"' RNUxcam.podspec >/dev/null; then
+            echo "::error::RNUxcam.podspec must use the v-prefixed Git tag created by this workflow"
+            exit 1
+          fi
+
+          if npm view "$PACKAGE_NAME@$version" version --silent >/dev/null 2>&1; then
+            echo "::error::$PACKAGE_NAME@$version is already published to npm"
+            exit 1
+          fi
+
+          if git rev-parse -q --verify "refs/tags/$tag" >/dev/null; then
+            echo "::error::Git tag $tag already exists"
+            exit 1
+          fi
+
+          if gh release view "$tag" --json tagName >/dev/null 2>&1; then
+            echo "::error::GitHub Release $tag already exists"
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps --ignore-scripts
+
+      - name: Verify package contents
+        run: npm pack --dry-run
+
+  sync_develop:
+    name: Merge release back into develop
+    if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && startsWith(github.head_ref, 'release/v') }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Harden runner
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+        with:
+          egress-policy: audit
+          disable-sudo: true
+
+      - name: Check out develop
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          ref: develop
+          fetch-depth: 0
+
+      - name: Merge release commit into develop
+        env:
+          MERGE_COMMIT_SHA: ${{ github.event.pull_request.merge_commit_sha }}
+          RELEASE_BRANCH: ${{ github.head_ref }}
+        run: |
+          set -euo pipefail
+
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+
+          git fetch origin main develop --tags
+          git checkout develop
+          git reset --hard origin/develop
+          git merge --no-ff "$MERGE_COMMIT_SHA" -m "chore: merge $RELEASE_BRANCH back into develop"
+          git push origin develop
+
+  publish:
+    name: Publish tagged release
+    if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      id-token: write
+    defaults:
+      run:
+        working-directory: uxcam-react-wrapper
+    steps:
+      - name: Harden runner
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+        with:
+          egress-policy: audit
+          disable-sudo: true
+
+      - name: Check out ${{ github.sha }}
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          fetch-depth: 0
+          persist-credentials: false
 
       - name: Setup Node
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: "24.x"
           registry-url: "https://registry.npmjs.org"
+          package-manager-cache: false
+
+      - name: Verify trusted publishing prerequisites
+        run: |
+          set -euo pipefail
+
+          npm_version="$(npm --version)"
+          node - "$npm_version" <<'NODE'
+          const version = process.argv[2];
+          const [major, minor, patch] = version.split('.').map(Number);
+
+          if (
+            major < 11 ||
+            (major === 11 && minor < 5) ||
+            (major === 11 && minor === 5 && patch < 1)
+          ) {
+            console.error(`npm ${version} does not support trusted publishing; npm >=11.5.1 is required.`);
+            process.exit(1);
+          }
+          NODE
+
+      - name: Validate tagged release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PACKAGE_NAME: react-native-ux-cam
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+
+          version="$(jq -r '.version' package.json)"
+          expected_tag="v$version"
+
+          if [ "$TAG_NAME" != "$expected_tag" ]; then
+            echo "::error::Git tag $TAG_NAME does not match package version tag $expected_tag"
+            exit 1
+          fi
+
+          if ! echo "$version" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z.-]+)?$'; then
+            echo "::error::Invalid package version: $version"
+            exit 1
+          fi
+
+          android_version="$(sed -n 's/.*UXCAM_REACT_PLUGIN_VERSION = "\([^"]*\)".*/\1/p' android/src/main/java/com/uxcam/RNUxcamModuleImpl.java)"
+          ios_version="$(sed -n 's/.*RNUxcam_PluginVersion = @"\([^"]*\)".*/\1/p' ios/RNUxcam/RNUxcam.mm)"
+
+          if [ "$android_version" != "$version" ]; then
+            echo "::error::Android plugin version $android_version does not match package version $version"
+            exit 1
+          fi
+
+          if [ "$ios_version" != "$version" ]; then
+            echo "::error::iOS plugin version $ios_version does not match package version $version"
+            exit 1
+          fi
+
+          if ! grep -F ':tag => "v#{s.version}"' RNUxcam.podspec >/dev/null; then
+            echo "::error::RNUxcam.podspec must use the v-prefixed Git tag created by this workflow"
+            exit 1
+          fi
+
+          if npm view "$PACKAGE_NAME@$version" version --silent >/dev/null 2>&1; then
+            echo "::error::$PACKAGE_NAME@$version is already published to npm"
+            exit 1
+          fi
+
+          if gh release view "$TAG_NAME" --json tagName >/dev/null 2>&1; then
+            echo "::error::GitHub Release $TAG_NAME already exists"
+            exit 1
+          fi
 
       - name: Install dependencies
-        # --legacy-peer-deps: react-native peerDep conflicts with @types/react devDep under npm 7+.
         run: npm ci --legacy-peer-deps --ignore-scripts
 
-      - name: Verify package (dry run)
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --dry-run
+      - name: Verify package contents
+        run: npm pack --dry-run
 
-      - name: Publish to npm 🚀
-        if: ${{ inputs.publish }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish to npm
         run: npm publish
 
       - name: Generate changelog
         id: changelog
-        if: ${{ inputs.publish }}
         run: |
-          previous_tag="$(git describe --tags --abbrev=0 "HEAD^" 2>/dev/null || echo '')"
-          range="HEAD"
-          [ -n "$previous_tag" ] && range="${previous_tag}..HEAD"
+          set -euo pipefail
+
+          previous_tag="$(git describe --tags --abbrev=0 "$GITHUB_SHA^" 2>/dev/null || echo '')"
+          range="$GITHUB_SHA"
+          [ -n "$previous_tag" ] && range="${previous_tag}..$GITHUB_SHA"
 
           logs="$(git log "$range" --no-merges --pretty=format:'%s' -i \
             --grep='^feat.*:' --grep='^fix.*:' \
@@ -85,26 +270,25 @@ jobs:
           } >> "$GITHUB_OUTPUT"
           echo "$logs"
 
-      - name: Create tag and GitHub Release
-        if: ${{ inputs.publish }}
+      - name: Create GitHub Release
         id: release
         env:
-          VERSION: ${{ steps.version.outputs.version }}
           BODY: ${{ steps.changelog.outputs.logs }}
           GH_TOKEN: ${{ github.token }}
+          TAG_NAME: ${{ github.ref_name }}
         run: |
-          url="$(gh release create "v$VERSION" \
+          url="$(gh release create "$TAG_NAME" \
             --target "$GITHUB_SHA" \
-            --title "v$VERSION" \
+            --title "$TAG_NAME" \
             --notes "$BODY" \
             --latest)"
           echo "url=$url" >> "$GITHUB_OUTPUT"
 
       - name: Notify Slack
-        if: ${{ inputs.publish }}
+        continue-on-error: true
         uses: slackapi/slack-github-action@45a88b9581bfab2566dc881e2cd66d334e621e2c # v3.0.3
         env:
-          PKG_VERSION: v${{ steps.version.outputs.version }}
+          PKG_VERSION: ${{ github.ref_name }}
           CHANGELOG: ${{ steps.changelog.outputs.logs }}
           RELEASE_URL: ${{ steps.release.outputs.url }}
         with:
