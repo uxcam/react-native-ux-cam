@@ -139,12 +139,16 @@ RNUxcam.startWithConfiguration(configuration);
 
 ## Release
 
-1. Replace `android/libs/uxcam.jar` latest Android SDK jar file.
-2. Update iOS SDK version on `RNUxcam.podspec`
-3. Update plugin version on `package.json`, `android/src/main/java/com/uxcam/RNUxcamModule.java` and `ios/RNUxcam.m`
-4. Run `npm publish --dry-run` to validate changes.
-5. Run `npm publish` to publish the plugin.
-6. NB: If publishing a beta version then `npm publish --tag=beta`
+1. Create a release branch from `develop` named `release/v<version>`, for example `release/v6.0.18`.
+2. Update Android SDK version on `uxcam-react-wrapper/android/build.gradle`.
+3. Update iOS SDK version on `uxcam-react-wrapper/RNUxcam.podspec`.
+4. Update plugin version on `uxcam-react-wrapper/package.json`, `uxcam-react-wrapper/android/src/main/java/com/uxcam/RNUxcamModuleImpl.java` and `uxcam-react-wrapper/ios/RNUxcam/RNUxcam.mm`.
+5. Update `uxcam-react-wrapper/CHANGELOG.md`.
+6. Open a PR from `release/v<version>` into `main`; the release-readiness workflow validates npm, Git tag and GitHub Release availability.
+7. Merge the PR into `main`; the workflow automatically merges the release commit back into `develop`.
+8. Tag the `main` merge commit as `v<version>` and push the tag.
+9. The tag workflow publishes to npm, creates the GitHub Release and notifies Slack.
+10. NB: If publishing a beta version then update the GitHub Action publish command to use the intended npm dist-tag.
 
 ## History
 
