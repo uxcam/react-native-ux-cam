@@ -22,6 +22,7 @@
     "homepage": "https://github.com/uxcam/react-native-ux-cam",
     "files": [
         "CHANGELOG.md",
+        "LICENSE",
         "README.md",
         "RNUxcam.podspec",
         "android/build.gradle",
@@ -30,9 +31,6 @@
         "android/gradlew",
         "android/gradlew.bat",
         "android/src",
-        "android/src/main",
-        "android/src/newarch",
-        "android/src/oldarch",
         "ios",
         "src"
     ],
