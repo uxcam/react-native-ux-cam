@@ -262,6 +262,17 @@ export default class UXCam {
     /**
      * Hide a view that contains sensitive information or that you do not want recording on the screen video.
      *
+     * Register as early as you have the component - a ref callback is the recommended place. The view
+     * does not have to be laid out or on screen yet: it starts being masked on the first frame it
+     * becomes visible. Passing null (which React does on unmount) is a no-op.
+     *
+     * ```jsx
+     * <TextInput ref={(view) => UXCam.occludeSensitiveView(view)} />
+     * ```
+     *
+     * If the ref cannot be resolved to a native view the occlusion is not registered and a warning is
+     * logged, because that would otherwise record the view unmasked with no indication of the failure.
+     *
      * @parameter sensitiveView The view to occlude in the screen recording
      */
     static occludeSensitiveView: (sensitiveView: any) => void;
@@ -276,6 +287,10 @@ export default class UXCam {
 
     /**
      * Hide a view that contains sensitive information or that you do not want recording on the screen video.
+     * Gestures starting inside the view are not captured either.
+     *
+     * The same timing rules as {@link occludeSensitiveView} apply: register from a ref callback, an
+     * unattached view is fine, and null is a no-op.
      *
      * @parameter sensitiveView The view to occlude in the screen recording
      */

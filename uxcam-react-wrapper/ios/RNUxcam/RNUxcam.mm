@@ -5,6 +5,7 @@
 #import <React/RCTUIManager.h>
 #import <React/RCTUIManagerUtils.h>
 #import <React/RCTConvert.h>
+#import <React/RCTLog.h>
 
 // Thanks to this guard, we won't import this header when we build for the old architecture.
 #ifdef RCT_NEW_ARCH_ENABLED
@@ -34,10 +35,17 @@ static NSString* const RNUxcam_OverlayColor = @"color";
 static NSString* const RNUxcam_PluginType = @"react-native";
 static NSString* const RNUxcam_PluginVersion = @"6.0.20";
 
+// Occlusion Retry Constants.
+static const NSTimeInterval RNUxcamOcclusionRetryInitialDelay = 0.1;
+static const int RNUxcamOcclusionRetryMaxAttempts = 6;
 
 @interface RNUxcam ()
 @property (atomic, strong) NSNumber* lastVerifyResult;
 @property (atomic, assign) NSInteger numEventListeners;
+
+/// Occlusion Helper: Main-thread only.
+@property (nonatomic, strong) NSMutableDictionary<NSNumber *, NSNumber *> *pendingOcclusionGenerations;
+@property (nonatomic, assign) NSUInteger occlusionGenerationCounter;
 @end
 
 @implementation RNUxcam
@@ -318,26 +326,60 @@ RCT_EXPORT_METHOD(occludeSensitiveView:(double)tag hideGestures:(BOOL)hideGestur
     RCTExecuteOnUIManagerQueue(^{
         [self->_viewRegistry_DEPRECATED addUIBlock:^(RCTViewRegistry *viewRegistry) {
             RCTExecuteOnMainQueue(^{
-                UIView *view = [self->_viewRegistry_DEPRECATED viewForReactTag:@(tag)];
-                // Temporary fix for handling null views in new architecture mode until this is fully migrated to shadow nodes
-                if (![self isViewAvailableAndAttachedToSuperView:view]) {
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-                        UIView *view = [self->_viewRegistry_DEPRECATED viewForReactTag:@(tag)];
-                        if ([self isViewAvailableAndAttachedToSuperView:view]) {
-                            [self occludeView:view hideGesture:hideGestures];
-                        }
-                    });
-                } else {
-                    [self occludeView:view hideGesture:hideGestures];
-                }
+                NSUInteger generation = [self beginOcclusionRequestForTag:tag];
+                [self registerOcclusionForTag:tag
+                                 hideGestures:hideGestures
+                                   generation:generation
+                                      attempt:0];
             });
         }];
     });
-    
 }
 
-- (BOOL)isViewAvailableAndAttachedToSuperView:(UIView *)view {
-    return view != nil && view.superview != nil;
+- (NSUInteger)beginOcclusionRequestForTag:(double)tag
+{
+    if (!self.pendingOcclusionGenerations) {
+        self.pendingOcclusionGenerations = [NSMutableDictionary dictionary];
+    }
+    NSUInteger generation = ++self.occlusionGenerationCounter;
+    self.pendingOcclusionGenerations[@(tag)] = @(generation);
+    return generation;
+}
+
+- (void)registerOcclusionForTag:(double)tag
+                   hideGestures:(BOOL)hideGestures
+                     generation:(NSUInteger)generation
+                        attempt:(int)attempt
+{
+    if (![self.pendingOcclusionGenerations[@(tag)] isEqualToNumber:@(generation)]) {
+        return;
+    }
+
+    UIView *view = [self->_viewRegistry_DEPRECATED viewForReactTag:@(tag)];
+    if (view) {
+        [self.pendingOcclusionGenerations removeObjectForKey:@(tag)];
+        [self occludeView:view hideGesture:hideGestures];
+        return;
+    }
+
+    if (attempt >= RNUxcamOcclusionRetryMaxAttempts) {
+        [self.pendingOcclusionGenerations removeObjectForKey:@(tag)];
+        RCTLogWarn(@"[UXCam] occludeSensitiveView: abandoned occlusion registration for react tag %.0f — "
+                   @"the view never became resolvable after %d attempts. Sensitive content in this view "
+                   @"may appear UNMASKED in session replays. Ensure occludeSensitiveView is called with a "
+                   @"mounted component (e.g. from a ref callback), and report this warning to UXCam support.",
+                   tag, RNUxcamOcclusionRetryMaxAttempts);
+        return;
+    }
+
+    NSTimeInterval delay = RNUxcamOcclusionRetryInitialDelay * pow(2.0, attempt);
+    __weak RNUxcam *weakSelf = self;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [weakSelf registerOcclusionForTag:tag
+                             hideGestures:hideGestures
+                               generation:generation
+                                  attempt:attempt + 1];
+    });
 }
 
 - (void)occludeView:(UIView *)view hideGesture:(BOOL)hideGesture {
@@ -350,10 +392,15 @@ RCT_EXPORT_METHOD(occludeSensitiveView:(double)tag hideGestures:(BOOL)hideGestur
 
 RCT_EXPORT_METHOD(unOccludeSensitiveView:(double)tag)
 {
-    UIView *view = [_viewRegistry_DEPRECATED viewForReactTag:@(tag)];
-    if (view) {
-        [UXCam unOccludeSensitiveView:view];
-    }
+    RCTExecuteOnMainQueue(^{
+        // Cancel any pending occlusion-registration retry for this tag so it
+        // cannot re-occlude after the caller asked for the mask to be removed.
+        [self.pendingOcclusionGenerations removeObjectForKey:@(tag)];
+        UIView *view = [self->_viewRegistry_DEPRECATED viewForReactTag:@(tag)];
+        if (view) {
+            [UXCam unOccludeSensitiveView:view];
+        }
+    });
 }
 
 RCT_EXPORT_METHOD(optInOverall)

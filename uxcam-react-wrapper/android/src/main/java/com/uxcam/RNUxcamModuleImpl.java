@@ -60,6 +60,23 @@ public class RNUxcamModuleImpl {
     private static final String UXCAM_PLUGIN_TYPE = "react-native";
     private static final String UXCAM_REACT_PLUGIN_VERSION = "6.0.20";
 
+    // Mirrors Integration Logging
+    private static volatile boolean integrationLoggingEnabled = false;
+    private static final String OCCLUSION_LOG_TAG = "UXCam";
+
+    private static void logOcclusionWarning(String message) {
+        if (integrationLoggingEnabled) {
+            Log.w(OCCLUSION_LOG_TAG, message);
+        }
+    }
+
+    // Occlusion Registration Helper:
+    private static final long OCCLUSION_RETRY_INITIAL_DELAY_MS = 100;
+    private static final int OCCLUSION_RETRY_MAX_ATTEMPTS = 6;
+
+    private final Map<Integer, Integer> pendingOcclusionGenerations = new HashMap<>();
+    private int occlusionGenerationCounter = 0;
+
     private final ReactApplicationContext reactContext;
 
     public RNUxcamModuleImpl(ReactApplicationContext reactApplicationContext) {
@@ -125,8 +142,10 @@ public class RNUxcamModuleImpl {
              occlusionList = convertToOcclusionList(occlusionObjects);
          } 
          UXConfig.Builder uxConfigBuilder = new UXConfig.Builder(appKey);
-         if (enableIntegrationLogging != null)
+         if (enableIntegrationLogging != null) {
+             integrationLoggingEnabled = enableIntegrationLogging;
              uxConfigBuilder.enableIntegrationLogging(enableIntegrationLogging);
+         }
          if (enableMultiSessionRecord != null)
              uxConfigBuilder.enableMultiSessionRecord(enableMultiSessionRecord);
          if (enableCrashHandling != null)
@@ -155,7 +174,11 @@ public class RNUxcamModuleImpl {
     }
 
     private UXCamOcclusion getOcclusion(Map<String, Object> occlusionMap) {
-        double typeIndex = (double) occlusionMap.get(TYPE);
+        Object rawType = occlusionMap == null ? null : occlusionMap.get(TYPE);
+        if (!(rawType instanceof Number)) {
+            return null;
+        }
+        double typeIndex = ((Number) rawType).doubleValue();
         switch ((int)typeIndex) {
             case 1:
                 return (UXCamOcclusion) getOccludeAllTextFields();
@@ -225,12 +248,22 @@ public class RNUxcamModuleImpl {
     }
 
     public void applyOcclusion(ReadableMap occlusionMap) {
-        UXCamOcclusion occlusion = getOcclusion(occlusionMap.toHashMap());
+        UXCamOcclusion occlusion = occlusionMap == null ? null : getOcclusion(occlusionMap.toHashMap());
+        if (occlusion == null) {
+            logOcclusionWarning("applyOcclusion: the occlusion setting could not be read, so NO occlusion"
+                    + " was applied. Check the 'type' value (1 = all text fields, 2 = overlay, 3 = blur).");
+            return;
+        }
         UXCam.applyOcclusion(occlusion);
     }
 
     public void removeOcclusion(ReadableMap occlusionMap) {
-        UXCamOcclusion occlusion = getOcclusion(occlusionMap.toHashMap());
+        UXCamOcclusion occlusion = occlusionMap == null ? null : getOcclusion(occlusionMap.toHashMap());
+        if (occlusion == null) {
+            logOcclusionWarning("removeOcclusion: the occlusion setting could not be read, so NO occlusion"
+                    + " was removed. Check the 'type' value (1 = all text fields, 2 = overlay, 3 = blur).");
+            return;
+        }
         UXCam.removeOcclusion(occlusion);
     }
 
@@ -254,72 +287,126 @@ public class RNUxcamModuleImpl {
         UXCam.occludeSensitiveScreen(occlude, hideGestures);
     }
 
-    public void occludeSensitiveView(final double tag, boolean hideGestures) {
-        if (hideGestures) {
-            occludeSensitiveViewWithoutGesture((int)tag);
-        } else {
-            occludeSensitiveViewWithGesture((int)tag);
+    public void occludeSensitiveView(final double tag, final boolean hideGestures) {
+        final int viewTag = (int) tag;
+        UiThreadUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                int generation = beginOcclusionRequest(viewTag);
+                registerOcclusionForTag(viewTag, hideGestures, generation, 0);
+            }
+        });
+    }
+
+    private int beginOcclusionRequest(int viewTag) {
+        int generation = ++occlusionGenerationCounter;
+        pendingOcclusionGenerations.put(viewTag, generation);
+        return generation;
+    }
+
+    private void registerOcclusionForTag(final int viewTag, final boolean hideGestures,
+                                        final int generation, final int attempt) {
+        if (!isCurrentOcclusionRequest(viewTag, generation)) {
+            return; // Superseded by a newer occlude call, or cancelled by unocclude.
         }
-    }
 
-    public void occludeSensitiveViewWithGesture(final int id) {
-       findView(id, (new RNUxViewFinder() {
-           @Override
-           public void obtainView(View view) {
-               UXCam.occludeSensitiveView(view);
-           }
-       }));
-    }
-
-    public void occludeSensitiveViewWithoutGesture(final int id) {
-        findView(id, (new RNUxViewFinder() {
+        resolveView(viewTag, new RNUxViewFinder() {
             @Override
             public void obtainView(View view) {
-                UXCam.occludeSensitiveViewWithoutGesture(view);
+                if (!isCurrentOcclusionRequest(viewTag, generation)) {
+                    return;
+                }
+
+                if (view != null) {
+                    pendingOcclusionGenerations.remove(viewTag);
+                    if (hideGestures) {
+                        UXCam.occludeSensitiveViewWithoutGesture(view);
+                    } else {
+                        UXCam.occludeSensitiveView(view);
+                    }
+                    return;
+                }
+
+                if (attempt >= OCCLUSION_RETRY_MAX_ATTEMPTS) {
+                    pendingOcclusionGenerations.remove(viewTag);
+                    logOcclusionWarning("occludeSensitiveView: abandoned occlusion registration for"
+                            + " react tag " + viewTag + " - the view never became resolvable after "
+                            + OCCLUSION_RETRY_MAX_ATTEMPTS + " attempts. Sensitive content in this view may"
+                            + " appear UNMASKED in session replays. Call occludeSensitiveView with a mounted"
+                            + " component (for example from a ref callback), and report this warning to"
+                            + " UXCam support.");
+                    return;
+                }
+
+                long delayMs = OCCLUSION_RETRY_INITIAL_DELAY_MS << attempt;
+                UiThreadUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        registerOcclusionForTag(viewTag, hideGestures, generation, attempt + 1);
+                    }
+                }, delayMs);
             }
-        }));
+        });
+    }
+
+    private boolean isCurrentOcclusionRequest(int viewTag, int generation) {
+        Integer current = pendingOcclusionGenerations.get(viewTag);
+        return current != null && current == generation;
     }
 
     public void unOccludeSensitiveView(final double id) {
-        findView((int) id, (new RNUxViewFinder() {
+        final int viewTag = (int) id;
+        UiThreadUtil.runOnUiThread(new Runnable() {
             @Override
-            public void obtainView(View view) {
-                UXCam.unOccludeSensitiveView(view);
+            public void run() {
+                pendingOcclusionGenerations.remove(viewTag);
+                resolveView(viewTag, new RNUxViewFinder() {
+                    @Override
+                    public void obtainView(View view) {
+                        if (view != null) {
+                            UXCam.unOccludeSensitiveView(view);
+                        } else {
+                            logOcclusionWarning("unOccludeSensitiveView: react tag " + viewTag
+                                    + " did not resolve to a view - it stays masked in session replays.");
+                        }
+                    }
+                });
             }
-        }));
+        });
     }
 
-    private void findView(final int tag, RNUxViewFinder viewFinder) {
+    private void resolveView(final int tag, final RNUxViewFinder viewFinder) {
         int type = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED ? UIManagerType.FABRIC : UIManagerType.DEFAULT;
-        UIManager uiManager = UIManagerHelper.getUIManager(getReactApplicationContext(), type);
-        assert uiManager != null;
+        final UIManager uiManager = UIManagerHelper.getUIManager(getReactApplicationContext(), type);
+        if (uiManager == null) {
+            viewFinder.obtainView(null);
+            return;
+        }
+
         if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
-            // Temporary fix for nullable view on new architecture due to lazy loading
             UiThreadUtil.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    View view = null;
                     try {
-                        View view = uiManager.resolveView(tag);
-                        if (view != null) {
-                            viewFinder.obtainView(view);
-                        }
+                        view = uiManager.resolveView(tag);
                     } catch (IllegalViewOperationException e) {
-                        // Skip occlusion if view no longer exists
+                        // Not mounted (yet, or any more) - the caller decides whether to retry.
                     }
+                    viewFinder.obtainView(view);
                 }
-            }, 100);
+            });
         } else {
             ((UIManagerModule) uiManager).addUIBlock(new UIBlock() {
                 @Override
                 public void execute(NativeViewHierarchyManager nativeViewHierarchyManager) {
+                    View view = null;
                     try {
-                        View view = nativeViewHierarchyManager.resolveView(tag);
-                        if (view != null) {
-                            viewFinder.obtainView(view);
-                        }
+                        view = nativeViewHierarchyManager.resolveView(tag);
                     } catch (IllegalViewOperationException e) {
-                        // Skip occlusion if view no longer exists
+                        // Not mounted (yet, or any more) - the caller decides whether to retry.
                     }
+                    viewFinder.obtainView(view);
                 }
             });
         }

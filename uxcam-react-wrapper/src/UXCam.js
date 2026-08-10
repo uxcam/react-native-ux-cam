@@ -5,6 +5,23 @@ const UXCamBridge = isTurboModuleEnabled ? require("./NativeRNUxcam").default : 
 
 const RNUxcam_VerifyEvent_Name = 'UXCam_Verification_Event';
 
+// Occlusion Registration Helper
+function registerViewOcclusion(sensitiveView, hideGestures, apiName) {
+    if (sensitiveView == null) {
+        return;
+    }
+    const tag = findNodeHandle(sensitiveView);
+    if (tag == null) {
+        console.warn(
+            `UXCam: ${apiName} could not resolve a native view for the ref it was given — occlusion ` +
+            'was NOT registered and this view may appear unmasked in session replays. Pass a mounted ' +
+            `component, for example from a ref callback: ref={(v) => UXCam.${apiName}(v)}.`,
+        );
+        return;
+    }
+    UXCamBridge.occludeSensitiveView(tag, hideGestures);
+}
+
 // Capture the platform we are running on
 const platform = Platform.OS;
 const platformIOS = platform === "ios" ? true : false;
@@ -323,33 +340,26 @@ export default class UXCam {
     }
 
     static occludeSensitiveView(sensitiveView) {
-        if (sensitiveView) {
-            const tag = findNodeHandle(sensitiveView);
-            if (tag) {
-                // Add a small delay to allow the native view to be registered
-                setTimeout(() => {
-                    UXCamBridge.occludeSensitiveView(tag, false);
-                }, 10); 
-            }
-        }
+        registerViewOcclusion(sensitiveView, false, 'occludeSensitiveView');
     }
 
     static occludeSensitiveViewWithoutGesture(sensitiveView) {
-        if (sensitiveView) {
-            const tag = findNodeHandle(sensitiveView);
-            if (tag) {
-                // Add a small delay to allow the native view to be registered
-                setTimeout(() => {
-                    UXCamBridge.occludeSensitiveView(tag, true);
-                }, 10);
-            }
-        }
+        registerViewOcclusion(sensitiveView, true, 'occludeSensitiveViewWithoutGesture');
     }
 
     static unOccludeSensitiveView(view) {
-        if (view) {
-            UXCamBridge.unOccludeSensitiveView(findNodeHandle(view));
+        if (view == null) {
+            return;
         }
+        const tag = findNodeHandle(view);
+        if (tag == null) {
+            console.warn(
+                'UXCam: unOccludeSensitiveView could not resolve a native view for the ref it was ' +
+                'given — the view was NOT un-occluded and stays masked in session replays.',
+            );
+            return;
+        }
+        UXCamBridge.unOccludeSensitiveView(tag);
     }
 
 }
