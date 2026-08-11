@@ -10,6 +10,15 @@ const platform = Platform.OS;
 const platformIOS = platform === "ios" ? true : false;
 const platformAndroid = platform === "android" ? true : false;
 
+function occludeView(sensitiveView, hideGestures) {
+    if (sensitiveView) {
+        const tag = findNodeHandle(sensitiveView);
+        if (tag != null) {
+            UXCamBridge.occludeSensitiveView(tag, hideGestures);
+        }
+    }
+}
+
 export default class UXCam {
     
     static startWithConfiguration(configuration) {
@@ -323,32 +332,19 @@ export default class UXCam {
     }
 
     static occludeSensitiveView(sensitiveView) {
-        if (sensitiveView) {
-            const tag = findNodeHandle(sensitiveView);
-            if (tag) {
-                // Add a small delay to allow the native view to be registered
-                setTimeout(() => {
-                    UXCamBridge.occludeSensitiveView(tag, false);
-                }, 10); 
-            }
-        }
+        occludeView(sensitiveView, false);
     }
 
     static occludeSensitiveViewWithoutGesture(sensitiveView) {
-        if (sensitiveView) {
-            const tag = findNodeHandle(sensitiveView);
-            if (tag) {
-                // Add a small delay to allow the native view to be registered
-                setTimeout(() => {
-                    UXCamBridge.occludeSensitiveView(tag, true);
-                }, 10);
-            }
-        }
+        occludeView(sensitiveView, true);
     }
 
     static unOccludeSensitiveView(view) {
         if (view) {
-            UXCamBridge.unOccludeSensitiveView(findNodeHandle(view));
+            const tag = findNodeHandle(view);
+            if (tag != null) {
+                UXCamBridge.unOccludeSensitiveView(tag);
+            }
         }
     }
 

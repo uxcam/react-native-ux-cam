@@ -2,13 +2,13 @@
 #import <UXCam/UXCam.h>
 #import <UXCam/UXCamConfiguration.h>
 #import <UXCam/UXOcclusionHeaders.h>
-#import <React/RCTUIManager.h>
-#import <React/RCTUIManagerUtils.h>
 #import <React/RCTConvert.h>
+#import <React/RCTUIManagerUtils.h>
 
 // Thanks to this guard, we won't import this header when we build for the old architecture.
 #ifdef RCT_NEW_ARCH_ENABLED
 #import "RNUxcamSpec.h"
+#import <React/RCTSurfacePresenterStub.h>
 #endif
 
 static NSString* const RNUxcam_VerifyEvent_Name = @"UXCam_Verification_Event";
@@ -35,9 +35,17 @@ static NSString* const RNUxcam_PluginType = @"react-native";
 static NSString* const RNUxcam_PluginVersion = @"6.0.20";
 
 
+#ifdef RCT_NEW_ARCH_ENABLED
+@interface RNUxcam () <RCTSurfacePresenterObserver>
+#else
 @interface RNUxcam ()
+#endif
 @property (atomic, strong) NSNumber* lastVerifyResult;
 @property (atomic, assign) NSInteger numEventListeners;
+#ifdef RCT_NEW_ARCH_ENABLED
+@property (nonatomic, weak) id<RCTSurfacePresenterStub> surfacePresenter;
+@property (nonatomic, strong) NSMutableDictionary<NSNumber *, NSNumber *> *pendingViewOcclusions;
+#endif
 @end
 
 @implementation RNUxcam
@@ -45,6 +53,42 @@ static NSString* const RNUxcam_PluginVersion = @"6.0.20";
 RCT_EXPORT_MODULE();
 
 @synthesize viewRegistry_DEPRECATED = _viewRegistry_DEPRECATED;
+
+#ifdef RCT_NEW_ARCH_ENABLED
+- (instancetype)init
+{
+    if (self = [super init]) {
+        _pendingViewOcclusions = [NSMutableDictionary new];
+    }
+    return self;
+}
+
+- (void)setBridge:(RCTBridge *)bridge
+{
+    [super setBridge:bridge];
+    if (bridge.surfacePresenter) {
+        [self setSurfacePresenter:bridge.surfacePresenter];
+    }
+}
+
+- (void)setSurfacePresenter:(id<RCTSurfacePresenterStub>)surfacePresenter
+{
+    if (_surfacePresenter == surfacePresenter) {
+        return;
+    }
+
+    [_surfacePresenter removeObserver:self];
+    _surfacePresenter = surfacePresenter;
+    [_surfacePresenter addObserver:self];
+}
+
+- (void)invalidate
+{
+    [_surfacePresenter removeObserver:self];
+    [_pendingViewOcclusions removeAllObjects];
+    [super invalidate];
+}
+#endif
 
 /// TODO: Investigate if we can remove this and run on a general background Q
 - (dispatch_queue_t)methodQueue
@@ -315,29 +359,25 @@ RCT_EXPORT_METHOD(occludeSensitiveScreen:(BOOL)hideScreen hideGestures:(BOOL)hid
 
 RCT_EXPORT_METHOD(occludeSensitiveView:(double)tag hideGestures:(BOOL)hideGestures)
 {
-    RCTExecuteOnUIManagerQueue(^{
-        [self->_viewRegistry_DEPRECATED addUIBlock:^(RCTViewRegistry *viewRegistry) {
-            RCTExecuteOnMainQueue(^{
-                UIView *view = [self->_viewRegistry_DEPRECATED viewForReactTag:@(tag)];
-                // Temporary fix for handling null views in new architecture mode until this is fully migrated to shadow nodes
-                if (![self isViewAvailableAndAttachedToSuperView:view]) {
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-                        UIView *view = [self->_viewRegistry_DEPRECATED viewForReactTag:@(tag)];
-                        if ([self isViewAvailableAndAttachedToSuperView:view]) {
-                            [self occludeView:view hideGesture:hideGestures];
-                        }
-                    });
-                } else {
-                    [self occludeView:view hideGesture:hideGestures];
-                }
-            });
-        }];
-    });
-    
-}
+#ifdef RCT_NEW_ARCH_ENABLED
+    NSNumber *reactTag = @(tag);
+    UIView *view = [self->_viewRegistry_DEPRECATED viewForReactTag:reactTag];
+    if (view) {
+        [self occludeView:view hideGesture:hideGestures];
+        return;
+    }
 
-- (BOOL)isViewAvailableAndAttachedToSuperView:(UIView *)view {
-    return view != nil && view.superview != nil;
+    _pendingViewOcclusions[reactTag] = @(hideGestures);
+#else
+    RCTExecuteOnUIManagerQueue(^{
+      [self->_viewRegistry_DEPRECATED addUIBlock:^(RCTViewRegistry *viewRegistry) {
+        UIView *view = [viewRegistry viewForReactTag:@(tag)];
+        if (view) {
+            [self occludeView:view hideGesture:hideGestures];
+        }
+      }];
+    });
+#endif
 }
 
 - (void)occludeView:(UIView *)view hideGesture:(BOOL)hideGesture {
@@ -350,11 +390,32 @@ RCT_EXPORT_METHOD(occludeSensitiveView:(double)tag hideGestures:(BOOL)hideGestur
 
 RCT_EXPORT_METHOD(unOccludeSensitiveView:(double)tag)
 {
+#ifdef RCT_NEW_ARCH_ENABLED
+    [_pendingViewOcclusions removeObjectForKey:@(tag)];
+#endif
     UIView *view = [_viewRegistry_DEPRECATED viewForReactTag:@(tag)];
     if (view) {
         [UXCam unOccludeSensitiveView:view];
     }
 }
+
+#ifdef RCT_NEW_ARCH_ENABLED
+- (void)didMountComponentsWithRootTag:(__unused NSInteger)rootTag
+{
+    if (_pendingViewOcclusions.count == 0) {
+        return;
+    }
+
+    for (NSNumber *reactTag in _pendingViewOcclusions.allKeys) {
+        UIView *view = [self->_viewRegistry_DEPRECATED viewForReactTag:reactTag];
+        if (view) {
+            NSNumber *hideGestures = _pendingViewOcclusions[reactTag];
+            [_pendingViewOcclusions removeObjectForKey:reactTag];
+            [self occludeView:view hideGesture:hideGestures.boolValue];
+        }
+    }
+}
+#endif
 
 RCT_EXPORT_METHOD(optInOverall)
 {
