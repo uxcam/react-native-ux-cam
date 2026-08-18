@@ -31,26 +31,23 @@ subdirectory — its root is the package. Installing
 `#preview/webview-capture` (without the suffix) fails, because npm finds no
 `package.json` at the repository root.
 
-## 2. iOS — pin the preview pod in the Podfile
-
-Add one line to `ios/Podfile`, inside your app target:
-
-```ruby
-pod 'UXCam', :podspec => 'https://github.com/uxcam/uxcam-ios/releases/download/3.10.9-webview.1/UXCam.podspec'
-```
-
-Then:
+## 2. iOS — no Podfile changes
 
 ```bash
-cd ios && pod update UXCam
+cd ios && pod install
 ```
 
-Use `pod update UXCam`, not plain `pod install`. If `Podfile.lock` already pins a
-released `UXCam`, `pod install` keeps that pin and silently ignores the line you
-just added — verified while testing this build, where it stayed on `UXCam
-(3.10.1)` until `pod update UXCam` re-resolved it.
+Nothing else. The plugin's podspec downloads the preview XCFramework into the
+package during `pod install` and links it directly, so there is no `UXCam` pod to
+resolve and no Podfile line to add.
 
-`Podfile.lock` should then show `UXCam (3.10.9-webview.1)`. This is the same
+`Podfile.lock` should show `RNUxcam (6.0.22-webview.1)` and **no** separate
+`UXCam` entry — the SDK is vendored inside `RNUxcam` for this preview.
+
+The download needs network access on the machine running `pod install`. If it is
+behind a proxy that blocks GitHub release assets, fetch the archive manually and
+unzip it to `node_modules/react-native-ux-cam/ios/UXCam.xcframework`; the podspec
+skips the download when that directory already exists. This is the same
 mechanism every released UXCam version uses (a GitHub Release on
 `uxcam/uxcam-ios`); the preview is simply a prerelease there, so no released
 integration can pick it up by accident.
@@ -105,11 +102,11 @@ it is read when the session starts and changing it later has no effect.
 
 With `enableIntegrationLogging: true`:
 
-- **iOS** — check `ios/Podfile.lock` for `UXCam (3.10.9-webview.1)`. Do **not**
-  look for a `WebView DOM capture has been enabled` console line: integration
-  logging only becomes active when UXCam starts, which is after the
-  configuration is built, so that particular message is always suppressed. Its
-  absence says nothing about the flag.
+- **iOS** — confirm `node_modules/react-native-ux-cam/ios/UXCam.xcframework`
+  exists after `pod install`. Do **not** look for a `WebView DOM capture has been
+  enabled` console line: integration logging only becomes active when UXCam
+  starts, which is after the configuration is built, so that particular message
+  is always suppressed. Its absence says nothing about the flag.
 - **Android** — logcat shows
   `improved webview capture true -> enableFrameSyncOcclusion(true)` under the
   `config` tag.
@@ -128,4 +125,5 @@ npm install react-native-ux-cam@6.0.21
 ```
 
 Then run `pod install --repo-update`. The released plugin resolves `UXCam` from
-CocoaPods trunk in the normal way.
+CocoaPods trunk in the normal way; nothing needs undoing in your Podfile because
+the preview never asked you to change it.
