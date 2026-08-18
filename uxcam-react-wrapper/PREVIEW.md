@@ -42,10 +42,15 @@ pod 'UXCam', :podspec => 'https://github.com/uxcam/uxcam-ios/releases/download/3
 Then:
 
 ```bash
-cd ios && pod install
+cd ios && pod update UXCam
 ```
 
-`Podfile.lock` should show `UXCam (3.10.9-webview.1)`. This is the same
+Use `pod update UXCam`, not plain `pod install`. If `Podfile.lock` already pins a
+released `UXCam`, `pod install` keeps that pin and silently ignores the line you
+just added — verified while testing this build, where it stayed on `UXCam
+(3.10.1)` until `pod update UXCam` re-resolved it.
+
+`Podfile.lock` should then show `UXCam (3.10.9-webview.1)`. This is the same
 mechanism every released UXCam version uses (a GitHub Release on
 `uxcam/uxcam-ios`); the preview is simply a prerelease there, so no released
 integration can pick it up by accident.
@@ -100,7 +105,11 @@ it is read when the session starts and changing it later has no effect.
 
 With `enableIntegrationLogging: true`:
 
-- **iOS** — the console logs `[UXCam] WebView DOM capture has been enabled`.
+- **iOS** — check `ios/Podfile.lock` for `UXCam (3.10.9-webview.1)`. Do **not**
+  look for a `WebView DOM capture has been enabled` console line: integration
+  logging only becomes active when UXCam starts, which is after the
+  configuration is built, so that particular message is always suppressed. Its
+  absence says nothing about the flag.
 - **Android** — logcat shows
   `improved webview capture true -> enableFrameSyncOcclusion(true)` under the
   `config` tag.
