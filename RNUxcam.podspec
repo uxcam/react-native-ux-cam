@@ -18,7 +18,18 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.static_framework = true
 
-  s.dependency 'UXCam' , '~> 3.10.1'
+  # PREVIEW BUILD -- improved WebView capture.
+  #
+  # The UXCam build carrying `enableImprovedWebViewCapture` is not on CocoaPods
+  # trunk yet. It is distributed the same way as every released UXCam version --
+  # a GitHub Release on uxcam/uxcam-ios -- just as a prerelease, so the version
+  # requirement is left open here and the exact build is pinned from the app's
+  # Podfile:
+  #
+  #   pod 'UXCam', :podspec => 'https://github.com/uxcam/uxcam-ios/releases/download/3.10.9-webview.1/UXCam.podspec'
+  #
+  # Restore `s.dependency 'UXCam', '~> 3.10.1'` before merging back to develop.
+  s.dependency 'UXCam'
 
   if defined? install_modules_dependencies
     # Default React Native dependencies for 0.71 and above (new and legacy architecture)

@@ -1,6 +1,6 @@
 {
     "name": "react-native-ux-cam",
-    "version": "6.0.21",
+    "version": "6.0.22-webview.1",
     "description": "React Native wrapper for uxcam.com.",
     "react-native": "src/index",
     "main": "src/index",
@@ -24,6 +24,7 @@
         "CHANGELOG.md",
         "LICENSE",
         "README.md",
+        "PREVIEW.md",
         "RNUxcam.podspec",
         "android/build.gradle",
         "android/gradle/wrapper/gradle-wrapper.jar",

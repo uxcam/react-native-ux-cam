@@ -5,6 +5,7 @@
 
 Version | Changes
 ------- | ----------
+6.0.22-webview.1 | Preview build. Added `enableImprovedWebViewCapture` configuration option and bundled unreleased iOS/Android SDK 3.10.9-webview.1. Not for production. See PREVIEW.md
 6.0.21  | Updated iOS SDK to 3.10.1 and Android to 3.10.8
 6.0.20  | Updated iOS SDK to 3.10.0 and Android to 3.10.7
 6.0.19  | Updated iOS SDK to 3.8.4 and Android to 3.10.6

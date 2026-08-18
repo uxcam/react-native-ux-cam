@@ -40,6 +40,7 @@ public class RNUxcamModuleImpl {
     public static final String ENABLE_CRASH_HANDLING = "enableCrashHandling";
     public static final String ENABLE_AUTOMATIC_SCREEN_NAME_TAGGING = "enableAutomaticScreenNameTagging";
     public static final String ENABLE_IMPROVED_SCREEN_CAPTURE = "enableImprovedScreenCapture";
+    public static final String ENABLE_IMPROVED_WEBVIEW_CAPTURE = "enableImprovedWebViewCapture";
     public static final String OCCLUSION = "occlusions";
     public static final String SCREENS = "screens";
     public static final String NAME = "name";
@@ -50,7 +51,7 @@ public class RNUxcamModuleImpl {
     public static final String HIDE_GESTURES = "hideGestures";
 
     private static final String UXCAM_PLUGIN_TYPE = "react-native";
-    private static final String UXCAM_REACT_PLUGIN_VERSION = "6.0.21";
+    private static final String UXCAM_REACT_PLUGIN_VERSION = "6.0.22-webview.1";
 
     private final ReactApplicationContext reactContext;
     private final RNUxViewResolver viewResolver;
@@ -112,6 +113,7 @@ public class RNUxcamModuleImpl {
          Boolean enableCrashHandling = (Boolean) configMap.get(ENABLE_CRASH_HANDLING);
          Boolean enableAutomaticScreenNameTagging = (Boolean) configMap.get(ENABLE_AUTOMATIC_SCREEN_NAME_TAGGING);
          Boolean enableImprovedScreenCapture = (Boolean) configMap.get(ENABLE_IMPROVED_SCREEN_CAPTURE); 
+         Boolean enableImprovedWebViewCapture = (Boolean) configMap.get(ENABLE_IMPROVED_WEBVIEW_CAPTURE);
          // // occlusion
          List<UXCamOcclusion> occlusionList = null;
          if (configMap.get(OCCLUSION) != null) {
@@ -130,6 +132,18 @@ public class RNUxcamModuleImpl {
          if (enableImprovedScreenCapture != null) {
              Log.d("config", "improved screen capture enabled " + enableImprovedScreenCapture);
              uxConfigBuilder.enableImprovedScreenCapture(enableImprovedScreenCapture);
+         }
+         if (enableImprovedWebViewCapture != null) {
+             // Android has no WebView-specific switch. DOM-based WebView capture rides on
+             // frame-synchronized occlusion (MARKER_BASED_OCCLUSION), so that is the condition
+             // the cross-platform flag redirects to.
+             //
+             // Note the asymmetry with iOS: frame-sync occlusion is on by default here and
+             // covers all occlusion, not only WebViews. Passing true is therefore a no-op,
+             // while passing false also drops back to the legacy scroll-delta occlusion path.
+             Log.d("config", "improved webview capture " + enableImprovedWebViewCapture
+                     + " -> enableFrameSyncOcclusion(" + enableImprovedWebViewCapture + ")");
+             uxConfigBuilder.enableFrameSyncOcclusion(enableImprovedWebViewCapture);
          }
          if (occlusionList != null)
              uxConfigBuilder.occlusions(occlusionList); 
