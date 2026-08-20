@@ -4,6 +4,7 @@
 #import <UXCam/UXOcclusionHeaders.h>
 #import <React/RCTConvert.h>
 #import <React/RCTUIManagerUtils.h>
+#import <React/RCTViewManager.h>
 
 // Thanks to this guard, we won't import this header when we build for the old architecture.
 #ifdef RCT_NEW_ARCH_ENABLED
@@ -44,7 +45,8 @@ static NSString* const RNUxcam_PluginVersion = @"6.0.21";
 @property (atomic, assign) NSInteger numEventListeners;
 #ifdef RCT_NEW_ARCH_ENABLED
 @property (nonatomic, weak) id<RCTSurfacePresenterStub> surfacePresenter;
-@property (nonatomic, strong) NSMutableDictionary<NSNumber *, NSNumber *> *pendingViewOcclusions;
+@property (nonatomic, strong) NSMutableDictionary<NSNumber *, NSNumber *> *viewOcclusions;
+@property (nonatomic, strong) NSMapTable<NSNumber *, UIView *> *boundOcclusionViews;
 #endif
 @end
 
@@ -58,7 +60,8 @@ RCT_EXPORT_MODULE();
 - (instancetype)init
 {
     if (self = [super init]) {
-        _pendingViewOcclusions = [NSMutableDictionary new];
+        _viewOcclusions = [NSMutableDictionary new];
+        _boundOcclusionViews = [NSMapTable strongToWeakObjectsMapTable];
     }
     return self;
 }
@@ -85,7 +88,14 @@ RCT_EXPORT_MODULE();
 - (void)invalidate
 {
     [_surfacePresenter removeObserver:self];
-    [_pendingViewOcclusions removeAllObjects];
+    for (NSNumber *reactTag in _viewOcclusions) {
+        UIView *view = [_boundOcclusionViews objectForKey:reactTag];
+        if (view) {
+            [UXCam unOccludeSensitiveView:view];
+        }
+    }
+    [_viewOcclusions removeAllObjects];
+    [_boundOcclusionViews removeAllObjects];
     [super invalidate];
 }
 #endif
@@ -361,13 +371,8 @@ RCT_EXPORT_METHOD(occludeSensitiveView:(double)tag hideGestures:(BOOL)hideGestur
 {
 #ifdef RCT_NEW_ARCH_ENABLED
     NSNumber *reactTag = @(tag);
-    UIView *view = [self->_viewRegistry_DEPRECATED viewForReactTag:reactTag];
-    if (view) {
-        [self occludeView:view hideGesture:hideGestures];
-        return;
-    }
-
-    _pendingViewOcclusions[reactTag] = @(hideGestures);
+    _viewOcclusions[reactTag] = @(hideGestures);
+    [self bindOcclusionForReactTag:reactTag force:YES];
 #else
     RCTExecuteOnUIManagerQueue(^{
       [self->_viewRegistry_DEPRECATED addUIBlock:^(RCTViewRegistry *viewRegistry) {
@@ -390,29 +395,54 @@ RCT_EXPORT_METHOD(occludeSensitiveView:(double)tag hideGestures:(BOOL)hideGestur
 
 RCT_EXPORT_METHOD(unOccludeSensitiveView:(double)tag)
 {
+    UIView *boundView = nil;
 #ifdef RCT_NEW_ARCH_ENABLED
-    [_pendingViewOcclusions removeObjectForKey:@(tag)];
+    NSNumber *reactTag = @(tag);
+    boundView = [_boundOcclusionViews objectForKey:reactTag];
+    if (boundView) {
+        [UXCam unOccludeSensitiveView:boundView];
+    }
+    [_viewOcclusions removeObjectForKey:reactTag];
+    [_boundOcclusionViews removeObjectForKey:reactTag];
 #endif
     UIView *view = [_viewRegistry_DEPRECATED viewForReactTag:@(tag)];
-    if (view) {
+    if (view && view != boundView) {
         [UXCam unOccludeSensitiveView:view];
     }
 }
 
 #ifdef RCT_NEW_ARCH_ENABLED
-- (void)didMountComponentsWithRootTag:(__unused NSInteger)rootTag
+- (void)bindOcclusionForReactTag:(NSNumber *)reactTag force:(BOOL)force
 {
-    if (_pendingViewOcclusions.count == 0) {
+    NSNumber *hideGestures = _viewOcclusions[reactTag];
+    if (!hideGestures) {
         return;
     }
 
-    for (NSNumber *reactTag in _pendingViewOcclusions.allKeys) {
-        UIView *view = [self->_viewRegistry_DEPRECATED viewForReactTag:reactTag];
-        if (view) {
-            NSNumber *hideGestures = _pendingViewOcclusions[reactTag];
-            [_pendingViewOcclusions removeObjectForKey:reactTag];
-            [self occludeView:view hideGesture:hideGestures.boolValue];
+    UIView *previousView = [_boundOcclusionViews objectForKey:reactTag];
+    UIView *view = [self->_viewRegistry_DEPRECATED viewForReactTag:reactTag];
+    if (!view) {
+        if (previousView) {
+            [UXCam unOccludeSensitiveView:previousView];
+            [_boundOcclusionViews removeObjectForKey:reactTag];
         }
+        return;
+    }
+
+    if (!force && previousView == view) {
+        return;
+    }
+    if (previousView && previousView != view) {
+        [UXCam unOccludeSensitiveView:previousView];
+    }
+    [self occludeView:view hideGesture:hideGestures.boolValue];
+    [_boundOcclusionViews setObject:view forKey:reactTag];
+}
+
+- (void)didMountComponentsWithRootTag:(__unused NSInteger)rootTag
+{
+    for (NSNumber *reactTag in _viewOcclusions) {
+        [self bindOcclusionForReactTag:reactTag force:NO];
     }
 }
 #endif
@@ -589,5 +619,68 @@ RCT_EXPORT_METHOD(setSessionProperty:(NSString *)propertyName value:(NSString *)
     return std::make_shared<facebook::react::NativeRNUxcamSpecJSI>(params);
 }
 #endif
+
+@end
+
+@interface RNUxcamOccludeView : UIView
+@property (nonatomic, assign) BOOL hideGestures;
+- (void)registerOcclusion;
+@end
+
+@implementation RNUxcamOccludeView
+
+- (void)setTag:(NSInteger)tag
+{
+    BOOL changed = self.tag != tag;
+    [super setTag:tag];
+    if (changed && self.window) {
+        [self registerOcclusion];
+    }
+}
+
+- (void)didMoveToWindow
+{
+    [super didMoveToWindow];
+    if (self.window) {
+        [self registerOcclusion];
+    } else {
+        [UXCam unOccludeSensitiveView:self];
+    }
+}
+
+- (void)setHideGestures:(BOOL)hideGestures
+{
+    if (_hideGestures == hideGestures) {
+        return;
+    }
+    _hideGestures = hideGestures;
+    if (self.window) {
+        [self registerOcclusion];
+    }
+}
+
+- (void)registerOcclusion
+{
+    if (self.hideGestures) {
+        [UXCam occludeSensitiveViewWithoutGesture:self];
+    } else {
+        [UXCam occludeSensitiveView:self];
+    }
+}
+
+@end
+
+@interface RNUxcamOccludeViewManager : RCTViewManager
+@end
+
+@implementation RNUxcamOccludeViewManager
+
+RCT_EXPORT_MODULE(RNUxcamOccludeView)
+RCT_EXPORT_VIEW_PROPERTY(hideGestures, BOOL)
+
+- (UIView *)view
+{
+    return [RNUxcamOccludeView new];
+}
 
 @end
