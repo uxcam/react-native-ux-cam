@@ -1,7 +1,13 @@
-import { EmitterSubscription } from "react-native";
+import { EmitterSubscription, ViewProps } from "react-native";
 import { Configuration, Occlusion } from "./types";
 
 export * from './types';
+
+export interface UXCamOccludedViewProps extends ViewProps {
+    hideGestures?: boolean;
+}
+
+export const UXCamOccludedView: (props: UXCamOccludedViewProps) => any;
 
 export default class UXCam {
     /**
