@@ -1,4 +1,4 @@
-# react-native-ux-cam 6.0.22-webview.1 — WebView capture preview
+# react-native-ux-cam 6.0.22-webview.2 — WebView capture preview
 
 A preview build for verifying improved WebView capture. It uses UXCam native
 SDK builds that are **not published** to CocoaPods trunk or Maven Central.
@@ -12,9 +12,9 @@ normal release.
 
 | Component | Version |
 | --- | --- |
-| `react-native-ux-cam` | `6.0.22-webview.1` |
-| UXCam iOS SDK | `3.10.9-webview.1` (preview, built from `develop`) |
-| UXCam Android SDK | `3.10.9-webview.1` (preview, built from `develop`) |
+| `react-native-ux-cam` | `6.0.22-webview.2` |
+| UXCam iOS SDK | `3.10.9-webview.2` (preview, built from `develop`) |
+| UXCam Android SDK | `3.10.9-webview.2` (preview, built from `develop`) |
 
 ## 1. Install the plugin
 
@@ -41,7 +41,7 @@ Nothing else. The plugin's podspec downloads the preview XCFramework into the
 package during `pod install` and links it directly, so there is no `UXCam` pod to
 resolve and no Podfile line to add.
 
-`Podfile.lock` should show `RNUxcam (6.0.22-webview.1)` and **no** separate
+`Podfile.lock` should show `RNUxcam (6.0.22-webview.2)` and **no** separate
 `UXCam` entry — the SDK is vendored inside `RNUxcam` for this preview.
 
 The download needs network access on the machine running `pod install`. If it is
@@ -54,7 +54,7 @@ integration can pick it up by accident.
 
 ## 3. Android — no build.gradle changes
 
-The plugin pins `com.uxcam:uxcam:3.10.9-webview.1` and registers UXCam's public
+The plugin pins `com.uxcam:uxcam:3.10.9-webview.2` and registers UXCam's public
 Maven repository (`https://sdk.uxcam.com/android`) itself, so your app's
 `build.gradle` does not change.
 
@@ -70,7 +70,38 @@ dependencyResolutionManagement {
 }
 ```
 
-## 4. Enable improved WebView capture
+## 4. Occluding native views — prefer `UXCamOccludedView`
+
+For native (non-WebView) views, wrap the view instead of passing a ref to
+`occludeSensitiveView`:
+
+```jsx
+import RNUxcam, { UXCamOccludedView } from 'react-native-ux-cam';
+
+<UXCamOccludedView>
+  <BalanceCard />
+</UXCamOccludedView>
+```
+
+Pass `hideGestures` to also suppress taps inside the region:
+
+```jsx
+<UXCamOccludedView hideGestures>
+  <PinPad />
+</UXCamOccludedView>
+```
+
+This registers occlusion as part of the native view lifecycle, before the view
+can be captured. The older `occludeSensitiveView(ref)` / `unOccludeSensitiveView(ref)`
+pair registers after mount and is keyed on a ref, which can miss the first frames
+and go stale when rows are recycled — so in a `FlatList` or any recycling list the
+cover can end up on the wrong row. `UXCamOccludedView` has neither problem and is
+the recommended API.
+
+It does not replace WebView occlusion: content *inside* a WebView is still marked
+with the `uxcam-occlude` class in the page (see below).
+
+## 5. Enable improved WebView capture
 
 ```js
 import RNUxcam from 'react-native-ux-cam';
@@ -98,7 +129,7 @@ it is read when the session starts and changing it later has no effect.
   legacy path — useful for an A/B comparison, but it is a wider switch than the
   iOS one.
 
-## 5. Confirm you are running the preview build
+## 6. Confirm you are running the preview build
 
 With `enableIntegrationLogging: true`:
 
@@ -112,7 +143,7 @@ With `enableIntegrationLogging: true`:
   `config` tag.
 
 On the UXCam dashboard, sessions from this build report plugin version
-`6.0.22-webview.1`. Use that to tell preview sessions apart from released ones —
+`6.0.22-webview.2`. Use that to tell preview sessions apart from released ones —
 the iOS native SDK still reports its base version `3.10.1`, so the plugin version
 is the reliable marker.
 

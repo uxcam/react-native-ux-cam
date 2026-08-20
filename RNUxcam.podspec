@@ -41,9 +41,9 @@ Pod::Spec.new do |s|
 
   s.prepare_command = <<-CMD
     set -e
-    UXCAM_PREVIEW_URL="https://github.com/uxcam/uxcam-ios/releases/download/3.10.9-webview.1/UXCam.xcframework.zip"
+    UXCAM_PREVIEW_URL="https://github.com/uxcam/uxcam-ios/releases/download/3.10.9-webview.2/UXCam.xcframework.zip"
     if [ ! -d "ios/UXCam.xcframework" ]; then
-      echo "[RNUxcam] downloading preview UXCam SDK 3.10.9-webview.1..."
+      echo "[RNUxcam] downloading preview UXCam SDK 3.10.9-webview.2..."
       curl -fsSL --retry 3 "$UXCAM_PREVIEW_URL" -o "ios/UXCam.xcframework.zip"
       unzip -q -o "ios/UXCam.xcframework.zip" "UXCam.xcframework/*" -d "ios/"
       rm -f "ios/UXCam.xcframework.zip"
