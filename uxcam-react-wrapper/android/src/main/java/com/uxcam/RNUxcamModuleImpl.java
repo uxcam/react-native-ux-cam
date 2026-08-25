@@ -17,17 +17,9 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.ReadableType;
-import com.facebook.react.bridge.UIManager;
-import com.facebook.react.bridge.UiThreadUtil;
 import com.facebook.react.bridge.UnexpectedNativeTypeException;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
-import com.facebook.react.uimanager.NativeViewHierarchyManager;
-import com.facebook.react.uimanager.IllegalViewOperationException;
-import com.facebook.react.uimanager.UIBlock;
-import com.facebook.react.uimanager.UIManagerHelper;
-import com.facebook.react.uimanager.UIManagerModule;
-import com.facebook.react.uimanager.common.UIManagerType;
 import com.uxcam.screenshot.model.UXCamBlur;
 import com.uxcam.screenshot.model.UXCamOverlay;
 import com.uxcam.screenshot.model.UXCamOcclusion;
@@ -58,12 +50,14 @@ public class RNUxcamModuleImpl {
     public static final String HIDE_GESTURES = "hideGestures";
 
     private static final String UXCAM_PLUGIN_TYPE = "react-native";
-    private static final String UXCAM_REACT_PLUGIN_VERSION = "6.0.17";
+    private static final String UXCAM_REACT_PLUGIN_VERSION = "6.0.21";
 
     private final ReactApplicationContext reactContext;
+    private final RNUxViewResolver viewResolver;
 
     public RNUxcamModuleImpl(ReactApplicationContext reactApplicationContext) {
       this.reactContext = reactApplicationContext;
+      this.viewResolver = new RNUxViewResolver(reactApplicationContext);
       UXCam.addVerificationListener(new OnVerificationListener() {
                 @Override
                 public void onVerificationSuccess() {
@@ -263,7 +257,7 @@ public class RNUxcamModuleImpl {
     }
 
     public void occludeSensitiveViewWithGesture(final int id) {
-       findView(id, (new RNUxViewFinder() {
+       viewResolver.resolve(id, (new RNUxViewFinder() {
            @Override
            public void obtainView(View view) {
                UXCam.occludeSensitiveView(view);
@@ -272,7 +266,7 @@ public class RNUxcamModuleImpl {
     }
 
     public void occludeSensitiveViewWithoutGesture(final int id) {
-        findView(id, (new RNUxViewFinder() {
+        viewResolver.resolve(id, (new RNUxViewFinder() {
             @Override
             public void obtainView(View view) {
                 UXCam.occludeSensitiveViewWithoutGesture(view);
@@ -281,7 +275,7 @@ public class RNUxcamModuleImpl {
     }
 
     public void unOccludeSensitiveView(final double id) {
-        findView((int) id, (new RNUxViewFinder() {
+        viewResolver.resolve((int) id, (new RNUxViewFinder() {
             @Override
             public void obtainView(View view) {
                 UXCam.unOccludeSensitiveView(view);
@@ -289,40 +283,8 @@ public class RNUxcamModuleImpl {
         }));
     }
 
-    private void findView(final int tag, RNUxViewFinder viewFinder) {
-        int type = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED ? UIManagerType.FABRIC : UIManagerType.DEFAULT;
-        UIManager uiManager = UIManagerHelper.getUIManager(getReactApplicationContext(), type);
-        assert uiManager != null;
-        if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
-            // Temporary fix for nullable view on new architecture due to lazy loading
-            UiThreadUtil.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        View view = uiManager.resolveView(tag);
-                        if (view != null) {
-                            viewFinder.obtainView(view);
-                        }
-                    } catch (IllegalViewOperationException e) {
-                        // Skip occlusion if view no longer exists
-                    }
-                }
-            }, 100);
-        } else {
-            ((UIManagerModule) uiManager).addUIBlock(new UIBlock() {
-                @Override
-                public void execute(NativeViewHierarchyManager nativeViewHierarchyManager) {
-                    try {
-                        View view = nativeViewHierarchyManager.resolveView(tag);
-                        if (view != null) {
-                            viewFinder.obtainView(view);
-                        }
-                    } catch (IllegalViewOperationException e) {
-                        // Skip occlusion if view no longer exists
-                    }
-                }
-            });
-        }
+    public void invalidate() {
+        viewResolver.invalidate();
     }
 
     public void optInOverall() {

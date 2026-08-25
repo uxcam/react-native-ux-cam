@@ -27,6 +27,12 @@ public class RNUxcamModule extends NativeRNUxcamSpec {
     }
 
     @Override
+    public void invalidate() {
+        this.impl.invalidate();
+        super.invalidate();
+    }
+
+    @Override
     public void startWithConfiguration(ReadableMap configuration) {
         this.impl.startWithConfiguration(configuration);
     }

@@ -1,6 +1,6 @@
 {
     "name": "react-native-ux-cam",
-    "version": "6.0.17",
+    "version": "6.0.21",
     "description": "React Native wrapper for uxcam.com.",
     "react-native": "src/index",
     "main": "src/index",
@@ -18,8 +18,22 @@
   ],
     "repository": "https://github.com/uxcam/react-native-ux-cam",
     "author": "admin@uxcam.com",
-    "license": "MIT",
+    "license": "BSD-3-Clause",
     "homepage": "https://github.com/uxcam/react-native-ux-cam",
+    "files": [
+        "CHANGELOG.md",
+        "LICENSE",
+        "README.md",
+        "RNUxcam.podspec",
+        "android/build.gradle",
+        "android/gradle/wrapper/gradle-wrapper.jar",
+        "android/gradle/wrapper/gradle-wrapper.properties",
+        "android/gradlew",
+        "android/gradlew.bat",
+        "android/src",
+        "ios",
+        "src"
+    ],
     "dependencies": {
         "@babel/runtime": "^7.20.0"
     },
