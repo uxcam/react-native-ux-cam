@@ -58,16 +58,34 @@ repositories {
     mavenCentral()
 }
 
+// PREVIEW BUILD -- improved WebView capture.
+//
+// The Android build carrying the WebView occlusion hardening is not on Maven
+// Central yet. It is served from UXCam's own public Maven repository
+// (sdk.uxcam.com/android, the SDK's standard "Public" publishing target),
+// where only this exact prerelease coordinate resolves it. Injecting the
+// repository here means the host app needs no build.gradle changes.
+//
+// Drop this repository and restore the released coordinate before merging back
+// to develop.
+def uxcamPublicMavenUrl = "https://sdk.uxcam.com/android"
+
 rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url uxcamPublicMavenUrl
+            content {
+                includeGroup "com.uxcam"
+            }
+        }
     }
 }
 
 dependencies {
     implementation("com.facebook.react:react-android")
-    implementation 'com.uxcam:uxcam:3.10.8'
+    implementation 'com.uxcam:uxcam:3.10.9-webview.2'
 }
 
 if (isNewArchitectureEnabled()) {

@@ -22,6 +22,7 @@ static NSString* const RNUxcam_CrashHandling = @"enableCrashHandling";
 static NSString* const RNUxcam_ScreenTag = @"enableAutomaticScreenNameTagging";
 static NSString* const RNUxcam_AdvancedGestures = @"enableAdvancedGestureRecognition";
 static NSString* const RNUxcam_EnableNetworkLogs = @"enableNetworkLogging";
+static NSString* const RNUxcam_ImprovedWebViewCapture = @"enableImprovedWebViewCapture";
 
 static NSString* const RNUxcam_Occlusion = @"occlusions";
 static NSString* const RNUxcam_OccludeScreens = @"screens";
@@ -33,7 +34,7 @@ static NSString* const RNUxcam_HideGestures = @"hideGestures";
 static NSString* const RNUxcam_OverlayColor = @"color";
 
 static NSString* const RNUxcam_PluginType = @"react-native";
-static NSString* const RNUxcam_PluginVersion = @"6.0.21";
+static NSString* const RNUxcam_PluginVersion = @"6.0.22-webview.2";
 
 
 #ifdef RCT_NEW_ARCH_ENABLED
@@ -146,7 +147,8 @@ RCT_EXPORT_METHOD(configurationForUXCam:(RCTPromiseResolveBlock)resolve
             RNUxcam_CrashHandling: @(configuration.enableCrashHandling),
             RNUxcam_ScreenTag: @(configuration.enableAutomaticScreenNameTagging),
             RNUxcam_AdvancedGestures: @(configuration.enableAdvancedGestureRecognition),
-            RNUxcam_EnableNetworkLogs: @(configuration.enableNetworkLogging)
+            RNUxcam_EnableNetworkLogs: @(configuration.enableNetworkLogging),
+            RNUxcam_ImprovedWebViewCapture: @(configuration.enableImprovedWebViewCapture)
         };
         resolve(configDict);
     }
@@ -203,6 +205,11 @@ RCT_EXPORT_METHOD(updateConfiguration:(NSDictionary *)config)
     if (enableNetworkLogging)
     {
         configuration.enableNetworkLogging = [RCTConvert BOOL:enableNetworkLogging];
+    }
+    NSNumber *enableImprovedWebViewCapture = config[RNUxcam_ImprovedWebViewCapture];
+    if (enableImprovedWebViewCapture)
+    {
+        configuration.enableImprovedWebViewCapture = [RCTConvert BOOL:enableImprovedWebViewCapture];
     }
     
     NSArray *occlusionList = config[RNUxcam_Occlusion];
