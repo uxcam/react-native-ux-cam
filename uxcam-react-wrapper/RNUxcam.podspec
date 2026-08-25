@@ -14,11 +14,11 @@ Pod::Spec.new do |s|
   s.author       = { "author" => "author@uxcam.com" }
   s.platform     = :ios, "12.0"
   s.source       = { :git => "https://github.com/uxcam/react-native-ux-cam", :tag => "v#{s.version}" }
-  s.source_files = "ios/**/*.{h,m,mm}"
+  s.source_files = "ios/RNUxcam/**/*.{h,m,mm}"
   s.requires_arc = true
   s.static_framework = true
 
-  s.dependency 'UXCam' , '~> 3.10.1'
+  s.dependency 'UXCam' , '~> 3.10.2'
 
   if defined? install_modules_dependencies
     # Default React Native dependencies for 0.71 and above (new and legacy architecture)

@@ -4,7 +4,8 @@
 ## Release Notes ##
 
 Version | Changes
-------- | ----------
+------- | ---------- 
+6.0.22  | Updated iOS SDK to 3.10.2 and Android to 3.10.9 <br/> Improved WebView Capture.
 6.0.21  | Updated iOS SDK to 3.10.1 and Android to 3.10.8
 6.0.20  | Updated iOS SDK to 3.10.0 and Android to 3.10.7
 6.0.19  | Updated iOS SDK to 3.8.4 and Android to 3.10.6
@@ -43,12 +44,7 @@ Version | Changes
 5.4.3	| Updated iOS SDK to 3.4.5 and Android to 3.5.1
 5.4.2	| Updated iOS SDK to 3.4.3 and Android to 3.4.4
 5.4.1	| Updated iOS SDK to 3.4.2 and Android to 3.4.3
-5.4.0	| Updated iOS SDK to 3.4.1 and Android to 3.4.1
-		| Add support for configuration and occlusion apis
-5.3.4	| Examples updated the latest react-native versions
-		| Added Typescript example into this repo
-		| iOS SDK 3.3.9, Android SDK 3.3.7
-5.3.3	| Adding interface to the missing method `disableCrashHandling`
-		| iOS SDK 3.3.5, Android SDK 3.3.6
-		| Added a CHANGELOG
+5.4.0	| Updated iOS SDK to 3.4.1 and Android to 3.4.1 <br/> Add support for configuration and occlusion apis
+5.3.4	| Examples updated the latest react-native versions <br/> Added Typescript example into this repo <br/> iOS SDK 3.3.9, Android SDK 3.3.7
+5.3.3	| Adding interface to the missing method `disableCrashHandling` <br/> iOS SDK 3.3.5, Android SDK 3.3.6 <br/> Added a CHANGELOG
 
