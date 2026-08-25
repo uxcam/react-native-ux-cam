@@ -51,7 +51,7 @@ public class RNUxcamModuleImpl {
     public static final String HIDE_GESTURES = "hideGestures";
 
     private static final String UXCAM_PLUGIN_TYPE = "react-native";
-    private static final String UXCAM_REACT_PLUGIN_VERSION = "6.0.22-webview.2";
+    private static final String UXCAM_REACT_PLUGIN_VERSION = "6.0.22";
 
     private final ReactApplicationContext reactContext;
     private final RNUxViewResolver viewResolver;
@@ -134,13 +134,6 @@ public class RNUxcamModuleImpl {
              uxConfigBuilder.enableImprovedScreenCapture(enableImprovedScreenCapture);
          }
          if (enableImprovedWebViewCapture != null) {
-             // Android has no WebView-specific switch. DOM-based WebView capture rides on
-             // frame-synchronized occlusion (MARKER_BASED_OCCLUSION), so that is the condition
-             // the cross-platform flag redirects to.
-             //
-             // Note the asymmetry with iOS: frame-sync occlusion is on by default here and
-             // covers all occlusion, not only WebViews. Passing true is therefore a no-op,
-             // while passing false also drops back to the legacy scroll-delta occlusion path.
              Log.d("config", "improved webview capture " + enableImprovedWebViewCapture
                      + " -> enableFrameSyncOcclusion(" + enableImprovedWebViewCapture + ")");
              uxConfigBuilder.enableFrameSyncOcclusion(enableImprovedWebViewCapture);
