@@ -90,3 +90,7 @@ build
 /UXCamReactExample/android/.project
 /UXCamReactExample/android/.settings
 /UXCamReactExample-Typescript/android/.project
+
+#SPM build artifacts
+/uxcam-react-wrapper/.build/
+/uxcam-react-wrapper/Package.resolved

@@ -3,6 +3,8 @@
 ## Installation
 `$yarn add file:/path-to-the-uxcam-react-wrapper`
 
+#### [SPM (Swift Package Manager) Installation](SPM_INSTALL_GUIDE.md)
+
 For iOS, you will need to update pod as well:
 
 `cd ios && pod update && cd ..`
