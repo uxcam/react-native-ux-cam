@@ -14,6 +14,35 @@ For iOS, you will need to `pod update`  as well:
 
 `cd ios && pod update && cd ..`
 
+### Android
+
+The Android SDK is distributed from UXCam's Maven repository. Autolinking normally picks it up, but if your build fails with
+`Could not find com.uxcam:uxcam:<version>` (common with Expo and some Gradle setups) add the repository to your app:
+
+**Bare React Native** — `android/build.gradle`:
+
+```groovy
+allprojects {
+    repositories {
+        // ...
+        maven { url 'https://sdk.uxcam.com/android/' }
+    }
+}
+```
+
+**Expo** — `app.json` / `app.config.js`, then run `npx expo prebuild`:
+
+```json
+[
+  "expo-build-properties",
+  {
+    "android": {
+      "extraMavenRepos": ["https://sdk.uxcam.com/android/"]
+    }
+  }
+]
+```
+
 > Starting from 5.3.0, we no longer support project with react native version <0.60.0. Use manual linking for older version to add [UXCam](https://github.com/uxcam/ios-sdk/raw/main/UXCam.xcframework.zip) to your project.
 
 > iOS 10 is the lowest version supported for recording sessions, which matches the default minimum version for new React Native projects.
