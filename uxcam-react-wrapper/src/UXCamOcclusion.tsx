@@ -1,6 +1,5 @@
 import * as React from "react";
-import { Platform, View, ViewProps, requireNativeComponent } from "react-native";
-import UXCam from "./UXCam";
+import { ViewProps, requireNativeComponent } from "react-native";
 import { Occlusion, OcclusionType } from "./types";
 
 export { OcclusionType } from "./types";
@@ -9,45 +8,20 @@ export interface UXCamOccludedViewProps extends ViewProps {
     hideGestures?: boolean;
 }
 
-const NativeOccludedView = Platform.OS === "ios"
-    ? requireNativeComponent<UXCamOccludedViewProps>("RNUxcamOccludeView")
-    : null;
+const NativeOccludedView = requireNativeComponent<UXCamOccludedViewProps>("RNUxcamOccludeView");
 
 /**
- * Registers occlusion as part of the native iOS view lifecycle, before the
- * mounted view can be captured. This is the safe API for recyclable lists.
+ * Registers occlusion through the native view lifecycle on Android and iOS,
+ * without waiting for a JavaScript mount callback or resolving a React tag.
  */
 export class UXCamOccludedView extends React.Component<UXCamOccludedViewProps> {
-    private viewRef = React.createRef<View>();
-
-    componentDidMount() {
-        if (NativeOccludedView) {
-            return;
-        }
-        if (this.props.hideGestures) {
-            UXCam.occludeSensitiveViewWithoutGesture(this.viewRef.current);
-        } else {
-            UXCam.occludeSensitiveView(this.viewRef.current);
-        }
-    }
-
-    componentWillUnmount() {
-        if (!NativeOccludedView) {
-            UXCam.unOccludeSensitiveView(this.viewRef.current);
-        }
-    }
-
     render() {
         const { hideGestures = false, ...viewProps } = this.props;
-        if (NativeOccludedView) {
-            return React.createElement(NativeOccludedView as any, {
-                ...viewProps,
-                hideGestures,
-            });
-        }
-        return React.createElement(View as any, {
+        return React.createElement(NativeOccludedView as any, {
             ...viewProps,
-            ref: this.viewRef,
+            hideGestures,
+            // This privacy boundary must retain its own native view.
+            collapsable: false,
         });
     }
 }
