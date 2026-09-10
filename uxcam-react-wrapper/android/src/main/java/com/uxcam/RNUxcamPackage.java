@@ -6,11 +6,19 @@ import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.module.model.ReactModuleInfo;
 import com.facebook.react.module.model.ReactModuleInfoProvider;
+import com.facebook.react.uimanager.ViewManager;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class RNUxcamPackage extends TurboReactPackage {
+    @Override
+    public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
+        return Collections.<ViewManager>singletonList(new RNUxcamOccludeViewManager());
+    }
+
     @Nullable
     @Override
     public NativeModule getModule(String name, ReactApplicationContext reactContext) {
