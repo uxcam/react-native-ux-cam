@@ -51,7 +51,7 @@ public class RNUxcamModuleImpl {
     public static final String HIDE_GESTURES = "hideGestures";
 
     private static final String UXCAM_PLUGIN_TYPE = "react-native";
-    private static final String UXCAM_REACT_PLUGIN_VERSION = "6.0.23";
+    private static final String UXCAM_REACT_PLUGIN_VERSION = "6.0.24";
 
     private final ReactApplicationContext reactContext;
     private final RNUxViewResolver viewResolver;
@@ -134,9 +134,8 @@ public class RNUxcamModuleImpl {
              uxConfigBuilder.enableImprovedScreenCapture(enableImprovedScreenCapture);
          }
          if (enableImprovedWebViewCapture != null) {
-             Log.d("config", "improved webview capture " + enableImprovedWebViewCapture
-                     + " -> enableFrameSyncOcclusion(" + enableImprovedWebViewCapture + ")");
-             uxConfigBuilder.enableFrameSyncOcclusion(enableImprovedWebViewCapture);
+             Log.d("config", "improved webview capture enabled " + enableImprovedWebViewCapture);
+             uxConfigBuilder.enableImprovedWebViewCapture(enableImprovedWebViewCapture);
          }
          if (occlusionList != null)
              uxConfigBuilder.occlusions(occlusionList); 
