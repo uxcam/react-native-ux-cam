@@ -32,8 +32,12 @@
         "android/gradlew.bat",
         "android/src",
         "ios",
+        "sourcemaps",
         "src"
     ],
+    "bin": {
+        "uxcam-sourcemaps": "sourcemaps/upload-sourcemap.js"
+    },
     "dependencies": {
         "@babel/runtime": "^7.20.0"
     },

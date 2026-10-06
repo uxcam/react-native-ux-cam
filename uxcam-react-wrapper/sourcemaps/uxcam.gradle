@@ -1,0 +1,82 @@
+// Uploads the React Native source map of every release build to UXCam.
+//
+// In android/app/build.gradle, after the React Native plugin is applied:
+//
+//   apply from: new File(["node", "--print", "require('path').join(require('path').dirname(require.resolve('react-native-ux-cam/package.json')), 'sourcemaps', 'uxcam.gradle')"].execute(null, rootDir).text.trim())
+//
+// Settings, in android/gradle.properties or as environment variables:
+//   uxcam.appKey=<key>               or UXCAM_APP_KEY        required for the upload
+//   uxcam.sourcemapUpload=false      or UXCAM_SOURCEMAP_UPLOAD=false   skip the upload
+//   uxcam.sourcemapDryRun=true       or UXCAM_SOURCEMAP_DRY_RUN=true   prepare it, send nothing
+//   uxcam.baseUrl=<url>              or UXCAM_BASE_URL       API host (default https://verify.uxcam.com)
+//
+// The map is the one React Native's Gradle plugin writes for every release
+// build: build/generated/sourcemaps/react/<variant>/index.android.bundle.map
+// (composed with the Hermes compiler's map when Hermes is on). The upload never
+// fails the build.
+
+def uxcamSetting(String property, String environment) {
+    def value = project.findProperty(property)
+    return value != null ? value.toString() : System.getenv(environment)
+}
+
+def uxcamUploader = new File(["node", "--print",
+        "require('path').join(require('path').dirname(require.resolve('react-native-ux-cam/package.json')), 'sourcemaps', 'upload-sourcemap.js')"]
+        .execute(null, rootDir).text.trim())
+
+afterEvaluate {
+    def variants = project.android.hasProperty("applicationVariants") ? project.android.applicationVariants : []
+    variants.all { variant ->
+        if (variant.buildType.debuggable) {
+            return
+        }
+        def variantName = variant.name.capitalize()
+        def bundleTask = tasks.findByName("createBundle${variantName}JsAndAssets")
+        if (bundleTask == null) {
+            return
+        }
+
+        def uploadTask = tasks.register("uxcamUploadSourceMap${variantName}", Exec) {
+            group = "uxcam"
+            description = "Uploads the ${variant.name} React Native source map to UXCam."
+            def mapFile = new File(buildDir, "generated/sourcemaps/react/${variant.name}/index.android.bundle.map")
+            def appKey = uxcamSetting("uxcam.appKey", "UXCAM_APP_KEY")
+            def dryRun = uxcamSetting("uxcam.sourcemapDryRun", "UXCAM_SOURCEMAP_DRY_RUN") == "true"
+            def baseUrl = uxcamSetting("uxcam.baseUrl", "UXCAM_BASE_URL")
+            def enabled = uxcamSetting("uxcam.sourcemapUpload", "UXCAM_SOURCEMAP_UPLOAD") != "false"
+
+            onlyIf {
+                if (!enabled) {
+                    return false
+                }
+                if (!mapFile.exists()) {
+                    logger.warn("[UXCam] No source map at ${mapFile}; nothing to upload.")
+                    return false
+                }
+                if (!appKey && !dryRun) {
+                    logger.warn("[UXCam] uxcam.appKey is not set, so the source map was not uploaded.")
+                    return false
+                }
+                return true
+            }
+
+            workingDir rootDir.parentFile
+            def uploadArgs = ["node", uxcamUploader.absolutePath,
+                              "--platform", "android",
+                              "--map", mapFile.absolutePath,
+                              "--project-root", rootDir.parentFile.absolutePath]
+            if (appKey) {
+                uploadArgs += ["--app-key", appKey]
+            }
+            if (baseUrl) {
+                uploadArgs += ["--base-url", baseUrl]
+            }
+            if (dryRun) {
+                uploadArgs += ["--dry-run"]
+            }
+            commandLine uploadArgs
+            ignoreExitValue true
+        }
+        bundleTask.finalizedBy(uploadTask)
+    }
+}
