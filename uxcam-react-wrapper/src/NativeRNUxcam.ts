@@ -50,6 +50,11 @@ export interface Spec extends TurboModule {
     
     applyOcclusion: (occlusion: Object) => void;
     removeOcclusion: (occlusion: Object) => void;
+
+    // JavaScript errors
+    // Synchronous: returns once the SDK has stored the fatal error, before React Native crashes the app.
+    reportJSCrash: (payload: Object) => boolean;
+    reportJSError: (payload: Object, properties: Object | null) => void;
    
 
     // Event Listeneres

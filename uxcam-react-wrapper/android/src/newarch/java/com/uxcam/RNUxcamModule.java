@@ -198,6 +198,16 @@ public class RNUxcamModule extends NativeRNUxcamSpec {
     }
 
     @Override
+    public boolean reportJSCrash(ReadableMap payload) {
+        return this.impl.reportJSCrash(payload);
+    }
+
+    @Override
+    public void reportJSError(ReadableMap payload, ReadableMap properties) {
+        this.impl.reportJSError(payload, properties);
+    }
+
+    @Override
     public void setUserIdentity(String id) {
         this.impl.setUserIdentity(id);
     }

@@ -1,3 +1,4 @@
+import * as React from "react";
 import { EmitterSubscription, ViewProps } from "react-native";
 import { Configuration, Occlusion } from "./types";
 
@@ -296,4 +297,30 @@ export default class UXCam {
         @parameter screenName Name to apply to the current screen in the session video
     */
     static tagScreenName: (screenName: string) => void;
+
+    /**
+     * Report a handled JavaScript error to UXCam. It appears with the session's exceptions.
+     *
+     * @parameter error The caught value, usually an Error
+     * @parameter properties Optional string or number values to attach (up to 20)
+     * @parameter componentStack Optional React component stack, such as the one an error boundary receives
+     * @note Reports are rate limited: repeats of the same error within a minute are dropped
+     */
+    static reportExceptionEvent: (error: unknown, properties?: { [key: string]: string | number } | null, componentStack?: string | null) => void;
 }
+
+export interface UXCamErrorBoundaryProps {
+    children?: React.ReactNode;
+    /** Rendered after an error: a node, or a function receiving the error and a reset callback */
+    fallback?: React.ReactNode | ((args: { error: unknown; resetError: () => void }) => React.ReactNode);
+    /** Called after the error is reported to UXCam */
+    onError?: (error: unknown, componentStack: string | null) => void;
+    /** Extra string or number values attached to the report */
+    properties?: { [key: string]: string | number };
+}
+
+/**
+ * Reports render errors in its children to UXCam as handled JavaScript exceptions,
+ * then renders `fallback` instead of the failed tree.
+ */
+export class UXCamErrorBoundary extends React.Component<UXCamErrorBoundaryProps> {}
