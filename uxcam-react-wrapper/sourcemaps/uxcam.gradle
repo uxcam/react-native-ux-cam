@@ -1,8 +1,9 @@
 // Uploads the React Native source map of every release build to UXCam.
 //
-// In android/app/build.gradle, after the React Native plugin is applied:
+// `npx uxcam-sourcemaps-setup` applies it in android/app/build.gradle, after the
+// React Native plugin:
 //
-//   apply from: new File(["node", "--print", "require('path').join(require('path').dirname(require.resolve('react-native-ux-cam/package.json')), 'sourcemaps', 'uxcam.gradle')"].execute(null, rootDir).text.trim())
+//   apply from: "../../node_modules/react-native-ux-cam/sourcemaps/uxcam.gradle"
 //
 // Settings, in android/gradle.properties or as environment variables:
 //   uxcam.appKey=<key>               or UXCAM_APP_KEY        required for the upload
@@ -20,9 +21,8 @@ def uxcamSetting(String property, String environment) {
     return value != null ? value.toString() : System.getenv(environment)
 }
 
-def uxcamUploader = new File(["node", "--print",
-        "require('path').join(require('path').dirname(require.resolve('react-native-ux-cam/package.json')), 'sourcemaps', 'upload-sourcemap.js')"]
-        .execute(null, rootDir).text.trim())
+// The uploader sits next to this script
+def uxcamUploader = new File(buildscript.sourceFile.parentFile, "upload-sourcemap.js")
 
 afterEvaluate {
     def variants = project.android.hasProperty("applicationVariants") ? project.android.applicationVariants : []

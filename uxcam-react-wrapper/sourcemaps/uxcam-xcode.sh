@@ -1,19 +1,19 @@
 #!/bin/bash
 # Wraps React Native's "Bundle React Native code and images" build phase:
 # makes sure a source map is written, runs React Native's own script, then
-# uploads the map to UXCam. In that build phase, put this script in front of
-# React Native's script:
+# uploads the map to UXCam. `npx uxcam-sourcemaps-setup` puts it in front of
+# React Native's script in that build phase:
 #
 #   set -e
 #   WITH_ENVIRONMENT="../node_modules/react-native/scripts/xcode/with-environment.sh"
 #   REACT_NATIVE_XCODE="../node_modules/react-native/scripts/react-native-xcode.sh"
-#   UXCAM_XCODE=`"$NODE_BINARY" --print "require('path').join(require('path').dirname(require.resolve('react-native-ux-cam/package.json')), 'sourcemaps', 'uxcam-xcode.sh')"`
-#   /bin/sh -c "$WITH_ENVIRONMENT \"$UXCAM_XCODE $REACT_NATIVE_XCODE\""
+#   UXCAM_XCODE="../node_modules/react-native-ux-cam/sourcemaps/uxcam-xcode.sh"
+#   /bin/sh -c "$WITH_ENVIRONMENT \"/bin/bash $UXCAM_XCODE $REACT_NATIVE_XCODE\""
 #
 # Like the dSYM upload, this needs ENABLE_USER_SCRIPT_SANDBOXING = NO.
 #
-# Settings, for example in ios/.xcode.env.local:
-#   UXCAM_APP_KEY=<key>               required for the upload
+# Settings, in ios/.xcode.env or ios/.xcode.env.local:
+#   export UXCAM_APP_KEY=<key>        required for the upload
 #   UXCAM_SOURCEMAP_UPLOAD=false      bundle and write the map, but skip the upload
 #   UXCAM_SOURCEMAP_DRY_RUN=true      prepare the upload, but send nothing
 #
@@ -41,8 +41,17 @@ if [[ "$CONFIGURATION" == *Debug* || "$UXCAM_SOURCEMAP_UPLOAD" == "false" ]]; th
   exit 0
 fi
 
+# Build phases that call React Native's script directly never source .xcode.env
+if [[ -z "$UXCAM_APP_KEY" ]]; then
+  for env_file in "$PROJECT_DIR/.xcode.env" "$PROJECT_DIR/.xcode.env.local"; do
+    if [[ -f "$env_file" ]]; then
+      source "$env_file"
+    fi
+  done
+fi
+
 if [[ -z "$UXCAM_APP_KEY" && "$UXCAM_SOURCEMAP_DRY_RUN" != "true" ]]; then
-  echo "warning: [UXCam] UXCAM_APP_KEY is not set, so the source map was not uploaded. Set it in ios/.xcode.env.local."
+  echo "warning: [UXCam] UXCAM_APP_KEY is not set, so the source map was not uploaded. Run npx uxcam-sourcemaps-setup, or set it in ios/.xcode.env."
   exit 0
 fi
 
