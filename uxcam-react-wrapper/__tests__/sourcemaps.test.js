@@ -80,6 +80,20 @@ describe('upload script helpers', () => {
         expect(sanitizeMap(map, { projectRoot: dir, keepSources: true }).sourcesContent).toEqual(map.sourcesContent);
     });
 
+    test('strips build-machine paths when the project root is relative or contains ..', () => {
+        // The real path: on macOS the temp folder is behind a symlink, and Metro writes real paths
+        const real = fs.realpathSync(dir);
+        const map = { sources: [`${real}/src/App.tsx`], mappings: 'AAAA' };
+        expect(sanitizeMap(map, { projectRoot: `${real}/ios/..`, keepSources: false }).sources).toEqual(['src/App.tsx']);
+        const cwd = process.cwd();
+        try {
+            process.chdir(real);
+            expect(sanitizeMap(map, { projectRoot: '.', keepSources: false }).sources).toEqual(['src/App.tsx']);
+        } finally {
+            process.chdir(cwd);
+        }
+    });
+
     test('parses options and names the upload by debug ID and platform', () => {
         const args = parseArgs(['--platform', 'android', '--map', 'a.map', '--debug-id', id, '--dry-run']);
         expect(args).toMatchObject({ platform: 'android', map: 'a.map', debugId: id, dryRun: true, keepSources: false });

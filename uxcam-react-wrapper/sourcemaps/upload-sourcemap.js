@@ -120,7 +120,9 @@ function sanitizeMap(map, { projectRoot, keepSources }) {
         delete result.sourcesContent;
     }
     if (Array.isArray(result.sources)) {
-        const root = projectRoot.endsWith(path.sep) ? projectRoot : projectRoot + path.sep;
+        // Resolved first: the Xcode hook passes "$PROJECT_DIR/..", and --project-root may be relative
+        const resolved = path.resolve(projectRoot);
+        const root = resolved.endsWith(path.sep) ? resolved : resolved + path.sep;
         result.sources = result.sources.map((source) => {
             if (typeof source !== 'string') return source;
             if (source.startsWith(root)) return source.slice(root.length);
