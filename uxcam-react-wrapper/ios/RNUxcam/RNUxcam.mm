@@ -618,6 +618,83 @@ RCT_EXPORT_METHOD(setSessionProperty:(NSString *)propertyName value:(NSString *)
     [UXCam setSessionProperty:propertyName value:value];
 }
 
+#pragma mark - JavaScript errors
+
+static NSString *RNUxcamFrameString(NSDictionary *frame)
+{
+    id function = frame[@"fn"];
+    id file = frame[@"file"];
+    NSString *name = [function isKindOfClass:NSString.class] && [function length] > 0 ? function : @"?";
+    NSString *position = [NSString stringWithFormat:@"%@:%@", frame[@"line"] ?: @0, frame[@"col"] ?: @0];
+    return [file isKindOfClass:NSString.class] && [file length] > 0
+        ? [NSString stringWithFormat:@"%@@%@:%@", name, file, position]
+        : [NSString stringWithFormat:@"%@@%@", name, position];
+}
+
+static dispatch_queue_t RNUxcamErrorReportingQueue(void)
+{
+    static dispatch_queue_t queue;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        queue = dispatch_queue_create("com.uxcam.reactnative.errors", DISPATCH_QUEUE_SERIAL);
+    });
+    return queue;
+}
+
+// Runs on the JS thread while React Native is about to crash the app. It must
+// never wait for the main queue, which may itself be blocked on JS.
+RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSNumber *, reportJSCrash:(NSDictionary *)payload)
+{
+    // TEMP diagnostic (remove before commit): which thread fatal errors arrive on.
+    NSLog(@"[UXCam RN] reportJSCrash entered (main thread: %d, thread: %@)", NSThread.isMainThread, NSThread.currentThread.name);
+    // Looked up at runtime so the plugin still works with SDKs that predate the call.
+    SEL selector = NSSelectorFromString(@"recordPendingJavaScriptCrash:");
+    Class plugin = NSClassFromString(@"UXCamPlugin");
+    if (plugin == Nil || ![plugin respondsToSelector:selector] || ![payload isKindOfClass:NSDictionary.class]) {
+        return @NO;
+    }
+    BOOL (*record)(id, SEL, NSDictionary *) = (BOOL (*)(id, SEL, NSDictionary *))[plugin methodForSelector:selector];
+    return @(record(plugin, selector, payload));
+}
+
+RCT_EXPORT_METHOD(reportJSError:(NSDictionary *)payload properties:(NSDictionary * _Nullable)properties)
+{
+    if (![payload isKindOfClass:NSDictionary.class]) {
+        return;
+    }
+    // This module's methods run on the main queue; keep the report off it.
+    dispatch_async(RNUxcamErrorReportingQueue(), ^{
+        id name = payload[@"name"];
+        id message = payload[@"message"];
+        NSMutableArray<NSString *> *callStack = [NSMutableArray array];
+        id frames = payload[@"frames"];
+        if ([frames isKindOfClass:NSArray.class]) {
+            for (id frame in (NSArray *)frames) {
+                if ([frame isKindOfClass:NSDictionary.class]) {
+                    [callStack addObject:RNUxcamFrameString(frame)];
+                }
+            }
+        }
+        NSMutableDictionary<NSString *, id> *reportProperties = [NSMutableDictionary dictionary];
+        if ([properties isKindOfClass:NSDictionary.class]) {
+            [properties enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL *stop) {
+                if ([key isKindOfClass:NSString.class] &&
+                    ([value isKindOfClass:NSString.class] || [value isKindOfClass:NSNumber.class])) {
+                    reportProperties[key] = value;
+                }
+            }];
+        }
+        reportProperties[@"exceptionType"] = @"javascript";
+        if ([payload[@"engine"] isKindOfClass:NSString.class]) {
+            reportProperties[@"jsEngine"] = payload[@"engine"];
+        }
+        [UXCam reportExceptionEvent:([name isKindOfClass:NSString.class] && [name length] > 0 ? name : @"Error")
+                             reason:([message isKindOfClass:NSString.class] ? message : @"")
+                         callStacks:callStack
+                         properties:reportProperties];
+    });
+}
+
 // Thanks to this guard, we won't compile this code when we build for the old architecture.
 #ifdef RCT_NEW_ARCH_ENABLED
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
