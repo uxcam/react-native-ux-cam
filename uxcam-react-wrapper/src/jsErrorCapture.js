@@ -1,4 +1,7 @@
-// Captures JavaScript errors through React Native's global ErrorUtils handler.
+// Captures JavaScript errors through React Native's global ErrorUtils handler,
+// and fatal errors also through ExceptionsManager.handleException: React
+// reports a render error that no error boundary catches (onUncaughtError)
+// straight to ExceptionsManager, so it never reaches the global handler.
 //
 // Fatal errors are handed to the UXCam SDK through a blocking bridge call, so
 // the SDK has stored them before React Native crashes the app; the SDK then
@@ -6,7 +9,7 @@
 // Non-fatal errors are reported asynchronously and rate limited.
 //
 // Kept free of react-native imports so it can be unit tested in plain Node:
-// the bridge and the ErrorUtils object are passed in.
+// the bridge, the ErrorUtils object and the ExceptionsManager are passed in.
 
 import { parseStack } from './stackParser';
 
@@ -97,38 +100,66 @@ export function reportNonFatal(bridge, error, properties, componentStack) {
     }
 }
 
-export function installJSErrorCapture(bridge, errorUtils = global.ErrorUtils) {
-    if (installed || !bridge || !errorUtils ||
-        typeof errorUtils.getGlobalHandler !== 'function' ||
-        typeof errorUtils.setGlobalHandler !== 'function') {
+export function installJSErrorCapture(bridge, errorUtils = global.ErrorUtils, exceptionsManager = null) {
+    if (installed || !bridge) {
         return false;
     }
-    installed = true;
 
-    const previous = errorUtils.getGlobalHandler();
     let handlingFatal = false;
+    const reportFatal = (error) => {
+        if (!handlingFatal && typeof bridge.reportJSCrash === 'function') {
+            handlingFatal = true;
+            // Synchronous: returns once the SDK has stored the error.
+            bridge.reportJSCrash(toPayload(error, true));
+        }
+    };
 
-    errorUtils.setGlobalHandler((error, isFatal) => {
-        try {
-            if (isFatal) {
-                if (!handlingFatal && typeof bridge.reportJSCrash === 'function') {
-                    handlingFatal = true;
-                    // Synchronous: returns once the SDK has stored the error.
-                    bridge.reportJSCrash(toPayload(error, true));
+    if (errorUtils &&
+        typeof errorUtils.getGlobalHandler === 'function' &&
+        typeof errorUtils.setGlobalHandler === 'function') {
+        const previous = errorUtils.getGlobalHandler();
+        errorUtils.setGlobalHandler((error, isFatal) => {
+            try {
+                if (isFatal) {
+                    reportFatal(error);
+                } else {
+                    reportNonFatal(bridge, error, null);
                 }
-            } else {
-                reportNonFatal(bridge, error, null);
+            } catch (_) {
+                // Reporting must never break React Native's own handling.
             }
+            if (typeof previous === 'function') {
+                // Always chain, including for values that are not Errors, so React
+                // Native still shows LogBox in debug and crashes in release.
+                previous(error, isFatal);
+            }
+        });
+        installed = true;
+    }
+
+    if (exceptionsManager && typeof exceptionsManager.handleException === 'function') {
+        const originalHandleException = exceptionsManager.handleException;
+        try {
+            exceptionsManager.handleException = function (error, isFatal) {
+                // Fatal only: errors caught by a boundary arrive here as non-fatal,
+                // and UXCamErrorBoundary already reports those. A fatal error that
+                // came through the global handler is already stored, so
+                // reportFatal does nothing the second time.
+                if (isFatal) {
+                    try {
+                        reportFatal(error);
+                    } catch (_) {
+                        // Reporting must never break React Native's own handling.
+                    }
+                }
+                return originalHandleException.apply(this, arguments);
+            };
+            installed = true;
         } catch (_) {
-            // Reporting must never break React Native's own handling.
+            // A read-only module object: keep the global handler only.
         }
-        if (typeof previous === 'function') {
-            // Always chain, including for values that are not Errors, so React
-            // Native still shows LogBox in debug and crashes in release.
-            previous(error, isFatal);
-        }
-    });
-    return true;
+    }
+    return installed;
 }
 
 // Test-only: undo installation state between tests.

@@ -4,6 +4,17 @@ import { installJSErrorCapture, reportNonFatal } from './jsErrorCapture';
 const isTurboModuleEnabled = global.__turboModuleProxy != null;
 const UXCamBridge = isTurboModuleEnabled ? require("./NativeRNUxcam").default : NativeModules.RNUxcam;
 
+// React reports render errors that no boundary catches straight to
+// ExceptionsManager, bypassing ErrorUtils, so the capture hooks it too.
+function loadExceptionsManager() {
+    try {
+        const module = require('react-native/Libraries/Core/ExceptionsManager');
+        return module && module.default ? module.default : module;
+    } catch (_) {
+        return null;
+    }
+}
+
 const RNUxcam_VerifyEvent_Name = 'UXCam_Verification_Event';
 
 // Capture the platform we are running on
@@ -25,7 +36,7 @@ export default class UXCam {
     static startWithConfiguration(configuration) {
         UXCamBridge.startWithConfiguration(configuration);
         if (!configuration || configuration.enableCrashHandling !== false) {
-            installJSErrorCapture(UXCamBridge);
+            installJSErrorCapture(UXCamBridge, global.ErrorUtils, loadExceptionsManager());
         }
     }
 

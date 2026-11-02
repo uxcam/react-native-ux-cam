@@ -164,6 +164,75 @@ describe('installJSErrorCapture', () => {
     });
 });
 
+describe('ExceptionsManager hook', () => {
+    // React Native's own global handler forwards to ExceptionsManager.handleException.
+    function fakeReactNative() {
+        const calls = [];
+        const exceptionsManager = {
+            handleException(error, isFatal) { calls.push([error, isFatal]); },
+        };
+        const errorUtils = fakeErrorUtils((error, isFatal) => exceptionsManager.handleException(error, isFatal));
+        return { calls, exceptionsManager, errorUtils };
+    }
+
+    test('stores a render error with no boundary, which skips the global handler', () => {
+        const { calls, exceptionsManager, errorUtils } = fakeReactNative();
+        const bridge = fakeBridge();
+        expect(installJSErrorCapture(bridge, errorUtils, exceptionsManager)).toBe(true);
+
+        // What React's onUncaughtError does.
+        const error = new TypeError('render failed');
+        error.componentStack = '\n    in Broken\n    in App';
+        exceptionsManager.handleException(error, true);
+
+        expect(bridge.crashes).toHaveLength(1);
+        expect(bridge.crashes[0]).toMatchObject({
+            name: 'TypeError',
+            message: 'render failed',
+            isFatal: true,
+            componentStack: '\n    in Broken\n    in App',
+        });
+        expect(calls).toEqual([[error, true]]);
+    });
+
+    test('records a fatal error from the global handler once', () => {
+        const { calls, exceptionsManager, errorUtils } = fakeReactNative();
+        const bridge = fakeBridge();
+        installJSErrorCapture(bridge, errorUtils, exceptionsManager);
+
+        const error = new Error('fatal');
+        errorUtils.fire(error, true);
+
+        expect(bridge.crashes).toHaveLength(1);
+        expect(calls).toEqual([[error, true]]);
+    });
+
+    test('leaves errors caught by a boundary to UXCamErrorBoundary', () => {
+        const { calls, exceptionsManager, errorUtils } = fakeReactNative();
+        const bridge = fakeBridge();
+        installJSErrorCapture(bridge, errorUtils, exceptionsManager);
+
+        // What React's onCaughtError does.
+        const error = new Error('caught');
+        exceptionsManager.handleException(error, false);
+
+        expect(bridge.crashes).toHaveLength(0);
+        expect(bridge.errors).toHaveLength(0);
+        expect(calls).toEqual([[error, false]]);
+    });
+
+    test('still calls React Native when the bridge throws', () => {
+        const { calls, exceptionsManager } = fakeReactNative();
+        const bridge = { reportJSCrash() { throw new Error('native failure'); }, reportJSError() {} };
+        expect(installJSErrorCapture(bridge, undefined, exceptionsManager)).toBe(true);
+
+        const error = new Error('x');
+        exceptionsManager.handleException(error, true);
+
+        expect(calls).toEqual([[error, true]]);
+    });
+});
+
 describe('rate limiting', () => {
     test('drops repeats of one error and caps the window', () => {
         let now = 0;
