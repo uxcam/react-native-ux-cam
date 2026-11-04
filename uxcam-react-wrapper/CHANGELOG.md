@@ -5,6 +5,7 @@
 
 Version | Changes
 ------- | ---------- 
+6.0.26  | Updated iOS SDK to 3.11.2 and Android SDK to 3.12.0
 6.0.25  | Updated iOS SDK to 3.11.1 and Android SDK to 3.11.2
 6.0.24  | Updated Android SDK to 3.11.0 <br/> Fixed Improved WebView Capture mapping on Android.
 6.0.23  | Updated iOS SDK to 3.11.0 and Android to 3.10.10
