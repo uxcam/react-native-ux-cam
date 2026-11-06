@@ -241,7 +241,9 @@ export default class UXCam {
     static allowShortBreakForAnotherApp: (continueSession: boolean | number) => void;
 
     /**
-     *  @brief Resume after short break. Only used in android, does nothing on iOS
+     *  @deprecated The SDK resumes the session automatically when the app returns to the foreground.
+     *  Call `allowShortBreakForAnotherApp(false)` when your app becomes active again instead.
+     *  This method now delegates to `allowShortBreakForAnotherApp(false)` and will be removed in a future major version.
      */
     static resumeShortBreakForAnotherApp: () => void;
 
