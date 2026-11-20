@@ -424,4 +424,96 @@ public class RNUxcamModuleImpl {
      public void setSessionProperty(String key, String value) {
         UXCam.setSessionProperty(key, value);
     }
+
+    /**
+     * Fatal JavaScript errors. Runs synchronously on the JS thread just before
+     * React Native throws its JavascriptException; the SDK keeps the payload in
+     * memory and merges it into that crash. Looked up at runtime, so the plugin
+     * still works with SDKs that predate the call (they record the crash from
+     * React Native's exception text, or as a plain native crash).
+     */
+    public boolean reportJSCrash(ReadableMap payload) {
+        if (payload == null) {
+            return false;
+        }
+        try {
+            java.lang.reflect.Method record = UXCamInternal.class.getMethod("recordPendingJavaScriptCrash", Map.class);
+            Object stored = record.invoke(null, payload.toHashMap());
+            return Boolean.TRUE.equals(stored);
+        } catch (NoSuchMethodException e) {
+            return false;
+        } catch (Exception e) {
+            Log.w(MODULE_NAME, "reportJSCrash failed: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public void reportJSError(ReadableMap payload, ReadableMap properties) {
+        try {
+            if (payload == null) {
+                return;
+            }
+            String name = payload.hasKey("name") && payload.getType("name") == ReadableType.String ? payload.getString("name") : "";
+            String message = payload.hasKey("message") && payload.getType("message") == ReadableType.String ? payload.getString("message") : "";
+            Throwable throwable = new JavaScriptError(name == null || name.isEmpty() ? "Error" : name, message);
+            throwable.setStackTrace(stackTraceFromFrames(payload));
+
+            HashMap<String, Object> reportProperties = new HashMap<>();
+            if (properties != null) {
+                ReadableMapKeySetIterator iterator = properties.keySetIterator();
+                while (iterator.hasNextKey()) {
+                    String key = iterator.nextKey();
+                    ReadableType type = properties.getType(key);
+                    if (type == ReadableType.String) {
+                        reportProperties.put(key, properties.getString(key));
+                    } else if (type == ReadableType.Number) {
+                        reportProperties.put(key, properties.getDouble(key));
+                    }
+                }
+            }
+            reportProperties.put("exceptionType", "javascript");
+            if (payload.hasKey("engine") && payload.getType("engine") == ReadableType.String) {
+                reportProperties.put("jsEngine", payload.getString("engine"));
+            }
+            UXCam.reportExceptionEvent(throwable, reportProperties);
+        } catch (Exception e) {
+            Log.w(MODULE_NAME, "reportJSError failed: " + e.getMessage());
+        }
+    }
+
+    private static StackTraceElement[] stackTraceFromFrames(ReadableMap payload) {
+        List<StackTraceElement> elements = new ArrayList<>();
+        if (payload.hasKey("frames") && payload.getType("frames") == ReadableType.Array) {
+            com.facebook.react.bridge.ReadableArray frames = payload.getArray("frames");
+            for (int i = 0; frames != null && i < frames.size() && i < 100; i++) {
+                if (frames.getType(i) != ReadableType.Map) {
+                    continue;
+                }
+                ReadableMap frame = frames.getMap(i);
+                String function = frame.hasKey("fn") && frame.getType("fn") == ReadableType.String ? frame.getString("fn") : "?";
+                String file = frame.hasKey("file") && frame.getType("file") == ReadableType.String ? frame.getString("file") : "";
+                int line = frame.hasKey("line") && frame.getType("line") == ReadableType.Number ? frame.getInt("line") : 0;
+                int column = frame.hasKey("col") && frame.getType("col") == ReadableType.Number ? frame.getInt("col") : 0;
+                // StackTraceElement has no column; keep it in the file name so it survives.
+                elements.add(new StackTraceElement("JavaScript", function, file + ":" + line + ":" + column, line));
+            }
+        }
+        return elements.toArray(new StackTraceElement[0]);
+    }
+
+    /** A handled JavaScript error reported through the native exception API. */
+    static final class JavaScriptError extends Exception {
+        private final String jsName;
+
+        JavaScriptError(String jsName, String message) {
+            super(message);
+            this.jsName = jsName;
+        }
+
+        @Override
+        public String toString() {
+            String message = getMessage();
+            return message == null || message.isEmpty() ? jsName : jsName + ": " + message;
+        }
+    }
 }

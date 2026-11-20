@@ -188,6 +188,16 @@ public class RNUxcamModule extends ReactContextBaseJavaModule {
         this.impl.logEvent(event, properties);
     }
 
+    @ReactMethod(isBlockingSynchronousMethod = true)
+    public boolean reportJSCrash(ReadableMap payload) {
+        return this.impl.reportJSCrash(payload);
+    }
+
+    @ReactMethod
+    public void reportJSError(ReadableMap payload, ReadableMap properties) {
+        this.impl.reportJSError(payload, properties);
+    }
+
     @ReactMethod
     public void setUserIdentity(String id) {
         this.impl.setUserIdentity(id);
